@@ -14,18 +14,23 @@ public class Door {
     public int getDirection() {
         return direction;
     }
+
     public void setDirection(int direction) {
         this.direction = direction;
     }
+
     public boolean isOpen() {
         return open;
     }
+
     public void setOpen(boolean open) {
         this.open = open;
     }
+
     public String getTexture() {
         return texture;
     }
+
     public void setTexture(String texture) {
         this.texture = texture;
     }
