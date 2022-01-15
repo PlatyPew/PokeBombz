@@ -12,7 +12,7 @@ public class Door {
     }
 
     public int getDirection() {
-        return direction;
+        return this.direction;
     }
 
     public void setDirection(int direction) {
@@ -20,7 +20,7 @@ public class Door {
     }
 
     public boolean isOpen() {
-        return open;
+        return this.open;
     }
 
     public void setOpen(boolean open) {
@@ -28,7 +28,7 @@ public class Door {
     }
 
     public String getTexture() {
-        return texture;
+        return this.texture;
     }
 
     public void setTexture(String texture) {

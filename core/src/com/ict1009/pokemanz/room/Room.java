@@ -12,6 +12,6 @@ public class Room {
     }
 
     public Texture getTexture() {
-        return texture;
+        return this.texture;
     }
 }

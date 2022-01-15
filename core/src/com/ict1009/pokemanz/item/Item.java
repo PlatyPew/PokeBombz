@@ -3,25 +3,20 @@ package com.ict1009.pokemanz.item;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-public class Item {
+public class Item extends Sprite {
     final private int cost; // Cost of item
-    final private Sprite sprite;
 
-    public Item(String textureName) {
+    public Item(String textureLocation) {
+        super(new Texture(textureLocation));
         this.cost = 0;
-        this.sprite = new Sprite(new Texture(textureName));
     }
 
-    public Item(int cost, String textureName) {
+    public Item(int cost, String textureLocation) {
+        super(new Texture(textureLocation));
         this.cost = cost;
-        this.sprite = new Sprite(new Texture(textureName));
     }
 
     public int getCost() {
-        return cost;
-    }
-
-    public Sprite getSprite() {
-        return sprite;
+        return this.cost;
     }
 }

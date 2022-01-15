@@ -1,39 +1,24 @@
 package com.ict1009.pokemanz.entity;
 
-public class Enemy {
-    final private String name;
-    final private int[] position = new int[2];
-    final private String texture;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
-    private int health;
+public class Enemy extends Entity {
+    final private int[] initialPos = new int[2];
 
     // TODO: add movement, attack
 
-    public Enemy(String name, int[] position, int health, String texture) {
-        this.name = name;
-        this.position[0] = position[0];
-        this.position[1] = position[1];
-        this.health = health;
-        this.texture = texture;
+    public Enemy(String name, int health, String textureLocation, int[] initialPos) {
+        super(name, health, textureLocation);
+        this.initialPos[0] = initialPos[0];
+        this.initialPos[1] = initialPos[1];
     }
 
-    public String getName() {
-        return name;
+    public int getInitialX() {
+        return this.initialPos[0];
     }
 
-    public int[] getPosition() {
-        return position;
-    }
-
-    public String getTexture() {
-        return texture;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public void updateHealth(int health) {
-        this.health += health;
+    public int getInitialY() {
+        return this.initialPos[1];
     }
 }
