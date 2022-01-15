@@ -1,8 +1,5 @@
 package com.ict1009.pokemanz.entity;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-
 public class Enemy extends Entity {
     final private int[] initialPos = new int[2];
 
