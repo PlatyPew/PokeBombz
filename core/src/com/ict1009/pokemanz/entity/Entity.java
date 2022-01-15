@@ -18,20 +18,25 @@ public class Entity extends Sprite {
 
     private int health;
 
-    public Entity(String name, String textureLocation, World world) {
+    public Entity(World world, String textureLocation, String name) {
         super(new Texture(textureLocation));
         this.name = name;
         this.health = 3;
         this.world = world;
-        createBody();
+        setPosition((GameInfo.RATIO_WIDTH / 2) * GameInfo.GRID - getWidth() / 2f,
+                    (GameInfo.RATIO_HEIGHT / 2) * GameInfo.GRID - getHeight() / 2f);
+        // createBody();
     }
 
-    public Entity(String name, int health, String textureLocation, World world) {
+    public Entity(World world, String textureLocation, float initialX, float initialY, String name,
+                  int health) {
         super(new Texture(textureLocation));
         this.name = name;
         this.health = health;
         this.world = world;
-        createBody();
+        setPosition(initialX * GameInfo.GRID - getWidth() / 2f,
+                    initialY * GameInfo.GRID - getHeight() / 2f);
+        // createBody();
     }
 
     private void createBody() {

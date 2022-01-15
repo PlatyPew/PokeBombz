@@ -11,16 +11,16 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.GameInfo;
 
 public class Obstacle extends Sprite {
-    final private int[] initialPos = new int[2];
-
     private World world;
     private Body body;
 
-    public Obstacle(int[] initialPos, String textureLocation, World world) {
+    public Obstacle(World world, String textureLocation, float initalX, float initialY) {
         super(new Texture(textureLocation));
-        this.initialPos[0] = initialPos[0];
-        this.initialPos[1] = initialPos[1];
-        createBody();
+        this.world = world;
+        // Set grid positions and fixes weird offsets
+        setPosition(initalX * GameInfo.GRID - getWidth() / 2f,
+                    initialY * GameInfo.GRID - getHeight() / 2f);
+        // createBody();
     }
 
     private void createBody() {
@@ -38,13 +38,5 @@ public class Obstacle extends Sprite {
         Fixture fixture = body.createFixture(fixtureDef);
 
         shape.dispose();
-    }
-
-    public int getInitialX() {
-        return this.initialPos[0];
-    }
-
-    public int getInitialY() {
-        return this.initialPos[1];
     }
 }
