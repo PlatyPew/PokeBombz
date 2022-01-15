@@ -4,8 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.GameInfo;
@@ -23,9 +21,9 @@ public class Entity extends Sprite {
         this.name = name;
         this.health = 3;
         this.world = world;
-        setPosition((GameInfo.RATIO_WIDTH / 2) * GameInfo.GRID - getWidth() / 2f,
-                    (GameInfo.RATIO_HEIGHT / 2) * GameInfo.GRID - getHeight() / 2f);
-        // createBody();
+        setPosition((GameInfo.RATIO_WIDTH / 2) * GameInfo.PPM - getWidth() / 2f,
+                    (GameInfo.RATIO_HEIGHT / 2) * GameInfo.PPM - getHeight() / 2f);
+        this.body = createBody();
     }
 
     public Entity(World world, String textureLocation, float initialX, float initialY, String name,
@@ -34,26 +32,24 @@ public class Entity extends Sprite {
         this.name = name;
         this.health = health;
         this.world = world;
-        setPosition(initialX * GameInfo.GRID - getWidth() / 2f,
-                    initialY * GameInfo.GRID - getHeight() / 2f);
-        // createBody();
+        setPosition(initialX * GameInfo.PPM - getWidth() / 2f,
+                    initialY * GameInfo.PPM - getHeight() / 2f);
+        this.body = createBody();
     }
 
-    private void createBody() {
+    private Body createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
 
+        Body body = world.createBody(bodyDef);
+
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(getWidth() / 2, getHeight() / 2);
 
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
-
-        Fixture fixture = body.createFixture(fixtureDef);
-
+        body.createFixture(shape, 1f);
         shape.dispose();
+        return body;
     }
 
     public String getName() {

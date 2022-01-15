@@ -12,14 +12,14 @@ public class MainScene implements Screen {
     private World world;
     private GameMain game;
     private Texture background;
-    // private Obstacle obstacle;
+    private Obstacle obstacle;
 
     public MainScene(GameMain game) {
         this.game = game;
         this.background = new Texture("room/background.jpg");
         this.world = new World(new Vector2(0, 0), true);
-        /* this.obstacle = new Obstacle(world, "room/rock.png", GameInfo.RATIO_WIDTH / 2,
-                                     GameInfo.RATIO_HEIGHT / 2); */
+        this.obstacle = new Obstacle(world, "room/rock.png", GameInfo.RATIO_WIDTH / 2,
+                                     GameInfo.RATIO_HEIGHT / 2);
     }
 
     @Override
@@ -29,10 +29,14 @@ public class MainScene implements Screen {
 
     @Override
     public void render(float delta) {
+        obstacle.updateObstacle();
+
         game.getBatch().begin();
         game.getBatch().draw(background, 0, 0);
-        // game.getBatch().draw(obstacle, obstacle.getX(), obstacle.getY());
+        game.getBatch().draw(obstacle, obstacle.getX(), obstacle.getY());
         game.getBatch().end();
+
+        world.step(delta, 6, 2);
     }
 
     @Override

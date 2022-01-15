@@ -16,8 +16,8 @@ public class Obstacle extends Sprite {
         super(new Texture(textureLocation));
         this.world = world;
         // Set grid positions and fixes weird offsets
-        setPosition(initalX * GameInfo.GRID - getWidth() / 2f,
-                    initialY * GameInfo.GRID - getHeight() / 2f);
+        setPosition(initalX * GameInfo.PPM - getWidth() / 2f,
+                    initialY * GameInfo.PPM - getHeight() / 2f);
         this.body = createBody();
     }
 
