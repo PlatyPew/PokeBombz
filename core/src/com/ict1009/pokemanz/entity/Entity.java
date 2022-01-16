@@ -21,8 +21,7 @@ public class Entity extends Sprite {
         this.name = name;
         this.health = 3;
         this.world = world;
-        setPosition((GameInfo.RATIO_WIDTH / 2) * GameInfo.PPM - getWidth() / 2f,
-                    (GameInfo.RATIO_HEIGHT / 2) * GameInfo.PPM - getHeight() / 2f);
+        setPosition(7.5f * GameInfo.PPM, 8f * GameInfo.PPM);
         this.body = createBody();
     }
 
@@ -32,15 +31,14 @@ public class Entity extends Sprite {
         this.name = name;
         this.health = health;
         this.world = world;
-        setPosition(initialX * GameInfo.PPM - getWidth() / 2f,
-                    initialY * GameInfo.PPM - getHeight() / 2f);
+        setPosition(initialX * GameInfo.PPM, initialY * GameInfo.PPM);
         this.body = createBody();
     }
 
     private Body createBody() {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(getX(), getY());
 
         Body body = world.createBody(bodyDef);
 
@@ -60,7 +58,15 @@ public class Entity extends Sprite {
         return this.health;
     }
 
+    public Body getBody() {
+        return this.body;
+    }
+
     public void updateHealth(int health) {
         this.health += health;
+    }
+
+    public void updateEntity() {
+        setPosition(body.getPosition().x, body.getPosition().y);
     }
 }

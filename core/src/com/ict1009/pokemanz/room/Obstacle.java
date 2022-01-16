@@ -12,19 +12,17 @@ public class Obstacle extends Sprite {
     private World world;
     private Body body;
 
-    public Obstacle(World world, String textureLocation, float initalX, float initialY) {
+    public Obstacle(World world, String textureLocation, float initialX, float initialY) {
         super(new Texture(textureLocation));
         this.world = world;
-        // Set grid positions and fixes weird offsets
-        setPosition(initalX * GameInfo.PPM - getWidth() / 2f,
-                    initialY * GameInfo.PPM - getHeight() / 2f);
+        setPosition(initialX * GameInfo.PPM, initialY * GameInfo.PPM);
         this.body = createBody();
     }
 
     private Body createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
+        bodyDef.position.set(getX(), getY());
 
         Body body = world.createBody(bodyDef);
 
@@ -36,7 +34,7 @@ public class Obstacle extends Sprite {
         return body;
     }
 
-    public void updateObstacle() {
-        this.setPosition(body.getPosition().x, body.getPosition().y);
+    public Body getBody() {
+        return body;
     }
 }
