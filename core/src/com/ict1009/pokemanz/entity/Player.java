@@ -22,23 +22,23 @@ public class Player extends Entity {
 
     public void detectInput(float delta) {
         float velX = 0, velY = 0;
-        float currX = getBody().getPosition().x;
-        float currY = getBody().getPosition().y;
+        float currX = (getBody().getPosition().x) * GameInfo.PPM;
+        float currY = (getBody().getPosition().y) * GameInfo.PPM;
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && currX > 0) {
-            velX = -1;
+            velX = -GameInfo.PLAYER_VELOCITY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && currX < GameInfo.WIDTH - GameInfo.PPM) {
-            velX = 1;
+            velX = GameInfo.PLAYER_VELOCITY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP) && currY < GameInfo.HEIGHT - GameInfo.PPM) {
-            velY = 1;
+            velY = GameInfo.PLAYER_VELOCITY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && currY > 0) {
-            velY = -1;
+            velY = -GameInfo.PLAYER_VELOCITY;
         }
 
-        getBody().setLinearVelocity(velX * GameInfo.PPM, velY * GameInfo.PPM);
+        getBody().setLinearVelocity(velX, velY);
         updateEntity();
     }
 }

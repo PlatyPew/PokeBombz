@@ -38,12 +38,13 @@ public class Entity extends Sprite {
     private Body createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(getX(), getY());
+        bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
 
         Body body = world.createBody(bodyDef);
+        body.setFixedRotation(true);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(getWidth() / 2, getHeight() / 2);
+        shape.setAsBox((getWidth() / 2) / GameInfo.PPM, (getHeight() / 2) / GameInfo.PPM);
 
         body.createFixture(shape, 1f);
         shape.dispose();
@@ -67,6 +68,6 @@ public class Entity extends Sprite {
     }
 
     public void updateEntity() {
-        setPosition(body.getPosition().x, body.getPosition().y);
+        setPosition((body.getPosition().x) * GameInfo.PPM, (body.getPosition().y) * GameInfo.PPM);
     }
 }

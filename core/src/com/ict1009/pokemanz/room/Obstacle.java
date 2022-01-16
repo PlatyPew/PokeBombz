@@ -22,12 +22,13 @@ public class Obstacle extends Sprite {
     private Body createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(getX(), getY());
+        bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
 
         Body body = world.createBody(bodyDef);
+        body.setFixedRotation(true);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(getWidth() / 2, getHeight() / 2);
+        shape.setAsBox((getWidth() / 2) / GameInfo.PPM, (getHeight() / 2) / GameInfo.PPM);
 
         body.createFixture(shape, 1f);
         shape.dispose();

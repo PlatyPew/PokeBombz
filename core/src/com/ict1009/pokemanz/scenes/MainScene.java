@@ -1,8 +1,10 @@
 package com.ict1009.pokemanz.scenes;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.GameMain;
 import com.ict1009.pokemanz.entity.Player;
@@ -16,6 +18,9 @@ public class MainScene implements Screen {
     private Obstacle obstacle;
     private Player player;
 
+    private OrthographicCamera box2DCamera;
+    private Box2DDebugRenderer debugRenderer;
+
     public MainScene(GameMain game) {
         this.game = game;
         this.background = new Texture("room/background.jpg");
@@ -23,6 +28,13 @@ public class MainScene implements Screen {
         this.obstacle = new Obstacle(world, "room/rock.png", GameInfo.RATIO_WIDTH / 2,
                                      GameInfo.RATIO_HEIGHT / 2);
         this.player = new Player(world, "player/player1.png", "Platy");
+
+        this.box2DCamera = new OrthographicCamera();
+        this.box2DCamera.setToOrtho(false, GameInfo.WIDTH / GameInfo.PPM,
+                                    GameInfo.HEIGHT / GameInfo.PPM);
+        this.box2DCamera.position.set(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f, 0);
+
+        this.debugRenderer = new Box2DDebugRenderer();
     }
 
     public void update(float delta) {
@@ -43,6 +55,8 @@ public class MainScene implements Screen {
         game.getBatch().draw(obstacle, obstacle.getX(), obstacle.getY());
         game.getBatch().draw(player, player.getX(), player.getY());
         game.getBatch().end();
+
+        debugRenderer.render(world, box2DCamera.combined);
 
         world.step(delta, 6, 2);
     }
