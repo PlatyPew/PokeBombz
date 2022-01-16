@@ -22,16 +22,19 @@ public class Player extends Entity {
 
     public void detectInput(float delta) {
         float velX = 0, velY = 0;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        float currX = getBody().getPosition().x;
+        float currY = getBody().getPosition().y;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && currX > 0) {
             velX = -1;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && currX < GameInfo.WIDTH - GameInfo.PPM) {
             velX = 1;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) && currY < GameInfo.HEIGHT - GameInfo.PPM) {
             velY = 1;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && currY > 0) {
             velY = -1;
         }
 
