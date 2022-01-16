@@ -4,19 +4,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.GameInfo;
 
-public class Entity extends Sprite implements ContactListener {
+public class Entity extends Sprite {
+    final private World world;
+    final private Body body;
     final private String name;
-
-    private World world;
-    private Body body;
 
     private int health;
 
@@ -73,25 +68,5 @@ public class Entity extends Sprite implements ContactListener {
         body.createFixture(shape, 1f).setUserData(this);
         shape.dispose();
         return body;
-    }
-
-    @Override
-    public void beginContact(Contact contact) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-        // TODO Auto-generated method stub
     }
 }

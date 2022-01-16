@@ -2,10 +2,16 @@ package com.ict1009.pokemanz.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.room.Obstacle;
 
-public class Player extends Entity {
+public class Player extends Entity implements ContactListener {
     private int coin = 0;
 
     public Player(World world, String textureLocation, String name) {
@@ -40,5 +46,33 @@ public class Player extends Entity {
 
         getBody().setLinearVelocity(velX, velY);
         updateEntity();
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        Fixture body1, body2;
+
+        if (contact.getFixtureA().getUserData() instanceof Player) {
+            body1 = contact.getFixtureA();
+            body2 = contact.getFixtureB();
+        } else {
+            body1 = contact.getFixtureB();
+            body2 = contact.getFixtureA();
+        }
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+        // TODO Auto-generated method stub
     }
 }
