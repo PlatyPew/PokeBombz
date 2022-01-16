@@ -23,14 +23,14 @@ public class Obstacle extends Sprite {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
-
-        Body body = world.createBody(bodyDef);
-        body.setFixedRotation(true);
+        bodyDef.fixedRotation = true;
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox((getWidth() / 2) / GameInfo.PPM, (getHeight() / 2) / GameInfo.PPM);
 
-        body.createFixture(shape, 1f);
+        Body body = world.createBody(bodyDef);
+
+        body.createFixture(shape, 1f).setUserData(this);
         shape.dispose();
         return body;
     }

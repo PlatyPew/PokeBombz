@@ -22,6 +22,7 @@ public class MainScene implements Screen {
     private Box2DDebugRenderer debugRenderer;
 
     public MainScene(GameMain game) {
+        setupCamera();
         this.game = game;
         this.background = new Texture("room/background.jpg");
         this.world = new World(new Vector2(0, 0), true);
@@ -29,12 +30,7 @@ public class MainScene implements Screen {
                                      GameInfo.RATIO_HEIGHT / 2);
         this.player = new Player(world, "player/player1.png", "Platy");
 
-        this.box2DCamera = new OrthographicCamera();
-        this.box2DCamera.setToOrtho(false, GameInfo.WIDTH / GameInfo.PPM,
-                                    GameInfo.HEIGHT / GameInfo.PPM);
-        this.box2DCamera.position.set(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f, 0);
-
-        this.debugRenderer = new Box2DDebugRenderer();
+        this.world.setContactListener(this.player);
     }
 
     public void update(float delta) {
@@ -84,5 +80,13 @@ public class MainScene implements Screen {
     @Override
     public void dispose() {
         // TODO Auto-generated method stub
+    }
+
+    private void setupCamera() {
+        this.box2DCamera = new OrthographicCamera();
+        this.box2DCamera.setToOrtho(false, GameInfo.WIDTH / GameInfo.PPM,
+                                    GameInfo.HEIGHT / GameInfo.PPM);
+        this.box2DCamera.position.set(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f, 0);
+        this.debugRenderer = new Box2DDebugRenderer();
     }
 }

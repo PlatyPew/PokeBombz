@@ -4,11 +4,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.GameInfo;
 
-public class Entity extends Sprite {
+public class Entity extends Sprite implements ContactListener {
     final private String name;
 
     private World world;
@@ -39,14 +43,14 @@ public class Entity extends Sprite {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
-
-        Body body = world.createBody(bodyDef);
-        body.setFixedRotation(true);
+        bodyDef.fixedRotation = true;
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox((getWidth() / 2) / GameInfo.PPM, (getHeight() / 2) / GameInfo.PPM);
 
-        body.createFixture(shape, 1f);
+        Body body = world.createBody(bodyDef);
+
+        body.createFixture(shape, 1f).setUserData(this);
         shape.dispose();
         return body;
     }
@@ -69,5 +73,25 @@ public class Entity extends Sprite {
 
     public void updateEntity() {
         setPosition((body.getPosition().x) * GameInfo.PPM, (body.getPosition().y) * GameInfo.PPM);
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+        // TODO Auto-generated method stub
     }
 }
