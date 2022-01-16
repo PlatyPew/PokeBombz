@@ -39,22 +39,6 @@ public class Entity extends Sprite implements ContactListener {
         this.body = createBody();
     }
 
-    private Body createBody() {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
-        bodyDef.fixedRotation = true;
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox((getWidth() / 2) / GameInfo.PPM, (getHeight() / 2) / GameInfo.PPM);
-
-        Body body = world.createBody(bodyDef);
-
-        body.createFixture(shape, 1f).setUserData(this);
-        shape.dispose();
-        return body;
-    }
-
     public String getName() {
         return this.name;
     }
@@ -73,6 +57,22 @@ public class Entity extends Sprite implements ContactListener {
 
     public void updateEntity() {
         setPosition((body.getPosition().x) * GameInfo.PPM, (body.getPosition().y) * GameInfo.PPM);
+    }
+
+    private Body createBody() {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
+        bodyDef.fixedRotation = true;
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox((getWidth() / 2) / GameInfo.PPM, (getHeight() / 2) / GameInfo.PPM);
+
+        Body body = world.createBody(bodyDef);
+
+        body.createFixture(shape, 1f).setUserData(this);
+        shape.dispose();
+        return body;
     }
 
     @Override

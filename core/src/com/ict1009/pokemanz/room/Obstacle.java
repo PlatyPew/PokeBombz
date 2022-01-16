@@ -19,6 +19,10 @@ public class Obstacle extends Sprite {
         this.body = createBody();
     }
 
+    public Body getBody() {
+        return body;
+    }
+
     private Body createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -32,10 +36,6 @@ public class Obstacle extends Sprite {
 
         body.createFixture(shape, 1f).setUserData(this);
         shape.dispose();
-        return body;
-    }
-
-    public Body getBody() {
         return body;
     }
 }

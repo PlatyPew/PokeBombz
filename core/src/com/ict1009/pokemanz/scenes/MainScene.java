@@ -33,6 +33,14 @@ public class MainScene implements Screen {
         this.world.setContactListener(this.player);
     }
 
+    private void setupCamera() {
+        this.box2DCamera = new OrthographicCamera();
+        this.box2DCamera.setToOrtho(false, GameInfo.WIDTH / GameInfo.PPM,
+                                    GameInfo.HEIGHT / GameInfo.PPM);
+        this.box2DCamera.position.set(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f, 0);
+        this.debugRenderer = new Box2DDebugRenderer();
+    }
+
     public void update(float delta) {
         player.detectInput(delta);
     }
@@ -80,13 +88,5 @@ public class MainScene implements Screen {
     @Override
     public void dispose() {
         // TODO Auto-generated method stub
-    }
-
-    private void setupCamera() {
-        this.box2DCamera = new OrthographicCamera();
-        this.box2DCamera.setToOrtho(false, GameInfo.WIDTH / GameInfo.PPM,
-                                    GameInfo.HEIGHT / GameInfo.PPM);
-        this.box2DCamera.position.set(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f, 0);
-        this.debugRenderer = new Box2DDebugRenderer();
     }
 }

@@ -10,4 +10,8 @@ public class Attack extends Sprite {
         super(new Texture(textureLocation));
         this.damage = damage;
     }
+
+    public int getDamage() {
+        return damage;
+    }
 }
