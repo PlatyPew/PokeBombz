@@ -2,13 +2,14 @@ package com.ict1009.pokemanz.entity;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.GameInfo;
 
-public class Entity extends Sprite {
+public abstract class Entity extends Sprite {
     final private World world;
     final private Body body;
     final private String name;
@@ -42,12 +43,12 @@ public class Entity extends Sprite {
         return this.health;
     }
 
-    public Body getBody() {
-        return this.body;
+    public void setHealth(int health) {
+        this.health = health;
     }
 
-    public void updateHealth(int health) {
-        this.health += health;
+    public Body getBody() {
+        return this.body;
     }
 
     public void updateEntity() {
@@ -68,5 +69,9 @@ public class Entity extends Sprite {
         body.createFixture(shape, 1f).setUserData(this);
         shape.dispose();
         return body;
+    }
+
+    public void draw(SpriteBatch batch) {
+        batch.draw(this, this.getX(), this.getY());
     }
 }

@@ -3,20 +3,24 @@ package com.ict1009.pokemanz.scenes;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.GameMain;
 import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.GameInfo;
-import com.ict1009.pokemanz.room.Obstacle;
+import com.ict1009.pokemanz.item.Coin;
 
 public class MainScene implements Screen {
     private World world;
     private GameMain game;
+    private SpriteBatch batch;
+
     private Texture background;
-    private Obstacle obstacle;
+
     private Player player;
+    private Coin coin;
 
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
@@ -24,11 +28,13 @@ public class MainScene implements Screen {
     public MainScene(GameMain game) {
         setupCamera();
         this.game = game;
+        this.batch = game.getBatch();
+
         this.background = new Texture("room/background.jpg");
         this.world = new World(new Vector2(0, 0), true);
-        this.obstacle = new Obstacle(world, "room/rock.png", GameInfo.RATIO_WIDTH / 2,
-                                     GameInfo.RATIO_HEIGHT / 2);
+
         this.player = new Player(world, "player/player1.png", "Platy");
+        this.coin = new Coin(world, "item/coin.png", 2, 2, 5);
 
         this.world.setContactListener(this.player);
     }
@@ -42,7 +48,8 @@ public class MainScene implements Screen {
     }
 
     public void update(float delta) {
-        player.detectInput(delta);
+        player.update(delta);
+        coin.update(delta);
     }
 
     @Override
@@ -54,11 +61,11 @@ public class MainScene implements Screen {
     public void render(float delta) {
         update(delta);
 
-        game.getBatch().begin();
-        game.getBatch().draw(background, 0, 0);
-        game.getBatch().draw(obstacle, obstacle.getX(), obstacle.getY());
-        game.getBatch().draw(player, player.getX(), player.getY());
-        game.getBatch().end();
+        batch.begin();
+        batch.draw(background, 0, 0);
+        coin.draw(batch);
+        player.draw(batch);
+        batch.end();
 
         debugRenderer.render(world, box2DCamera.combined);
 
