@@ -26,25 +26,41 @@ public class Player extends Entity implements ContactListener {
         this.coin = coin;
     }
 
-    public void update(float delta) {
+    public void handleMovement() {
         float velX = 0, velY = 0;
         float currX = (getBody().getPosition().x) * GameInfo.PPM;
         float currY = (getBody().getPosition().y) * GameInfo.PPM;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && currX > 0) {
-            velX = -GameInfo.PLAYER_VELOCITY;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && currX < GameInfo.WIDTH - GameInfo.PPM) {
-            velX = GameInfo.PLAYER_VELOCITY;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) && currY < GameInfo.HEIGHT - GameInfo.PPM) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM) {
             velY = GameInfo.PLAYER_VELOCITY;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && currY > 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > 0) {
+            velX = -GameInfo.PLAYER_VELOCITY;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > 0) {
             velY = -GameInfo.PLAYER_VELOCITY;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && currX < GameInfo.WIDTH - GameInfo.PPM) {
+            velX = GameInfo.PLAYER_VELOCITY;
         }
 
         getBody().setLinearVelocity(velX, velY);
+    }
+
+    public void handleAttack() {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+
+        }
+    }
+
+    public void update(float delta) {
+        handleMovement();
         updateEntity();
     }
 
@@ -58,7 +74,7 @@ public class Player extends Entity implements ContactListener {
             body = contact.getFixtureA().getUserData();
         }
 
-        // TODO: Change to switch statement (but requires an additional field in Item class)
+        // TODO: Make code less disgusting
         if (body instanceof Coin) {
             Coin coin = (Coin)body;
             coin.applyProperty(this);
