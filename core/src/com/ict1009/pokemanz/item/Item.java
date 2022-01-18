@@ -2,6 +2,7 @@ package com.ict1009.pokemanz.item;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -9,10 +10,13 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.GameInfo;
 
-public class Item extends Sprite {
+public abstract class Item extends Sprite {
     final private World world;
     final private Body body;
     final private int cost; // Cost of item
+
+    private boolean destroyed = false;
+    protected boolean toDestroy = false;
 
     public Item(World world, String textureLocation, float initialX, float initialY) {
         super(new Texture(textureLocation));
@@ -57,5 +61,17 @@ public class Item extends Sprite {
 
         shape.dispose();
         return body;
+    }
+
+    public void draw(SpriteBatch batch) {
+        if (!destroyed)
+            batch.draw(this, this.getX(), this.getY());
+    }
+
+    public void update(float delta) {
+        if (toDestroy && !destroyed) {
+            this.world.destroyBody(this.body);
+            this.destroyed = true;
+        }
     }
 }

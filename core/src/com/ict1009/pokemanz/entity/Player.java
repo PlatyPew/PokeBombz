@@ -5,11 +5,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.GameInfo;
-import com.ict1009.pokemanz.room.Obstacle;
+import com.ict1009.pokemanz.item.Coin;
+import com.ict1009.pokemanz.item.Potion;
 
 public class Player extends Entity implements ContactListener {
     private int coin = 0;
@@ -22,11 +22,11 @@ public class Player extends Entity implements ContactListener {
         return this.coin;
     }
 
-    public void updateCoin(int coin) {
-        this.coin += coin;
+    public void setCoin(int coin) {
+        this.coin = coin;
     }
 
-    public void detectInput(float delta) {
+    public void update(float delta) {
         float velX = 0, velY = 0;
         float currX = (getBody().getPosition().x) * GameInfo.PPM;
         float currY = (getBody().getPosition().y) * GameInfo.PPM;
@@ -50,14 +50,21 @@ public class Player extends Entity implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        Fixture body1, body2;
+        Object body;
 
         if (contact.getFixtureA().getUserData() instanceof Player) {
-            body1 = contact.getFixtureA();
-            body2 = contact.getFixtureB();
+            body = contact.getFixtureB().getUserData();
         } else {
-            body1 = contact.getFixtureB();
-            body2 = contact.getFixtureA();
+            body = contact.getFixtureA().getUserData();
+        }
+
+        // TODO: Change to switch statement (but requires an additional field in Item class)
+        if (body instanceof Coin) {
+            Coin coin = (Coin)body;
+            coin.applyProperty(this);
+        } else if (body instanceof Potion) {
+            Potion potion = (Potion)body;
+            potion.applyProperty(this);
         }
     }
 
