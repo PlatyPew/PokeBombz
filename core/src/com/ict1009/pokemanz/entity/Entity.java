@@ -51,7 +51,7 @@ public abstract class Entity extends Sprite {
         return this.body;
     }
 
-    public void updateEntity() {
+    public void update(float delta) {
         setPosition((body.getPosition().x) * GameInfo.PPM, (body.getPosition().y) * GameInfo.PPM);
     }
 

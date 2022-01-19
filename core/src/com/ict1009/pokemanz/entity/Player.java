@@ -2,6 +2,7 @@ package com.ict1009.pokemanz.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -14,8 +15,11 @@ import com.ict1009.pokemanz.item.Potion;
 public class Player extends Entity implements ContactListener {
     private int coin = 0;
 
+    private World world;
+
     public Player(World world, String textureLocation, String name) {
         super(world, textureLocation, name);
+        this.world = world;
     }
 
     public int getCoin() {
@@ -47,21 +51,28 @@ public class Player extends Entity implements ContactListener {
         getBody().setLinearVelocity(velX, velY);
     }
 
-    public void handleAttack() {
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+    public void handleAttack(SpriteBatch batch) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
 
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
 
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
 
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
 
         }
     }
 
+    @Override
+    public void draw(SpriteBatch batch) {
+        super.draw(batch);
+        handleAttack(batch);
+    }
+
+    @Override
     public void update(float delta) {
         handleMovement();
-        updateEntity();
+        super.update(delta);
     }
 
     @Override
