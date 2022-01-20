@@ -1,4 +1,5 @@
 package com.ict1009.pokemanz.attack;
 
-public class Attack {
+public class BulletOne {
+
 }

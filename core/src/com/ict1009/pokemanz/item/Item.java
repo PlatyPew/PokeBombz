@@ -63,7 +63,7 @@ public abstract class Item extends Sprite {
         return body;
     }
 
-    public void draw(SpriteBatch batch) {
+    public void render(SpriteBatch batch) {
         if (!destroyed)
             batch.draw(this, this.getX(), this.getY());
     }

@@ -71,7 +71,7 @@ public abstract class Entity extends Sprite {
         return body;
     }
 
-    public void draw(SpriteBatch batch) {
+    public void render(SpriteBatch batch) {
         batch.draw(this, this.getX(), this.getY());
     }
 }

@@ -64,8 +64,8 @@ public class Player extends Entity implements ContactListener {
     }
 
     @Override
-    public void draw(SpriteBatch batch) {
-        super.draw(batch);
+    public void render(SpriteBatch batch) {
+        super.render(batch);
         handleAttack(batch);
     }
 

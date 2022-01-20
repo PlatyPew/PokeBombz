@@ -2,6 +2,7 @@ package com.ict1009.pokemanz.room;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -37,5 +38,9 @@ public class Obstacle extends Sprite {
         body.createFixture(shape, 1f).setUserData(this);
         shape.dispose();
         return body;
+    }
+
+    public void render(SpriteBatch batch) {
+        batch.draw(this, this.getX(), this.getY());
     }
 }

@@ -8,22 +8,19 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.GameInfo;
 
 public abstract class Bullet extends Sprite {
     final private World world;
     final private Body body;
-    final private Player player;
     final private int damage;
 
     private boolean activated = false;
     protected boolean toDestroy = false;
 
-    public Bullet(World world, Player player, String textureLocation, int damage) {
+    public Bullet(World world, String textureLocation, int damage) {
         super(new Texture(textureLocation));
         this.world = world;
-        this.player = player;
         this.damage = damage;
 
         this.body = createBody();
@@ -56,16 +53,8 @@ public abstract class Bullet extends Sprite {
         return body;
     }
 
-    public void attackRight() {
-        setPosition(player.getX() + GameInfo.PPM, player.getY() + GameInfo.PPM / 2);
-        this.activated = true;
-        getBody().setLinearVelocity(5f, 0f);
-    }
-
-    public void draw(SpriteBatch batch) {
-        if (activated) {
-            batch.draw(this, this.getX(), this.getY());
-        }
+    public void render(SpriteBatch batch) {
+        batch.draw(this, this.getX(), this.getY());
     }
 
     public void update(float delta) {

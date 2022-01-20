@@ -12,6 +12,7 @@ import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.item.Coin;
 import com.ict1009.pokemanz.item.Potion;
+import com.ict1009.pokemanz.room.Obstacle;
 
 public class MainScene implements Screen {
     private World world;
@@ -22,6 +23,7 @@ public class MainScene implements Screen {
     private Player player;
     private Coin coin;
     private Potion potion;
+    private Obstacle obstacle;
 
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
@@ -36,6 +38,7 @@ public class MainScene implements Screen {
         this.player = new Player(world, "player/player1.png", "Platy");
         this.coin = new Coin(world, "item/coin.png", 2, 2, 5);
         this.potion = new Potion(world, "item/potion.png", 3, 2, 0, 3);
+        this.obstacle = new Obstacle(world, "room/rock.png", 8, 6);
 
         this.world.setContactListener(this.player);
     }
@@ -65,9 +68,10 @@ public class MainScene implements Screen {
 
         batch.begin();
         batch.draw(background, 0, 0);
-        player.draw(batch);
-        coin.draw(batch);
-        potion.draw(batch);
+        player.render(batch);
+        coin.render(batch);
+        potion.render(batch);
+        obstacle.render(batch);
         batch.end();
 
         debugRenderer.render(world, box2DCamera.combined);
