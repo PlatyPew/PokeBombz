@@ -59,7 +59,6 @@ public class Player extends Entity implements ContactListener {
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
 
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-
         }
     }
 
