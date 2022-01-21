@@ -44,9 +44,14 @@ public abstract class Item extends Sprite {
         return body;
     }
 
+    /**
+     * Creates a static body with a square shape
+     *
+     * @return body: Static body
+     */
     private Body createBody() {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
         bodyDef.fixedRotation = true;
 
@@ -63,11 +68,21 @@ public abstract class Item extends Sprite {
         return body;
     }
 
+    /**
+     * Renders the body of the sprite when body is not destroyed
+     *
+     * @param batch: The spritebatch of the game
+     */
     public void render(SpriteBatch batch) {
         if (!destroyed)
             batch.draw(this, this.getX(), this.getY());
     }
 
+    /**
+     * Checks if sprite needs to be destroyed
+     *
+     * @param delta: 1/fps
+     */
     public void update(float delta) {
         if (toDestroy && !destroyed) {
             this.world.destroyBody(this.body);

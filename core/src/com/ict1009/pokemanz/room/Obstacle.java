@@ -24,6 +24,11 @@ public class Obstacle extends Sprite {
         return body;
     }
 
+    /**
+     * Creates a static body with a square shape
+     *
+     * @return body: Static body
+     */
     private Body createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -40,6 +45,11 @@ public class Obstacle extends Sprite {
         return body;
     }
 
+    /**
+     * Renders the body of the obstacle
+     *
+     * @param batch: The spritebatch of the game
+     */
     public void render(SpriteBatch batch) {
         batch.draw(this, this.getX(), this.getY());
     }

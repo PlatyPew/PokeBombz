@@ -58,6 +58,11 @@ public class Player extends Sprite implements ContactListener {
         this.health = health;
     }
 
+    /**
+     * Creates a dynamic body with a square shape
+     *
+     * @return body: Dynamic body
+     */
     private Body createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -74,6 +79,10 @@ public class Player extends Sprite implements ContactListener {
         return body;
     }
 
+    /**
+     * Gets keyboard input and moves the character using WASD
+     * Also checks that player does not go over edge
+     */
     public void handleMovement() {
         float velX = 0, velY = 0;
         float currX = (getBody().getPosition().x) * GameInfo.PPM;
@@ -95,6 +104,11 @@ public class Player extends Sprite implements ContactListener {
         getBody().setLinearVelocity(velX, velY);
     }
 
+    /**
+     * Gets keyboard input with arrow keys and only runs once per press
+     *
+     * @param batch: The spritebatch of the game
+     */
     public void handleAttack(SpriteBatch batch) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
 
@@ -106,16 +120,32 @@ public class Player extends Sprite implements ContactListener {
         }
     }
 
+    /**
+     * Renders the body of the player
+     *
+     * @param batch: The spritebatch of the game
+     */
     public void render(SpriteBatch batch) {
         batch.draw(this, this.getX(), this.getY());
         handleAttack(batch);
     }
 
+    /**
+     * Updates the sprite texture according to where the body is
+     *
+     * @param delta: 1/fps
+     */
     public void update(float delta) {
         handleMovement();
         setPosition((body.getPosition().x) * GameInfo.PPM, (body.getPosition().y) * GameInfo.PPM);
     }
 
+    /**
+     * Checks when 2 objects collide
+     * Currently used for collecting items
+     *
+     * @param contact: Contact
+     */
     @Override
     public void beginContact(Contact contact) {
         Object body;
