@@ -35,7 +35,7 @@ public class MainScene implements Screen {
         this.background = new Texture("room/background.jpg");
         this.world = new World(new Vector2(0, 0), true);
 
-        this.player = new Player(world, "player/player1.png", "Platy");
+        this.player = new Player(world, "player/player1.png", 6, 6, "Platy");
         this.coin = new Coin(world, "item/coin.png", 2, 2, 5);
         this.potion = new Potion(world, "item/potion.png", 3, 2, 0, 3);
         this.obstacle = new Obstacle(world, "room/rock.png", 8, 6);
