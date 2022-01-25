@@ -14,10 +14,9 @@ import com.ict1009.pokemanz.room.Room;
 public class MainScene implements Screen {
     private World world;
     private SpriteBatch batch;
-    
-//    private Texture background;
+
     private Room room;
-    
+
     private Player player;
 
     private OrthographicCamera box2DCamera;

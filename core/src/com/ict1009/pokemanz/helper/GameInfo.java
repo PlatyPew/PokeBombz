@@ -12,5 +12,4 @@ public class GameInfo {
     final public static int PPM = 60;
     final public static int PLAYER_VELOCITY = 5;
     public static World world = new World(new Vector2(0, 0), true);
-
 }
