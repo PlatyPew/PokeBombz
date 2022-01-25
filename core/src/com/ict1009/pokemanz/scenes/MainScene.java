@@ -9,13 +9,13 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.GameMain;
 import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.GameInfo;
-import com.ict1009.pokemanz.room.Room;
+import com.ict1009.pokemanz.room.LevelOne;
 
 public class MainScene implements Screen {
     private World world;
     private SpriteBatch batch;
 
-    private Room room;
+    private LevelOne level1;
 
     private Player player;
 
@@ -25,11 +25,11 @@ public class MainScene implements Screen {
     public MainScene(GameMain game) {
         setupCamera();
         this.batch = game.getBatch();
-        room = new Room("room/background.png");
+        this.level1 = new LevelOne();
         this.world = new World(new Vector2(0, 0), true);
         this.player = new Player(world, "player/1/player1downstill.png", 6, 6, "Platy");
         this.world.setContactListener(this.player);
-        room.makeRoom(world);
+        level1.createObstacles(world);
     }
 
     private void setupCamera() {
@@ -55,9 +55,9 @@ public class MainScene implements Screen {
 
         batch.begin();
 
-        batch.draw(room.getTexture(), 0, 0);
+        batch.draw(level1.getTexture(), 0, 0);
         player.render(batch);
-        room.render(batch);
+        level1.render(batch);
         batch.end();
 
         debugRenderer.render(world, box2DCamera.combined);
