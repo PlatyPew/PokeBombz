@@ -13,17 +13,21 @@ import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.item.Coin;
 import com.ict1009.pokemanz.item.Potion;
 import com.ict1009.pokemanz.room.Obstacle;
+import com.ict1009.pokemanz.room.Room;
 
 public class MainScene implements Screen {
-    private World world;
+//    private World world;
     private SpriteBatch batch;
-
-    private Texture background;
-
+    private World world;
+    
+//    private Texture background;
+    private Room room;
+    
     private Player player;
     private Coin coin;
     private Potion potion;
     private Obstacle obstacle;
+    private Obstacle obstacle2;
 
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
@@ -31,16 +35,14 @@ public class MainScene implements Screen {
     public MainScene(GameMain game) {
         setupCamera();
         this.batch = game.getBatch();
-
-        this.background = new Texture("room/background.jpg");
+        room = new Room("room/map1.png");
+//        this.background = new Texture("room/rock.png");
         this.world = new World(new Vector2(0, 0), true);
-
-        this.player = new Player(world, "player/player1.png", 6, 6, "Platy");
+        this.player = new Player(world, "player/player2.png", 6, 6, "Platy");
         this.coin = new Coin(world, "item/coin.png", 2, 2, 5);
         this.potion = new Potion(world, "item/potion.png", 3, 2, 0, 3);
-        this.obstacle = new Obstacle(world, "room/rock.png", 8, 6);
-
         this.world.setContactListener(this.player);
+        room.makeRoom(world);
     }
 
     private void setupCamera() {
@@ -67,11 +69,15 @@ public class MainScene implements Screen {
         update(delta);
 
         batch.begin();
-        batch.draw(background, 0, 0);
+
+        batch.draw(room.getTexture(), 0, 0);
+//        batch.draw(background, (GameInfo.PPM * -0.15f), GameInfo.PPM * -0.1f);
         player.render(batch);
         coin.render(batch);
         potion.render(batch);
-        obstacle.render(batch);
+//        obstacle.render(batch);
+//        obstacle2.render(batch);
+        room.render(batch);
         batch.end();
 
         debugRenderer.render(world, box2DCamera.combined);
