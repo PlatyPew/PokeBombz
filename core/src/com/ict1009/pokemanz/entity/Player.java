@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -66,11 +67,12 @@ public class Player extends Sprite implements ContactListener {
     private Body createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set((getX() / GameInfo.PPM), (getY() / GameInfo.PPM));
+        bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
         bodyDef.fixedRotation = true;
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(0.45f, 0.45f);
+        CircleShape shape = new CircleShape();
+        shape.setRadius((getWidth() / 2) / GameInfo.PPM - 0.02f);
+
         Body body = world.createBody(bodyDef);
 
         body.createFixture(shape, 1f).setUserData(this);
@@ -87,16 +89,17 @@ public class Player extends Sprite implements ContactListener {
         float currX = (getBody().getPosition().x) * GameInfo.PPM;
         float currY = (getBody().getPosition().y) * GameInfo.PPM;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM * 2) {
             velY = GameInfo.PLAYER_VELOCITY;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM) {
             velX = -GameInfo.PLAYER_VELOCITY;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > GameInfo.PPM) {
             velY = -GameInfo.PLAYER_VELOCITY;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && currX < GameInfo.WIDTH - GameInfo.PPM) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D) &&
+            currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
             velX = GameInfo.PLAYER_VELOCITY;
         }
 
@@ -125,7 +128,7 @@ public class Player extends Sprite implements ContactListener {
      * @param batch: The spritebatch of the game
      */
     public void render(SpriteBatch batch) {
-        batch.draw(this, this.getX() - 22.5f, this.getY() - 32);
+        batch.draw(this, this.getX(), this.getY());
         handleAttack(batch);
     }
 
