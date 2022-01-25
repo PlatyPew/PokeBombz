@@ -89,16 +89,17 @@ public class Player extends Sprite implements ContactListener {
         float currX = (getBody().getPosition().x) * GameInfo.PPM;
         float currY = (getBody().getPosition().y) * GameInfo.PPM;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM * 2) {
             velY = GameInfo.PLAYER_VELOCITY;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM) {
             velX = -GameInfo.PLAYER_VELOCITY;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > GameInfo.PPM) {
             velY = -GameInfo.PLAYER_VELOCITY;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && currX < GameInfo.WIDTH - GameInfo.PPM) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D) &&
+            currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
             velX = GameInfo.PLAYER_VELOCITY;
         }
 
