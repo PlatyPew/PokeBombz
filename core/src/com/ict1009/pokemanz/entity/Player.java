@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -69,9 +70,8 @@ public class Player extends Sprite implements ContactListener {
         bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
         bodyDef.fixedRotation = true;
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox((getWidth() / 2) / GameInfo.PPM - 0.02f,
-                       (getHeight() / 2) / GameInfo.PPM - 0.02f);
+        CircleShape shape = new CircleShape();
+        shape.setRadius((getWidth() / 2) / GameInfo.PPM - 0.02f);
 
         Body body = world.createBody(bodyDef);
 
