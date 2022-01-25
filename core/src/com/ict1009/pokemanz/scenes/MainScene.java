@@ -2,7 +2,6 @@ package com.ict1009.pokemanz.scenes;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -10,24 +9,15 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.GameMain;
 import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.GameInfo;
-import com.ict1009.pokemanz.item.Coin;
-import com.ict1009.pokemanz.item.Potion;
-import com.ict1009.pokemanz.room.Obstacle;
 import com.ict1009.pokemanz.room.Room;
 
 public class MainScene implements Screen {
-//    private World world;
-    private SpriteBatch batch;
     private World world;
-    
-//    private Texture background;
+    private SpriteBatch batch;
+
     private Room room;
-    
+
     private Player player;
-    private Coin coin;
-    private Potion potion;
-    private Obstacle obstacle;
-    private Obstacle obstacle2;
 
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
@@ -35,12 +25,9 @@ public class MainScene implements Screen {
     public MainScene(GameMain game) {
         setupCamera();
         this.batch = game.getBatch();
-        room = new Room("room/map1.png");
-//        this.background = new Texture("room/rock.png");
+        room = new Room("room/background.png");
         this.world = new World(new Vector2(0, 0), true);
-        this.player = new Player(world, "player/player2.png", 6, 6, "Platy");
-        this.coin = new Coin(world, "item/coin.png", 2, 2, 5);
-        this.potion = new Potion(world, "item/potion.png", 3, 2, 0, 3);
+        this.player = new Player(world, "player/1/player1downstill.png", 6, 6, "Platy");
         this.world.setContactListener(this.player);
         room.makeRoom(world);
     }
@@ -55,8 +42,6 @@ public class MainScene implements Screen {
 
     public void update(float delta) {
         player.update(delta);
-        coin.update(delta);
-        potion.update(delta);
     }
 
     @Override
@@ -71,12 +56,7 @@ public class MainScene implements Screen {
         batch.begin();
 
         batch.draw(room.getTexture(), 0, 0);
-//        batch.draw(background, (GameInfo.PPM * -0.15f), GameInfo.PPM * -0.1f);
         player.render(batch);
-        coin.render(batch);
-        potion.render(batch);
-//        obstacle.render(batch);
-//        obstacle2.render(batch);
         room.render(batch);
         batch.end();
 

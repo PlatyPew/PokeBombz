@@ -66,12 +66,11 @@ public class Player extends Sprite implements ContactListener {
     private Body createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set((getX() / GameInfo.PPM),
-        		(getY() / GameInfo.PPM));
+        bodyDef.position.set((getX() / GameInfo.PPM), (getY() / GameInfo.PPM));
         bodyDef.fixedRotation = true;
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(0.45f,0.45f);
+        shape.setAsBox(0.45f, 0.45f);
         Body body = world.createBody(bodyDef);
 
         body.createFixture(shape, 1f).setUserData(this);
@@ -126,7 +125,7 @@ public class Player extends Sprite implements ContactListener {
      * @param batch: The spritebatch of the game
      */
     public void render(SpriteBatch batch) {
-        batch.draw(this, this.getX()-22.5f, this.getY()-32);
+        batch.draw(this, this.getX() - 22.5f, this.getY() - 32);
         handleAttack(batch);
     }
 
