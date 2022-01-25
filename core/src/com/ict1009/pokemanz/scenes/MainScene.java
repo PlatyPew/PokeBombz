@@ -27,7 +27,7 @@ public class MainScene implements Screen {
         this.batch = game.getBatch();
         this.level1 = new LevelOne();
         this.world = new World(new Vector2(0, 0), true);
-        this.player = new Player(world, "player/1/player1downstill.png", 6, 6, "Platy");
+        this.player = new Player(world, "player/1/player1downstill.png", 0, 0, "Platy");
         this.world.setContactListener(this.player);
         level1.createObstacles(world);
     }

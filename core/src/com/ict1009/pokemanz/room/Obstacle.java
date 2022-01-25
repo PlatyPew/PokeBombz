@@ -16,7 +16,7 @@ public class Obstacle extends Sprite {
     public Obstacle(World world, String textureLocation, float initialX, float initialY) {
         super(new Texture(textureLocation));
         this.world = world;
-        setPosition(initialX * GameInfo.PPM, initialY * GameInfo.PPM);
+        setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
         this.body = createBody();
     }
 
