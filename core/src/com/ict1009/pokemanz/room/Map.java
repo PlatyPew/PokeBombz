@@ -24,6 +24,11 @@ public abstract class Map {
         return this.texture;
     }
 
+    /**
+     * Creates unbreakable obstacles using 2d array
+     *
+     * @param world: World
+     */
     private void createUnbreakable(World world) {
         for (int i = 0; i < unbreakable.length; i++) {
             this.obstacle =
@@ -32,6 +37,11 @@ public abstract class Map {
         }
     }
 
+    /**
+     * Creates breakable obstacles using 2d array
+     *
+     * @param world: World
+     */
     private void createBreakable(World world) {
         for (int i = 0; i < breakable.length; i++) {
             this.obstacle =
@@ -40,11 +50,21 @@ public abstract class Map {
         }
     }
 
+    /**
+     * Creates both unbreakable and breakable obstacles
+     *
+     * @param world: World
+     */
     public void createObstacles(World world) {
         createBreakable(world);
         createUnbreakable(world);
     }
 
+    /**
+     * Provides updates to the obstacle class
+     *
+     * @param delta: 1/fps
+     */
     public void update(float delta) {
         for (int i = 0; i < obstaclesUnbreakable.size(); i++) {
             obstaclesUnbreakable.get(i).update(delta);
@@ -55,6 +75,11 @@ public abstract class Map {
         }
     }
 
+    /**
+     * Renders the obstacles
+     *
+     * @param batch: SpriteBatch
+     */
     public void render(SpriteBatch batch) {
         for (int i = 0; i < obstaclesUnbreakable.size(); i++) {
             obstaclesUnbreakable.get(i).render(batch);

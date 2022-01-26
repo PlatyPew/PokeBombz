@@ -10,10 +10,18 @@ public class Breakable {
         this.obstacle = obstacle;
     }
 
+    /**
+     * Destroys the obstacle
+     */
     public void setToDestroy() {
         toDestroy = true;
     }
 
+    /**
+     * Checks if obstacle has been destroyed
+     *
+     * @return boolean
+     */
     public boolean getDestroyed() {
         return destroyed;
     }

@@ -66,12 +66,20 @@ public class Obstacle extends Sprite {
         return body;
     }
 
+    /**
+     * Destroys obstacle if it's breakable
+     */
     public void setToDestroy() {
         if (canBreak) {
             breakable.setToDestroy();
         }
     }
 
+    /**
+     * Checks if obstacle has been destroyed
+     *
+     * @return boolean
+     */
     public boolean getDestroyed() {
         if (canBreak) {
             return breakable.getDestroyed();
@@ -79,6 +87,11 @@ public class Obstacle extends Sprite {
         return false;
     }
 
+    /**
+     * Updates obstacle
+     *
+     * @param delta: 1/fps
+     */
     public void update(float delta) {
         if (canBreak) {
             breakable.update(delta);
