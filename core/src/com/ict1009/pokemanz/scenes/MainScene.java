@@ -29,7 +29,7 @@ public class MainScene implements Screen {
         this.world = new World(new Vector2(0, 0), true);
         this.player = new Player(world, "player/1/player1downstill.png", 0, 0, "Platy");
         this.world.setContactListener(this.player);
-        level1.createUnbreakableObstacles(world);
+        level1.createObstacles(world);
     }
 
     private void setupCamera() {
