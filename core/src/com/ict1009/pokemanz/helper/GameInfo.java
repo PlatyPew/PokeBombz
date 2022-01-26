@@ -10,6 +10,6 @@ public class GameInfo {
     final public static float RATIO_HEIGHT = 9f;
     final public static int FPS = 60;
     final public static int PPM = 60;
-    final public static int PLAYER_VELOCITY = 5;
+    final public static int PLAYER_VELOCITY = 2;
     public static World world = new World(new Vector2(0, 0), true);
 }
