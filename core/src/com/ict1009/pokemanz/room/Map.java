@@ -21,11 +21,17 @@ public abstract class Map {
         return this.texture;
     }
 
-    public void createObstacles(World world) {
+    public void createUnbreakableObstacles(World world) {
         for (int i = 0; i < obstaclesUnbreakable.length; i++) {
             this.obstacle = new Obstacle(world, "room/unbreakable.png", obstaclesUnbreakable[i][0],
                                          obstaclesUnbreakable[i][1]);
             this.obstacles.add(this.obstacle);
+        }
+    }
+
+    public void update(float delta) {
+        for (int i = 0; i < obstacles.size(); i++) {
+            obstacles.get(i).update(delta);
         }
     }
 
