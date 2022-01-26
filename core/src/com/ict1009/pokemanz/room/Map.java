@@ -3,6 +3,8 @@ package com.ict1009.pokemanz.room;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ict1009.pokemanz.helper.GameInfo;
+
 import java.util.ArrayList;
 
 public abstract class Map {
@@ -10,6 +12,7 @@ public abstract class Map {
     private Obstacle obstacle;
     private int[][] unbreakable;
     private int[][] breakable;
+    private int[][] map = new int[GameInfo.MAP_WIDTH][GameInfo.MAP_HEIGHT];
 
     private ArrayList<Obstacle> obstaclesUnbreakable = new ArrayList<Obstacle>();
     private ArrayList<Obstacle> obstaclesBreakable = new ArrayList<Obstacle>();
@@ -31,9 +34,13 @@ public abstract class Map {
      */
     private void createUnbreakable(World world) {
         for (int i = 0; i < unbreakable.length; i++) {
+            int gridX = unbreakable[i][0];
+            int gridY = unbreakable[i][1];
             this.obstacle =
-                new Obstacle(world, "room/unbreakable.png", unbreakable[i][0], unbreakable[i][1]);
+                new Obstacle(world, "room/unbreakable.png", gridX, gridY);
             this.obstaclesUnbreakable.add(this.obstacle);
+
+            map[gridX][gridY] = 2;
         }
     }
 
@@ -44,9 +51,13 @@ public abstract class Map {
      */
     private void createBreakable(World world) {
         for (int i = 0; i < breakable.length; i++) {
+            int gridX = breakable[i][0];
+            int gridY = breakable[i][1];
             this.obstacle =
-                new Obstacle(world, "room/breakable.png", breakable[i][0], breakable[i][1], true);
+                new Obstacle(world, "room/breakable.png", gridX, gridY, true);
             this.obstaclesBreakable.add(this.obstacle);
+
+            map[gridX][gridY] = 1;
         }
     }
 
