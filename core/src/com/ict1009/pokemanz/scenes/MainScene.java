@@ -42,6 +42,7 @@ public class MainScene implements Screen {
 
     public void update(float delta) {
         player.update(delta);
+        level1.update(delta);
     }
 
     @Override
