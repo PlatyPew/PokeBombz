@@ -35,7 +35,7 @@ public abstract class Map {
     private void createBreakable(World world) {
         for (int i = 0; i < breakable.length; i++) {
             this.obstacle =
-                new Obstacle(world, "room/breakable.png", breakable[i][0], breakable[i][1]);
+                new Obstacle(world, "room/breakable.png", breakable[i][0], breakable[i][1], true);
             this.obstaclesBreakable.add(this.obstacle);
         }
     }
