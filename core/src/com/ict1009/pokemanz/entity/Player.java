@@ -25,8 +25,7 @@ public class Player extends Sprite implements ContactListener {
     private int coin = 0;
     private int health = 0;
 
-    public Player(World world, String textureLocation, float initialX, float initialY,
-                  String name) {
+    public Player(World world, String textureLocation, int initialX, int initialY, String name) {
         super(new Texture(textureLocation));
         this.name = name;
         this.world = world;

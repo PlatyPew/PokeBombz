@@ -16,21 +16,29 @@ public class Obstacle extends Sprite {
     final private boolean canBreak;
     private Breakable breakable = null;
 
-    public Obstacle(World world, String textureLocation, float initialX, float initialY) {
+    final private int initialX, initialY;
+
+    public Obstacle(World world, String textureLocation, int initialX, int initialY) {
         super(new Texture(textureLocation));
         this.world = world;
         setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
+
         this.body = createBody();
         this.canBreak = false;
+        this.initialX = initialX;
+        this.initialY = initialY;
     }
 
-    public Obstacle(World world, String textureLocation, float initialX, float initialY,
+    public Obstacle(World world, String textureLocation, int initialX, int initialY,
                     boolean canBreak) {
         super(new Texture(textureLocation));
         this.world = world;
         setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
+
         this.body = createBody();
         this.canBreak = canBreak;
+        this.initialX = initialX;
+        this.initialY = initialY;
 
         if (canBreak) {
             this.breakable = new Breakable(this);
@@ -43,6 +51,14 @@ public class Obstacle extends Sprite {
 
     public boolean getBreakable() {
         return canBreak;
+    }
+
+    public int getInitialX() {
+        return initialX;
+    }
+
+    public int getInitialY() {
+        return initialY;
     }
 
     /**

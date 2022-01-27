@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.GameInfo;
-
 import java.util.ArrayList;
 
 public abstract class Map {
@@ -27,6 +26,10 @@ public abstract class Map {
         return this.texture;
     }
 
+    public void setMap(int gridX, int gridY, int state) {
+        map[gridX][gridY] = state;
+    }
+
     /**
      * Creates unbreakable obstacles using 2d array
      *
@@ -36,8 +39,7 @@ public abstract class Map {
         for (int i = 0; i < unbreakable.length; i++) {
             int gridX = unbreakable[i][0];
             int gridY = unbreakable[i][1];
-            this.obstacle =
-                new Obstacle(world, "room/unbreakable.png", gridX, gridY);
+            this.obstacle = new Obstacle(world, "room/unbreakable.png", gridX, gridY);
             this.obstaclesUnbreakable.add(this.obstacle);
 
             map[gridX][gridY] = 2;
@@ -53,8 +55,7 @@ public abstract class Map {
         for (int i = 0; i < breakable.length; i++) {
             int gridX = breakable[i][0];
             int gridY = breakable[i][1];
-            this.obstacle =
-                new Obstacle(world, "room/breakable.png", gridX, gridY, true);
+            this.obstacle = new Obstacle(world, "room/breakable.png", gridX, gridY, true);
             this.obstaclesBreakable.add(this.obstacle);
 
             map[gridX][gridY] = 1;

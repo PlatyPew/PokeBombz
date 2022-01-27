@@ -6,7 +6,7 @@ import com.ict1009.pokemanz.entity.Player;
 public class Potion extends Item {
     final private int health;
 
-    public Potion(World world, String textureLocation, float initialX, float initialY, int cost,
+    public Potion(World world, String textureLocation, int initialX, int initialY, int cost,
                   int health) {
         super(world, textureLocation, initialX, initialY, cost);
         this.health = health;

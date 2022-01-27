@@ -18,7 +18,7 @@ public abstract class Item extends Sprite {
     private boolean destroyed = false;
     protected boolean toDestroy = false;
 
-    public Item(World world, String textureLocation, float initialX, float initialY) {
+    public Item(World world, String textureLocation, int initialX, int initialY) {
         super(new Texture(textureLocation));
         this.cost = 0;
         setPosition(initialX * GameInfo.PPM, initialY * GameInfo.PPM);
@@ -27,7 +27,7 @@ public abstract class Item extends Sprite {
         this.body = createBody();
     }
 
-    public Item(World world, String textureLocation, float initialX, float initialY, int cost) {
+    public Item(World world, String textureLocation, int initialX, int initialY, int cost) {
         super(new Texture(textureLocation));
         this.cost = cost;
         setPosition(initialX * GameInfo.PPM, initialY * GameInfo.PPM);
