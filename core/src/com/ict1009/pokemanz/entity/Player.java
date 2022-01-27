@@ -7,11 +7,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.item.Coin;
@@ -25,12 +25,11 @@ public class Player extends Sprite implements ContactListener {
     private int coin = 0;
     private int health = 0;
 
-    public Player(World world, String textureLocation, float initialX, float initialY,
-                  String name) {
+    public Player(World world, String textureLocation, int initialX, int initialY, String name) {
         super(new Texture(textureLocation));
         this.name = name;
         this.world = world;
-        setPosition(initialX * GameInfo.PPM, initialY * GameInfo.PPM);
+        setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
         this.body = createBody();
     }
 
@@ -69,8 +68,8 @@ public class Player extends Sprite implements ContactListener {
         bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
         bodyDef.fixedRotation = true;
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox((getWidth() / 2) / GameInfo.PPM, (getHeight() / 2) / GameInfo.PPM);
+        CircleShape shape = new CircleShape();
+        shape.setRadius((getWidth() / 2) / GameInfo.PPM - 0.02f);
 
         Body body = world.createBody(bodyDef);
 
@@ -88,16 +87,17 @@ public class Player extends Sprite implements ContactListener {
         float currX = (getBody().getPosition().x) * GameInfo.PPM;
         float currY = (getBody().getPosition().y) * GameInfo.PPM;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM * 2) {
             velY = GameInfo.PLAYER_VELOCITY;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM) {
             velX = -GameInfo.PLAYER_VELOCITY;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > GameInfo.PPM) {
             velY = -GameInfo.PLAYER_VELOCITY;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && currX < GameInfo.WIDTH - GameInfo.PPM) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D) &&
+            currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
             velX = GameInfo.PLAYER_VELOCITY;
         }
 

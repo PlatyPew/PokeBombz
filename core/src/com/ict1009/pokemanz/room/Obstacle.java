@@ -10,18 +10,55 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.GameInfo;
 
 public class Obstacle extends Sprite {
-    final private World world;
-    final private Body body;
+    final protected World world;
+    final protected Body body;
 
-    public Obstacle(World world, String textureLocation, float initialX, float initialY) {
+    final private boolean canBreak;
+    private Breakable breakable = null;
+
+    final private int initialX, initialY;
+
+    public Obstacle(World world, String textureLocation, int initialX, int initialY) {
         super(new Texture(textureLocation));
         this.world = world;
-        setPosition(initialX * GameInfo.PPM, initialY * GameInfo.PPM);
+        setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
+
         this.body = createBody();
+        this.canBreak = false;
+        this.initialX = initialX;
+        this.initialY = initialY;
+    }
+
+    public Obstacle(World world, String textureLocation, int initialX, int initialY,
+                    boolean canBreak) {
+        super(new Texture(textureLocation));
+        this.world = world;
+        setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
+
+        this.body = createBody();
+        this.canBreak = canBreak;
+        this.initialX = initialX;
+        this.initialY = initialY;
+
+        if (canBreak) {
+            this.breakable = new Breakable(this);
+        }
     }
 
     public Body getBody() {
         return body;
+    }
+
+    public boolean getBreakable() {
+        return canBreak;
+    }
+
+    public int getInitialX() {
+        return initialX;
+    }
+
+    public int getInitialY() {
+        return initialY;
     }
 
     /**
@@ -46,11 +83,46 @@ public class Obstacle extends Sprite {
     }
 
     /**
+     * Destroys obstacle if it's breakable
+     */
+    public void setToDestroy() {
+        if (canBreak) {
+            breakable.setToDestroy();
+        }
+    }
+
+    /**
+     * Checks if obstacle has been destroyed
+     *
+     * @return boolean
+     */
+    public boolean getDestroyed() {
+        if (canBreak) {
+            return breakable.getDestroyed();
+        }
+        return false;
+    }
+
+    /**
+     * Updates obstacle
+     *
+     * @param delta: 1/fps
+     */
+    public void update(float delta) {
+        if (canBreak) {
+            breakable.update(delta);
+        }
+    }
+
+    /**
      * Renders the body of the obstacle
+     * If it can be broken, do not render if destroyed
      *
      * @param batch: The spritebatch of the game
      */
     public void render(SpriteBatch batch) {
-        batch.draw(this, this.getX(), this.getY());
+        if (!(canBreak && getDestroyed())) {
+            batch.draw(this, this.getX(), this.getY());
+        }
     }
 }
