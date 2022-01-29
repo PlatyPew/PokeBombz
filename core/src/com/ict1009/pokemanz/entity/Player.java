@@ -15,8 +15,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.helper.GameInfo;
-import com.ict1009.pokemanz.item.Coin;
-import com.ict1009.pokemanz.item.Potion;
 import java.util.ArrayList;
 
 public class Player extends Sprite implements ContactListener {
@@ -144,11 +142,11 @@ public class Player extends Sprite implements ContactListener {
      * @param batch: The spritebatch of the game
      */
     public void render(SpriteBatch batch) {
-        batch.draw(this, this.getX(), this.getY());
-
         for (Bomb bomb : bombs) {
             bomb.render(batch);
         }
+
+        batch.draw(this, this.getX(), this.getY());
     }
 
     /**
@@ -160,6 +158,10 @@ public class Player extends Sprite implements ContactListener {
         handleMovement();
         handleBomb();
         setPosition((body.getPosition().x) * GameInfo.PPM, (body.getPosition().y) * GameInfo.PPM);
+
+        for (Bomb bomb : bombs) {
+            bomb.update(delta);
+        }
     }
 
     /**
@@ -177,20 +179,28 @@ public class Player extends Sprite implements ContactListener {
         } else {
             body = contact.getFixtureA().getUserData();
         }
-
-        // TODO: Make code less disgusting
-        if (body instanceof Coin) {
-            Coin coin = (Coin)body;
-            coin.applyProperty(this);
-        } else if (body instanceof Potion) {
-            Potion potion = (Potion)body;
-            potion.applyProperty(this);
-        }
     }
 
     @Override
     public void endContact(Contact contact) {
-        // TODO Auto-generated method stub
+        Object body;
+
+        if (contact.getFixtureA().getUserData() instanceof Player) {
+            body = contact.getFixtureB().getUserData();
+        } else {
+            body = contact.getFixtureA().getUserData();
+        }
+
+        Bomb detectedBomb;
+        if (body instanceof Bomb) {
+            detectedBomb = (Bomb)body;
+            for (Bomb bomb : bombs) {
+                if (bomb == detectedBomb) {
+                    bomb.updateBody(false);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
