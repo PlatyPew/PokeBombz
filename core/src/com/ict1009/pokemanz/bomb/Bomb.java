@@ -20,8 +20,12 @@ public class Bomb extends Sprite {
     private Body body;
     private int range = 3;
 
+    private int counter = 0;
+
     private boolean destroyed = false;
-    protected boolean toDestroy = false;
+    private boolean toDestroy = false;
+    private boolean unload = false;
+    private boolean updated = false;
 
     private boolean sensor = true;
     private BodyType bodyType = BodyType.StaticBody;
@@ -65,8 +69,20 @@ public class Bomb extends Sprite {
         return initialY;
     }
 
+    public void setToDestroy() {
+        toDestroy = true;
+    }
+
     public Body getBody() {
         return body;
+    }
+
+    public boolean getDestroyed() {
+        return destroyed;
+    }
+
+    public boolean getUpdated() {
+        return updated;
     }
 
     private Body createBody() {
@@ -91,28 +107,45 @@ public class Bomb extends Sprite {
     public void updateBody(boolean sensor) {
         this.sensor = sensor;
         toDestroy = true;
+        unload = true;
+        updated = true;
     }
 
     public void updateBody(BodyType bodyType, boolean sensor) {
         this.bodyType = bodyType;
         this.sensor = sensor;
         toDestroy = true;
+        unload = true;
+        updated = true;
+    }
+
+    private void countDown(float delta) {
+        if (counter < timer / delta) {
+            counter++;
+        } else {
+            toDestroy = true;
+        }
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(this, this.getX(), this.getY());
+        if (!destroyed) {
+            batch.draw(this, this.getX(), this.getY());
+        }
     }
 
     public void update(float delta) {
+        countDown(delta);
+
         if (toDestroy && !destroyed) {
             this.world.destroyBody(this.body);
             destroyed = true;
         }
 
-        if (destroyed) {
+        if (destroyed && unload) {
             createBody();
             toDestroy = false;
             destroyed = false;
+            unload = false;
         }
     }
 }

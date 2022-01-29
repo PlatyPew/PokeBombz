@@ -159,8 +159,18 @@ public class Player extends Sprite implements ContactListener {
         handleBomb();
         setPosition((body.getPosition().x) * GameInfo.PPM, (body.getPosition().y) * GameInfo.PPM);
 
+        ArrayList<Integer> toRemove = new ArrayList<Integer>();
+
         for (Bomb bomb : bombs) {
             bomb.update(delta);
+
+            if (bomb.getDestroyed()) {
+                toRemove.add(bombs.indexOf(bomb));
+            }
+        }
+
+        for (int index : toRemove) {
+            bombs.remove(index);
         }
     }
 
@@ -195,7 +205,7 @@ public class Player extends Sprite implements ContactListener {
         if (body instanceof Bomb) {
             detectedBomb = (Bomb)body;
             for (Bomb bomb : bombs) {
-                if (bomb == detectedBomb) {
+                if (bomb == detectedBomb && !bomb.getUpdated()) {
                     bomb.updateBody(false);
                     break;
                 }
