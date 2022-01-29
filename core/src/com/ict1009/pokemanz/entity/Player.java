@@ -13,14 +13,19 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.item.Coin;
 import com.ict1009.pokemanz.item.Potion;
+import java.util.ArrayList;
 
 public class Player extends Sprite implements ContactListener {
     final private World world;
     final private Body body;
     final private String name;
+
+    private int maxBombs = 1;
+    private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
     private int coin = 0;
     private int health = 0;
@@ -55,6 +60,14 @@ public class Player extends Sprite implements ContactListener {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public int getMaxBombs() {
+        return maxBombs;
+    }
+
+    public void setMaxBombs(int maxBombs) {
+        this.maxBombs = maxBombs;
     }
 
     /**
@@ -104,19 +117,24 @@ public class Player extends Sprite implements ContactListener {
         getBody().setLinearVelocity(velX, velY);
     }
 
-    /**
-     * Gets keyboard input with arrow keys and only runs once per press
-     *
-     * @param batch: The spritebatch of the game
-     */
-    public void handleAttack(SpriteBatch batch) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+    public void handleBomb() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            float currX = getX() / GameInfo.PPM - 1;
+            float currY = getY() / GameInfo.PPM - 1;
+            int bombX = (int)Math.floor(currX) - 1;
+            int bombY = (int)Math.floor(currY) - 1;
 
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+            if (currX - bombX >= 0.5) {
+                bombX += 1;
+            }
 
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            if (currY - bombY >= 0.5) {
+                bombY += 1;
+            }
 
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+            if (bombs.size() < maxBombs) {
+                bombs.add(new Bomb(world, "bomb/bomb1.png", bombX, bombY));
+            }
         }
     }
 
@@ -127,7 +145,10 @@ public class Player extends Sprite implements ContactListener {
      */
     public void render(SpriteBatch batch) {
         batch.draw(this, this.getX(), this.getY());
-        handleAttack(batch);
+
+        for (Bomb bomb : bombs) {
+            bomb.render(batch);
+        }
     }
 
     /**
@@ -137,6 +158,7 @@ public class Player extends Sprite implements ContactListener {
      */
     public void update(float delta) {
         handleMovement();
+        handleBomb();
         setPosition((body.getPosition().x) * GameInfo.PPM, (body.getPosition().y) * GameInfo.PPM);
     }
 
