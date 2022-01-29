@@ -22,10 +22,10 @@ public class Bomb extends Sprite {
 
     private int counter = 0;
 
-    private boolean destroyed = false;
-    private boolean toDestroy = false;
-    private boolean unloadOnly = false;
-    private boolean updated = false;
+    private boolean destroyed = false;  // When body is destroyed
+    private boolean toDestroy = false;  // When body is set to be destroyed
+    private boolean unloadOnly = false; // When a old body is going to be replaced
+    private boolean updated = false;    // When a body has been updated
 
     private boolean sensor = true;
     private BodyType bodyType = BodyType.StaticBody;
@@ -85,6 +85,11 @@ public class Bomb extends Sprite {
         return updated;
     }
 
+    /**
+     * Creates a new body
+     *
+     * @return body: Body
+     */
     private Body createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = bodyType;
@@ -104,6 +109,11 @@ public class Bomb extends Sprite {
         return body;
     }
 
+    /**
+     * Deletes old body and replaces new body
+     *
+     * @param If body is a sensor
+     */
     public void updateBody(boolean sensor) {
         this.sensor = sensor;
         toDestroy = true;
@@ -111,6 +121,12 @@ public class Bomb extends Sprite {
         updated = true;
     }
 
+    /**
+     * Deletes old body and replaces new body
+     *
+     * @param BodyType
+     * @param If body is a sensor
+     */
     public void updateBody(BodyType bodyType, boolean sensor) {
         this.bodyType = bodyType;
         this.sensor = sensor;
@@ -119,6 +135,11 @@ public class Bomb extends Sprite {
         updated = true;
     }
 
+    /**
+     * Counts the number of seconds before destroying body
+     *
+     * @param delta: 1/fps
+     */
     private void countDown(float delta) {
         if (counter < timer / delta) {
             counter++;
