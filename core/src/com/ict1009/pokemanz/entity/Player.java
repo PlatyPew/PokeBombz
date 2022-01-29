@@ -24,7 +24,7 @@ public class Player extends Sprite implements ContactListener {
     final private Body body;
     final private String name;
 
-    private int maxBombs = 1;
+    private int maxBombs = 10;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
     private int coin = 0;
@@ -119,17 +119,17 @@ public class Player extends Sprite implements ContactListener {
 
     public void handleBomb() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            float currX = getX() / GameInfo.PPM - 1;
-            float currY = getY() / GameInfo.PPM - 1;
-            int bombX = (int)Math.floor(currX) - 1;
-            int bombY = (int)Math.floor(currY) - 1;
+            float currX = getX() / GameInfo.PPM;
+            float currY = getY() / GameInfo.PPM;
+            int bombX = (int)Math.floor(currX);
+            int bombY = (int)Math.floor(currY);
 
-            if (currX - bombX >= 0.5) {
-                bombX += 1;
+            if (currX - bombX < 0.5) {
+                bombX -= 1;
             }
 
-            if (currY - bombY >= 0.5) {
-                bombY += 1;
+            if (currY - bombY < 0.5) {
+                bombY -= 1;
             }
 
             if (bombs.size() < maxBombs) {
