@@ -24,7 +24,7 @@ public class Bomb extends Sprite {
 
     private boolean destroyed = false;
     private boolean toDestroy = false;
-    private boolean unload = false;
+    private boolean unloadOnly = false;
     private boolean updated = false;
 
     private boolean sensor = true;
@@ -107,7 +107,7 @@ public class Bomb extends Sprite {
     public void updateBody(boolean sensor) {
         this.sensor = sensor;
         toDestroy = true;
-        unload = true;
+        unloadOnly = true;
         updated = true;
     }
 
@@ -115,7 +115,7 @@ public class Bomb extends Sprite {
         this.bodyType = bodyType;
         this.sensor = sensor;
         toDestroy = true;
-        unload = true;
+        unloadOnly = true;
         updated = true;
     }
 
@@ -124,6 +124,7 @@ public class Bomb extends Sprite {
             counter++;
         } else {
             toDestroy = true;
+            updated = true;
         }
     }
 
@@ -141,11 +142,11 @@ public class Bomb extends Sprite {
             destroyed = true;
         }
 
-        if (destroyed && unload) {
+        if (destroyed && unloadOnly) {
             createBody();
             toDestroy = false;
             destroyed = false;
-            unload = false;
+            unloadOnly = false;
         }
     }
 }
