@@ -15,23 +15,27 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.room.Map;
 import java.util.ArrayList;
 
 public class Player extends Sprite implements ContactListener {
     final private World world;
     final private Body body;
+    final private Map map;
     final private String name;
 
-    private int maxBombs = 10;
+    private int maxBombs = 3;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
     private int coin = 0;
     private int health = 0;
 
-    public Player(World world, String textureLocation, int initialX, int initialY, String name) {
+    public Player(World world, Map map, String textureLocation, int initialX, int initialY,
+                  String name) {
         super(new Texture(textureLocation));
         this.name = name;
         this.world = world;
+        this.map = map;
         setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
         this.body = createBody();
     }
@@ -130,8 +134,10 @@ public class Player extends Sprite implements ContactListener {
                 bombY -= 1;
             }
 
-            if (bombs.size() < maxBombs) {
-                bombs.add(new Bomb(world, "bomb/bomb1.png", bombX, bombY));
+            if (bombs.size() < maxBombs && map.getBombMap()[bombX][bombY] == null) {
+                Bomb bomb = new Bomb(world, "bomb/bomb1.png", bombX, bombY);
+                bombs.add(bomb);
+                map.setBombMap(bombX, bombY, bomb);
             }
         }
     }
@@ -160,37 +166,38 @@ public class Player extends Sprite implements ContactListener {
         setPosition((body.getPosition().x) * GameInfo.PPM, (body.getPosition().y) * GameInfo.PPM);
 
         ArrayList<Integer> toRemove = new ArrayList<Integer>();
+        ArrayList<int[]> toRemoveCoords = new ArrayList<int[]>();
 
         for (Bomb bomb : bombs) {
             bomb.update(delta);
 
             if (bomb.getDestroyed()) {
                 toRemove.add(bombs.indexOf(bomb));
+                int[] coords = {bomb.getInitialX(), bomb.getInitialY()};
+                toRemoveCoords.add(coords);
             }
         }
 
         for (int index : toRemove) {
             bombs.remove(index);
         }
+
+        for (int[] coords : toRemoveCoords) {
+            map.setBombMap(coords[0], coords[1], null);
+        }
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        // TODO Auto-generated method stub
     }
 
     /**
-     * Checks when 2 objects collide
+     * Checks when 2 objects stop collide
      * Currently used for collecting items
      *
      * @param contact: Contact
      */
-    @Override
-    public void beginContact(Contact contact) {
-        Object body;
-
-        if (contact.getFixtureA().getUserData() instanceof Player) {
-            body = contact.getFixtureB().getUserData();
-        } else {
-            body = contact.getFixtureA().getUserData();
-        }
-    }
-
     @Override
     public void endContact(Contact contact) {
         Object body;

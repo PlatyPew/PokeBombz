@@ -10,6 +10,7 @@ import com.ict1009.pokemanz.GameMain;
 import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.LevelOne;
+import com.ict1009.pokemanz.room.Map;
 
 public class MainScene implements Screen {
     private World world;
@@ -27,7 +28,8 @@ public class MainScene implements Screen {
         this.batch = game.getBatch();
         this.level1 = new LevelOne();
         this.world = new World(new Vector2(0, 0), true);
-        this.player = new Player(world, "player/1/player1downstill.png", 0, 0, "Platy");
+        this.player =
+            new Player(world, (Map)level1, "player/1/player1downstill.png", 0, 0, "Platy");
         this.world.setContactListener(this.player);
         level1.createObstacles(world);
     }
