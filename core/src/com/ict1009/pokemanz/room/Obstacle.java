@@ -16,29 +16,28 @@ public class Obstacle extends Sprite {
     final private boolean canBreak;
     private Breakable breakable = null;
 
-    final private int initialX, initialY;
+    final private int gridX, gridY;
 
-    public Obstacle(World world, String textureLocation, int initialX, int initialY) {
+    public Obstacle(World world, String textureLocation, int gridX, int gridY) {
         super(new Texture(textureLocation));
         this.world = world;
-        setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
 
         this.body = createBody();
         this.canBreak = false;
-        this.initialX = initialX;
-        this.initialY = initialY;
+        this.gridX = gridX;
+        this.gridY = gridY;
     }
 
-    public Obstacle(World world, String textureLocation, int initialX, int initialY,
-                    boolean canBreak) {
+    public Obstacle(World world, String textureLocation, int gridX, int gridY, boolean canBreak) {
         super(new Texture(textureLocation));
         this.world = world;
-        setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
 
         this.body = createBody();
         this.canBreak = canBreak;
-        this.initialX = initialX;
-        this.initialY = initialY;
+        this.gridX = gridX;
+        this.gridY = gridY;
 
         if (canBreak) {
             this.breakable = new Breakable(this);
@@ -53,12 +52,12 @@ public class Obstacle extends Sprite {
         return canBreak;
     }
 
-    public int getInitialX() {
-        return initialX;
+    public int getGridX() {
+        return gridX;
     }
 
-    public int getInitialY() {
-        return initialY;
+    public int getGridY() {
+        return gridY;
     }
 
     /**

@@ -18,19 +18,19 @@ public abstract class Item extends Sprite {
     private boolean destroyed = false;
     protected boolean toDestroy = false;
 
-    public Item(World world, String textureLocation, int initialX, int initialY) {
+    public Item(World world, String textureLocation, int gridX, int gridY) {
         super(new Texture(textureLocation));
         this.cost = 0;
-        setPosition(initialX * GameInfo.PPM, initialY * GameInfo.PPM);
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.world = world;
 
         this.body = createBody();
     }
 
-    public Item(World world, String textureLocation, int initialX, int initialY, int cost) {
+    public Item(World world, String textureLocation, int gridX, int gridY, int cost) {
         super(new Texture(textureLocation));
         this.cost = cost;
-        setPosition(initialX * GameInfo.PPM, initialY * GameInfo.PPM);
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.world = world;
 
         this.body = createBody();

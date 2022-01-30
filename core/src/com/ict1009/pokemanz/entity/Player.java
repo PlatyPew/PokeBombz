@@ -27,13 +27,13 @@ public class Player extends Sprite implements ContactListener {
     private int maxBombs = 3;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
-    public Player(World world, Map map, String textureLocation, int initialX, int initialY,
+    public Player(World world, Map map, String textureLocation, int gridX, int gridY,
                   String name) {
         super(new Texture(textureLocation));
         this.name = name;
         this.world = world;
         this.map = map;
-        setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.body = createBody();
     }
 
@@ -161,7 +161,7 @@ public class Player extends Sprite implements ContactListener {
 
             if (bomb.getDestroyed()) {
                 toRemove.add(bombs.indexOf(bomb));
-                int[] coords = {bomb.getInitialX(), bomb.getInitialY()};
+                int[] coords = {bomb.getGridX(), bomb.getGridY()};
                 toRemoveCoords.add(coords);
             }
         }

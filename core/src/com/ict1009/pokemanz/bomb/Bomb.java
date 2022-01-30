@@ -14,8 +14,7 @@ import com.ict1009.pokemanz.helper.GameInfo;
 public class Bomb extends Sprite {
     final World world;
     final private int timer = 3;
-    final private int initialX;
-    final private int initialY;
+    final private int gridX, gridY;
 
     private Body body;
     private int range = 3;
@@ -30,22 +29,22 @@ public class Bomb extends Sprite {
     private boolean sensor = true;
     private BodyType bodyType = BodyType.StaticBody;
 
-    public Bomb(World world, String textureLocation, int initialX, int initialY) {
+    public Bomb(World world, String textureLocation, int gridX, int gridY) {
         super(new Texture(textureLocation));
         this.world = world;
-        this.initialX = initialX;
-        this.initialY = initialY;
-        setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
+        this.gridX = gridX;
+        this.gridY = gridY;
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.body = createBody();
     }
 
-    public Bomb(World world, String textureLocation, int initialX, int initialY, int range) {
+    public Bomb(World world, String textureLocation, int gridX, int gridY, int range) {
         super(new Texture(textureLocation));
         this.world = world;
         this.range = range;
-        this.initialX = initialX;
-        this.initialY = initialY;
-        setPosition((initialX + 1) * GameInfo.PPM, (initialY + 1) * GameInfo.PPM);
+        this.gridX = gridX;
+        this.gridY = gridY;
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.body = createBody();
     }
 
@@ -61,12 +60,12 @@ public class Bomb extends Sprite {
         this.range = range;
     }
 
-    public int getInitialX() {
-        return initialX;
+    public int getGridX() {
+        return gridX;
     }
 
-    public int getInitialY() {
-        return initialY;
+    public int getGridY() {
+        return gridY;
     }
 
     public void setToDestroy() {
