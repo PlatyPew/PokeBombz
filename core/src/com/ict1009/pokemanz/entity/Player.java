@@ -100,25 +100,30 @@ public class Player extends Sprite implements ContactListener {
         getBody().setLinearVelocity(velX, velY);
     }
 
+    /**
+     * Handles bomb placement when spacebar is pressed
+     */
     public void handleBomb() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            // Snaps the bomb to the grid
             float currX = getX() / GameInfo.PPM;
             float currY = getY() / GameInfo.PPM;
             int bombX = (int)Math.floor(currX);
             int bombY = (int)Math.floor(currY);
 
+            // Snaps the bomb if player passes the 0.5 threshold
             if (currX - bombX < 0.5) {
                 bombX -= 1;
             }
-
             if (currY - bombY < 0.5) {
                 bombY -= 1;
             }
 
+            // Place bombs only if player has remaining bombs and bomb does not exist in the spot
             if (bombs.size() < maxBombs && map.getBombMap()[bombX][bombY] == null) {
                 Bomb bomb = new Bomb(world, "bomb/bomb1.png", bombX, bombY);
                 bombs.add(bomb);
-                map.setBombMap(bombX, bombY, bomb);
+                map.setBombMap(bombX, bombY, bomb); // Places bomb is grid
             }
         }
     }
@@ -146,9 +151,11 @@ public class Player extends Sprite implements ContactListener {
         handleBomb();
         setPosition((body.getPosition().x) * GameInfo.PPM, (body.getPosition().y) * GameInfo.PPM);
 
+        // TODO: Super ugly code please someone help me refractor I too lazy
         ArrayList<Integer> toRemove = new ArrayList<Integer>();
         ArrayList<int[]> toRemoveCoords = new ArrayList<int[]>();
 
+        // Remove bombs from arraylist and bombMap once bomb has exploded
         for (Bomb bomb : bombs) {
             bomb.update(delta);
 
@@ -162,7 +169,6 @@ public class Player extends Sprite implements ContactListener {
         for (int index : toRemove) {
             bombs.remove(index);
         }
-
         for (int[] coords : toRemoveCoords) {
             map.setBombMap(coords[0], coords[1], null);
         }
