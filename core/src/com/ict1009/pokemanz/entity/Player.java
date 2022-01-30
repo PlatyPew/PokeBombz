@@ -27,9 +27,6 @@ public class Player extends Sprite implements ContactListener {
     private int maxBombs = 3;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
-    private int coin = 0;
-    private int health = 0;
-
     public Player(World world, Map map, String textureLocation, int initialX, int initialY,
                   String name) {
         super(new Texture(textureLocation));
@@ -46,22 +43,6 @@ public class Player extends Sprite implements ContactListener {
 
     public String getName() {
         return this.name;
-    }
-
-    public int getCoin() {
-        return coin;
-    }
-
-    public void setCoin(int coin) {
-        this.coin = coin;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
     }
 
     public int getMaxBombs() {
