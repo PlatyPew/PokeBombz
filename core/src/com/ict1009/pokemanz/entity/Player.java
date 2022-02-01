@@ -27,26 +27,37 @@ public class Player extends Sprite implements ContactListener {
     final private Body body;
     final private Map map;
     final private String name;
+    final private int playerNumber;
 
-    final private TextureAtlas playerAtlas = new TextureAtlas("player/1/left.atlas");
-    final private TextureAtlas playerAtlasDown = new TextureAtlas("player/1/down.atlas");
-    final private TextureAtlas playerAtlasUp = new TextureAtlas("player/1/up.atlas");
+    final private TextureAtlas playerAtlasSide;
+    final private TextureAtlas playerAtlasDown;
+    final private TextureAtlas playerAtlasUp;
 
     private Animation<TextureAtlas.AtlasRegion> animation;
     private float elapsedTime;
 
     private boolean isWalking = false;
+    private Texture texture;
 
     private int maxBombs = 3;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
-    public Player(World world, Map map, String textureLocation, int gridX, int gridY, String name) {
-        super(new Texture(textureLocation));
+    public Player(World world, Map map, int playerNumber, String textureLocation, int gridX,
+                  int gridY, String name) {
+        super(new Texture(String.format("player/%d/%s", playerNumber, textureLocation)));
         this.name = name;
         this.world = world;
         this.map = map;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.body = createBody();
+
+        this.playerNumber = playerNumber;
+        this.texture = new Texture(String.format("player/%d/%s", playerNumber, textureLocation));
+        this.playerAtlasSide =
+            new TextureAtlas(String.format("player/%d/left.atlas", playerNumber));
+        this.playerAtlasDown =
+            new TextureAtlas(String.format("player/%d/down.atlas", playerNumber));
+        this.playerAtlasUp = new TextureAtlas(String.format("player/%d/up.atlas", playerNumber));
     }
 
     public Body getBody() {
@@ -100,20 +111,26 @@ public class Player extends Sprite implements ContactListener {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
+            texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
             velY = GameInfo.PLAYER_VELOCITY;
         } else if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM) {
             isWalking = true;
-            animation = new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlas.getRegions());
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
+            texture = new Texture(String.format("player/%d/leftstill.png", playerNumber));
             velX = -GameInfo.PLAYER_VELOCITY;
         } else if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > GameInfo.PPM) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
+            texture = new Texture(String.format("player/%d/downstill.png", playerNumber));
             velY = -GameInfo.PLAYER_VELOCITY;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D) &&
                    currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
             isWalking = true;
-            animation = new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlas.getRegions());
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
+            texture = new Texture(String.format("player/%d/rightstill.png", playerNumber));
             velX = GameInfo.PLAYER_VELOCITY;
         }
 
@@ -161,7 +178,7 @@ public class Player extends Sprite implements ContactListener {
         if (isWalking) {
             elapsedTime += Gdx.graphics.getDeltaTime();
 
-            Array<TextureAtlas.AtlasRegion> frames = playerAtlas.getRegions();
+            Array<TextureAtlas.AtlasRegion> frames = playerAtlasSide.getRegions();
 
             for (TextureRegion frame : frames) {
                 if (body.getLinearVelocity().x < 0 && frame.isFlipX()) {
@@ -174,7 +191,7 @@ public class Player extends Sprite implements ContactListener {
             batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), this.getX(),
                        this.getY());
         } else {
-            batch.draw(this, this.getX(), this.getY());
+            batch.draw(texture, this.getX(), this.getY());
         }
     }
 
