@@ -28,10 +28,11 @@ public class Player extends Sprite implements ContactListener {
     final private Map map;
     final private String name;
 
-    private TextureAtlas playerAtlas;
-    private TextureAtlas playerAtlasDown;
-    private TextureAtlas playerAtlasUp;
-    private Animation animation;
+    final private TextureAtlas playerAtlas = new TextureAtlas("player/1/left.atlas");
+    final private TextureAtlas playerAtlasDown = new TextureAtlas("player/1/down.atlas");
+    final private TextureAtlas playerAtlasUp = new TextureAtlas("player/1/up.atlas");
+
+    private Animation<TextureAtlas.AtlasRegion> animation;
     private float elapsedTime;
 
     private boolean isWalking = false;
@@ -46,9 +47,6 @@ public class Player extends Sprite implements ContactListener {
         this.map = map;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.body = createBody();
-        playerAtlas = new TextureAtlas("player/1/left.atlas");
-        playerAtlasDown = new TextureAtlas("player/1/down.atlas");
-        playerAtlasUp = new TextureAtlas("player/1/up.atlas");
     }
 
     public Body getBody() {
@@ -99,25 +97,26 @@ public class Player extends Sprite implements ContactListener {
         isWalking = false;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM * 2) {
-            animation = new Animation(1f / 10f, playerAtlasUp.getRegions());
-            setWalking(true);
+            isWalking = true;
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
             velY = GameInfo.PLAYER_VELOCITY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM) {
-            // isWalking = true;
-            animation = new Animation(1f / 10f, playerAtlas.getRegions());
-            setWalking(true);
+            isWalking = true;
+            animation = new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlas.getRegions());
             velX = -GameInfo.PLAYER_VELOCITY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > GameInfo.PPM) {
-            animation = new Animation(1f / 10f, playerAtlasDown.getRegions());
-            setWalking(true);
+            isWalking = true;
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
             velY = -GameInfo.PLAYER_VELOCITY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D) &&
             currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
-            animation = new Animation(1f / 10f, playerAtlas.getRegions());
-            setWalking(true);
+            isWalking = true;
+            animation = new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlas.getRegions());
             velX = GameInfo.PLAYER_VELOCITY;
         }
 
@@ -162,9 +161,6 @@ public class Player extends Sprite implements ContactListener {
             bomb.render(batch);
         }
 
-        if (!isWalking) {
-            batch.draw(this, this.getX(), this.getY());
-        }
         if (isWalking) {
             elapsedTime += Gdx.graphics.getDeltaTime();
 
@@ -173,14 +169,15 @@ public class Player extends Sprite implements ContactListener {
             for (TextureRegion frame : frames) {
                 if (body.getLinearVelocity().x < 0 && frame.isFlipX()) {
                     frame.flip(true, false);
-                }
-                if (body.getLinearVelocity().x > 0 && !frame.isFlipX()) {
+                } else if (body.getLinearVelocity().x > 0 && !frame.isFlipX()) {
                     frame.flip(true, false);
                 }
             }
 
             batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), this.getX(),
                        this.getY());
+        } else {
+            batch.draw(this, this.getX(), this.getY());
         }
     }
 
@@ -258,9 +255,5 @@ public class Player extends Sprite implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
         // TODO Auto-generated method stub
-    }
-
-    public void setWalking(boolean isWalking) {
-        this.isWalking = isWalking;
     }
 }
