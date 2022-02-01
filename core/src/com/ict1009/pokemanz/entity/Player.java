@@ -3,8 +3,11 @@ package com.ict1009.pokemanz.entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -13,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
@@ -23,6 +27,14 @@ public class Player extends Sprite implements ContactListener {
     final private Body body;
     final private Map map;
     final private String name;
+
+    private TextureAtlas playerAtlas;
+    private TextureAtlas playerAtlasDown;
+    private TextureAtlas playerAtlasUp;
+    private Animation animation;
+    private float elapsedTime;
+
+    private boolean isWalking = false;
 
     private int maxBombs = 3;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
@@ -35,6 +47,9 @@ public class Player extends Sprite implements ContactListener {
         this.map = map;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.body = createBody();
+        playerAtlas = new TextureAtlas("Player Animation/player1left.atlas");
+        playerAtlasDown = new TextureAtlas("Player Animation/player1down.atlas");
+        playerAtlasUp = new TextureAtlas("Player Animation/player1up.atlas");
     }
 
     public Body getBody() {
@@ -82,20 +97,31 @@ public class Player extends Sprite implements ContactListener {
         float velX = 0, velY = 0;
         float currX = (getBody().getPosition().x) * GameInfo.PPM;
         float currY = (getBody().getPosition().y) * GameInfo.PPM;
+        isWalking = false;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM * 2) {
+            animation = new Animation(1f / 10f, playerAtlasUp.getRegions());
+            setWalking(true);
             velY = GameInfo.PLAYER_VELOCITY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM) {
+            //isWalking = true;
+            animation = new Animation(1f / 10f, playerAtlas.getRegions());
+            setWalking(true);
             velX = -GameInfo.PLAYER_VELOCITY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > GameInfo.PPM) {
+            animation = new Animation(1f / 10f, playerAtlasDown.getRegions());
+            setWalking(true);
             velY = -GameInfo.PLAYER_VELOCITY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D) &&
             currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
+            animation = new Animation(1f / 10f, playerAtlas.getRegions());
+            setWalking(true);
             velX = GameInfo.PLAYER_VELOCITY;
         }
+
 
         getBody().setLinearVelocity(velX, velY);
     }
@@ -138,8 +164,27 @@ public class Player extends Sprite implements ContactListener {
             bomb.render(batch);
         }
 
-        batch.draw(this, this.getX(), this.getY());
+        if(!isWalking) {
+            batch.draw(this, this.getX(), this.getY());
+        }
+        if(isWalking) {
+            elapsedTime += Gdx.graphics.getDeltaTime();
+
+            Array<TextureAtlas.AtlasRegion> frames = playerAtlas.getRegions();
+
+            for(TextureRegion frame: frames) {
+                if(body.getLinearVelocity().x < 0 && frame.isFlipX()) {
+                    frame.flip(true, false);
+                }
+                if(body.getLinearVelocity().x > 0 && !frame.isFlipX()) {
+                    frame.flip(true, false);
+                }
+            }
+
+            batch.draw((TextureRegion) animation.getKeyFrame(elapsedTime, true), this.getX(), this.getY());
+        }
     }
+
 
     /**
      * Updates the sprite texture according to where the body is
@@ -215,5 +260,9 @@ public class Player extends Sprite implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
         // TODO Auto-generated method stub
+    }
+
+    public void setWalking(boolean isWalking) {
+        this.isWalking = isWalking;
     }
 }
