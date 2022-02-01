@@ -16,7 +16,7 @@ public class MainScene implements Screen {
     private World world;
     private SpriteBatch batch;
 
-    private LevelOne level1;
+    private Map level1;
 
     private Player player;
 
@@ -28,8 +28,7 @@ public class MainScene implements Screen {
         this.batch = game.getBatch();
         this.level1 = new LevelOne();
         this.world = new World(new Vector2(0, 0), true);
-        this.player =
-            new Player(world, (Map)level1, "player/1/player1downstill.png", 0, 0, "Platy");
+        this.player = new Player(world, level1, 1, "upstill.png", 0, 0, "Platy");
         this.world.setContactListener(this.player);
         level1.createObstacles(world);
     }
