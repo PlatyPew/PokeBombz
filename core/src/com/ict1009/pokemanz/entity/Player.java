@@ -39,8 +39,7 @@ public class Player extends Sprite implements ContactListener {
     private int maxBombs = 3;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
-    public Player(World world, Map map, String textureLocation, int gridX, int gridY,
-                  String name) {
+    public Player(World world, Map map, String textureLocation, int gridX, int gridY, String name) {
         super(new Texture(textureLocation));
         this.name = name;
         this.world = world;
@@ -105,7 +104,7 @@ public class Player extends Sprite implements ContactListener {
             velY = GameInfo.PLAYER_VELOCITY;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM) {
-            //isWalking = true;
+            // isWalking = true;
             animation = new Animation(1f / 10f, playerAtlas.getRegions());
             setWalking(true);
             velX = -GameInfo.PLAYER_VELOCITY;
@@ -121,7 +120,6 @@ public class Player extends Sprite implements ContactListener {
             setWalking(true);
             velX = GameInfo.PLAYER_VELOCITY;
         }
-
 
         getBody().setLinearVelocity(velX, velY);
     }
@@ -164,27 +162,27 @@ public class Player extends Sprite implements ContactListener {
             bomb.render(batch);
         }
 
-        if(!isWalking) {
+        if (!isWalking) {
             batch.draw(this, this.getX(), this.getY());
         }
-        if(isWalking) {
+        if (isWalking) {
             elapsedTime += Gdx.graphics.getDeltaTime();
 
             Array<TextureAtlas.AtlasRegion> frames = playerAtlas.getRegions();
 
-            for(TextureRegion frame: frames) {
-                if(body.getLinearVelocity().x < 0 && frame.isFlipX()) {
+            for (TextureRegion frame : frames) {
+                if (body.getLinearVelocity().x < 0 && frame.isFlipX()) {
                     frame.flip(true, false);
                 }
-                if(body.getLinearVelocity().x > 0 && !frame.isFlipX()) {
+                if (body.getLinearVelocity().x > 0 && !frame.isFlipX()) {
                     frame.flip(true, false);
                 }
             }
 
-            batch.draw((TextureRegion) animation.getKeyFrame(elapsedTime, true), this.getX(), this.getY());
+            batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), this.getX(),
+                       this.getY());
         }
     }
-
 
     /**
      * Updates the sprite texture according to where the body is
