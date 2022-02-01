@@ -101,20 +101,17 @@ public class Player extends Sprite implements ContactListener {
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
             velY = GameInfo.PLAYER_VELOCITY;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM) {
             isWalking = true;
             animation = new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlas.getRegions());
             velX = -GameInfo.PLAYER_VELOCITY;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > GameInfo.PPM) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > GameInfo.PPM) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
             velY = -GameInfo.PLAYER_VELOCITY;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D) &&
-            currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D) &&
+                   currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
             isWalking = true;
             animation = new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlas.getRegions());
             velX = GameInfo.PLAYER_VELOCITY;
