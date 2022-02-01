@@ -47,9 +47,9 @@ public class Player extends Sprite implements ContactListener {
         this.map = map;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.body = createBody();
-        playerAtlas = new TextureAtlas("Player Animation/player1left.atlas");
-        playerAtlasDown = new TextureAtlas("Player Animation/player1down.atlas");
-        playerAtlasUp = new TextureAtlas("Player Animation/player1up.atlas");
+        playerAtlas = new TextureAtlas("player/1/left.atlas");
+        playerAtlasDown = new TextureAtlas("player/1/down.atlas");
+        playerAtlasUp = new TextureAtlas("player/1/up.atlas");
     }
 
     public Body getBody() {
