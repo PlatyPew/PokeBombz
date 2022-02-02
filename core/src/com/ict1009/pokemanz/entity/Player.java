@@ -2,6 +2,9 @@ package com.ict1009.pokemanz.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.ControllerListener;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,7 +25,7 @@ import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
 import java.util.ArrayList;
 
-public class Player extends Sprite implements ContactListener {
+public class Player extends Sprite implements ContactListener, ControllerListener {
     final private World world;
     final private Body body;
     final private Map map;
@@ -42,6 +45,13 @@ public class Player extends Sprite implements ContactListener {
     private int maxBombs = 3;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
+    private String controllerID;
+
+    private boolean up = false;
+    private boolean left = false;
+    private boolean down = false;
+    private boolean right = false;
+
     public Player(World world, Map map, int playerNumber, String textureLocation, int gridX,
                   int gridY, String name) {
         super(new Texture(String.format("player/%d/%s", playerNumber, textureLocation)));
@@ -58,6 +68,11 @@ public class Player extends Sprite implements ContactListener {
         this.playerAtlasDown =
             new TextureAtlas(String.format("player/%d/down.atlas", playerNumber));
         this.playerAtlasUp = new TextureAtlas(String.format("player/%d/up.atlas", playerNumber));
+
+        if (Controllers.getControllers().notEmpty()) {
+            this.controllerID = Controllers.getControllers().get(playerNumber - 1).getUniqueId();
+            Controllers.addListener(this);
+        }
     }
 
     public Body getBody() {
@@ -74,6 +89,10 @@ public class Player extends Sprite implements ContactListener {
 
     public void setMaxBombs(int maxBombs) {
         this.maxBombs = maxBombs;
+    }
+
+    public String getControllerID() {
+        return controllerID;
     }
 
     /**
@@ -107,26 +126,28 @@ public class Player extends Sprite implements ContactListener {
         float currY = (getBody().getPosition().y) * GameInfo.PPM;
         isWalking = false;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM * 2) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM * 2 ||
+            up) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
             texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
             velY = GameInfo.PLAYER_VELOCITY;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM || left) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/leftstill.png", playerNumber));
             velX = -GameInfo.PLAYER_VELOCITY;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > GameInfo.PPM) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > GameInfo.PPM || down) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
             texture = new Texture(String.format("player/%d/downstill.png", playerNumber));
             velY = -GameInfo.PLAYER_VELOCITY;
         } else if (Gdx.input.isKeyPressed(Input.Keys.D) &&
-                   currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
+                       currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16) ||
+                   right) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
@@ -137,31 +158,35 @@ public class Player extends Sprite implements ContactListener {
         getBody().setLinearVelocity(velX, velY);
     }
 
+    private void placeBomb() {
+        // Snaps the bomb to the grid
+        float currX = getX() / GameInfo.PPM;
+        float currY = getY() / GameInfo.PPM;
+        int bombX = (int)Math.floor(currX);
+        int bombY = (int)Math.floor(currY);
+
+        // Snaps the bomb if player passes the 0.5 threshold
+        if (currX - bombX < 0.5) {
+            bombX -= 1;
+        }
+        if (currY - bombY < 0.5) {
+            bombY -= 1;
+        }
+
+        // Place bombs only if player has remaining bombs and bomb does not exist in the spot
+        if (bombs.size() < maxBombs && map.getBombMap()[bombX][bombY] == null) {
+            Bomb bomb = new Bomb(world, "bomb/bomb1.png", bombX, bombY);
+            bombs.add(bomb);
+            map.setBombMap(bombX, bombY, bomb); // Places bomb is grid
+        }
+    }
+
     /**
      * Handles bomb placement when spacebar is pressed
      */
     public void handleBomb() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            // Snaps the bomb to the grid
-            float currX = getX() / GameInfo.PPM;
-            float currY = getY() / GameInfo.PPM;
-            int bombX = (int)Math.floor(currX);
-            int bombY = (int)Math.floor(currY);
-
-            // Snaps the bomb if player passes the 0.5 threshold
-            if (currX - bombX < 0.5) {
-                bombX -= 1;
-            }
-            if (currY - bombY < 0.5) {
-                bombY -= 1;
-            }
-
-            // Place bombs only if player has remaining bombs and bomb does not exist in the spot
-            if (bombs.size() < maxBombs && map.getBombMap()[bombX][bombY] == null) {
-                Bomb bomb = new Bomb(world, "bomb/bomb1.png", bombX, bombY);
-                bombs.add(bomb);
-                map.setBombMap(bombX, bombY, bomb); // Places bomb is grid
-            }
+            placeBomb();
         }
     }
 
@@ -269,5 +294,55 @@ public class Player extends Sprite implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void connected(Controller controller) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void disconnected(Controller controller) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public boolean buttonDown(Controller controller, int buttonCode) {
+        if (controller.getUniqueId() == controllerID) {
+            if (buttonCode == 11)
+                up = true;
+            else if (buttonCode == 13)
+                left = true;
+            else if (buttonCode == 12)
+                down = true;
+            else if (buttonCode == 14)
+                right = true;
+            else if (buttonCode == 1)
+                placeBomb();
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean buttonUp(Controller controller, int buttonCode) {
+        if (controller.getUniqueId() == controllerID) {
+            if (buttonCode == 11)
+                up = false;
+            else if (buttonCode == 13)
+                left = false;
+            else if (buttonCode == 12)
+                down = false;
+            else if (buttonCode == 14)
+                right = false;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean axisMoved(Controller controller, int axisCode, float value) {
+        // TODO Auto-generated method stub
+        return false;
     }
 }
