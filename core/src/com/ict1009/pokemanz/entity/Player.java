@@ -126,28 +126,27 @@ public class Player extends Sprite implements ContactListener, ControllerListene
         float currY = (getBody().getPosition().y) * GameInfo.PPM;
         isWalking = false;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && currY < GameInfo.HEIGHT - GameInfo.PPM * 2 ||
-            up) {
+        if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) &&
+            currY < GameInfo.HEIGHT - GameInfo.PPM * 2) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
             texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
             velY = GameInfo.PLAYER_VELOCITY;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A) && currX > GameInfo.PPM || left) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > GameInfo.PPM) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/leftstill.png", playerNumber));
             velX = -GameInfo.PLAYER_VELOCITY;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S) && currY > GameInfo.PPM || down) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > GameInfo.PPM) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
             texture = new Texture(String.format("player/%d/downstill.png", playerNumber));
             velY = -GameInfo.PLAYER_VELOCITY;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D) &&
-                       currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16) ||
-                   right) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) &&
+                   currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
