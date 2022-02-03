@@ -14,10 +14,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
@@ -25,7 +21,7 @@ import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
 import java.util.ArrayList;
 
-public class Player extends Sprite implements ContactListener, ControllerListener {
+public class Player extends Sprite implements ControllerListener {
     final private World world;
     final private Body body;
     final private Map map;
@@ -42,7 +38,7 @@ public class Player extends Sprite implements ContactListener, ControllerListene
     private boolean isWalking = false;
     private Texture texture;
 
-    private int maxBombs = 3;
+    private int maxBombs = 10;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
     private String controllerID;
@@ -51,6 +47,11 @@ public class Player extends Sprite implements ContactListener, ControllerListene
     private boolean left = false;
     private boolean down = false;
     private boolean right = false;
+
+    private boolean disableUp = false;
+    private boolean disableLeft = false;
+    private boolean disableDown = false;
+    private boolean disableRight = false;
 
     public Player(World world, Map map, int playerNumber, String textureLocation, int gridX,
                   int gridY, String name) {
@@ -95,6 +96,33 @@ public class Player extends Sprite implements ContactListener, ControllerListene
         return controllerID;
     }
 
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public void disableUp() {
+        disableUp = true;
+    }
+
+    public void disableLeft() {
+        disableLeft = true;
+    }
+
+    public void disableDown() {
+        disableDown = true;
+    }
+
+    public void disableRight() {
+        disableRight = true;
+    }
+
+    public void enableAll() {
+        disableUp = false;
+        disableLeft = false;
+        disableDown = false;
+        disableRight = false;
+    }
+
     /**
      * Creates a dynamic body with a square shape
      *
@@ -127,26 +155,28 @@ public class Player extends Sprite implements ContactListener, ControllerListene
         isWalking = false;
 
         if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) &&
-            currY < GameInfo.HEIGHT - GameInfo.PPM * 2) {
+            currY < GameInfo.HEIGHT - GameInfo.PPM * 2 && !disableUp) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
             texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
             velY = GameInfo.PLAYER_VELOCITY;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > GameInfo.PPM) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > GameInfo.PPM &&
+                   !disableLeft) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/leftstill.png", playerNumber));
             velX = -GameInfo.PLAYER_VELOCITY;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > GameInfo.PPM) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > GameInfo.PPM &&
+                   !disableDown) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
             texture = new Texture(String.format("player/%d/downstill.png", playerNumber));
             velY = -GameInfo.PLAYER_VELOCITY;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) &&
-                   currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
+                   currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16) && !disableRight) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
@@ -252,47 +282,13 @@ public class Player extends Sprite implements ContactListener, ControllerListene
         }
     }
 
-    @Override
-    public void beginContact(Contact contact) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
-     * Checks when 2 objects stop collide
-     * Currently used for collecting items
-     *
-     * @param contact: Contact
-     */
-    @Override
-    public void endContact(Contact contact) {
-        Object body;
-
-        if (contact.getFixtureA().getUserData() instanceof Player) {
-            body = contact.getFixtureB().getUserData();
-        } else {
-            body = contact.getFixtureA().getUserData();
-        }
-
-        Bomb detectedBomb;
-        if (body instanceof Bomb) {
-            detectedBomb = (Bomb)body;
-            for (Bomb bomb : bombs) {
-                if (bomb == detectedBomb && !bomb.getUpdated()) {
-                    bomb.updateBody(false);
-                    break;
-                }
+    public void bombTangible(Bomb detectedBomb) {
+        for (Bomb bomb : bombs) {
+            if (bomb == detectedBomb && !bomb.getUpdated()) {
+                bomb.updateBody(false);
+                break;
             }
         }
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-        // TODO Auto-generated method stub
     }
 
     @Override
