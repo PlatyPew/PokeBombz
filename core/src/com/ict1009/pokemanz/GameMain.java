@@ -9,8 +9,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ict1009.pokemanz.scenes.MainScene;
 import com.ict1009.pokemanz.chatbot.gameChatbot;
-//import com.ict1009.pokemanz.chatbot.textInputRunner;
 import com.ict1009.pokemanz.chatbot.textInputRunner;
+import com.ict1009.pokemanz.scenes.TitleScene;
+
 public class GameMain extends Game {
     private SpriteBatch batch;
     private textInputRunner chatBot;
@@ -25,7 +26,7 @@ public class GameMain extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        setScreen(new MainScene(this));
+        setScreen(new TitleScene(this));
         chatBot = new textInputRunner();
 		chatBot.create();
     }
