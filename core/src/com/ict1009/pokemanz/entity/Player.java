@@ -48,6 +48,11 @@ public class Player extends Sprite implements ControllerListener {
     private boolean down = false;
     private boolean right = false;
 
+    private boolean disableUp = false;
+    private boolean disableLeft = false;
+    private boolean disableDown = false;
+    private boolean disableRight = false;
+
     public Player(World world, Map map, int playerNumber, String textureLocation, int gridX,
                   int gridY, String name) {
         super(new Texture(String.format("player/%d/%s", playerNumber, textureLocation)));
@@ -91,6 +96,33 @@ public class Player extends Sprite implements ControllerListener {
         return controllerID;
     }
 
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public void disableUp() {
+        disableUp = true;
+    }
+
+    public void disableLeft() {
+        disableLeft = true;
+    }
+
+    public void disableDown() {
+        disableDown = true;
+    }
+
+    public void disableRight() {
+        disableRight = true;
+    }
+
+    public void enableAll() {
+        disableUp = false;
+        disableLeft = false;
+        disableDown = false;
+        disableRight = false;
+    }
+
     /**
      * Creates a dynamic body with a square shape
      *
@@ -123,26 +155,28 @@ public class Player extends Sprite implements ControllerListener {
         isWalking = false;
 
         if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) &&
-            currY < GameInfo.HEIGHT - GameInfo.PPM * 2) {
+            currY < GameInfo.HEIGHT - GameInfo.PPM * 2 && !disableUp) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
             texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
             velY = GameInfo.PLAYER_VELOCITY;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > GameInfo.PPM) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > GameInfo.PPM &&
+                   !disableLeft) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/leftstill.png", playerNumber));
             velX = -GameInfo.PLAYER_VELOCITY;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > GameInfo.PPM) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > GameInfo.PPM &&
+                   !disableDown) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
             texture = new Texture(String.format("player/%d/downstill.png", playerNumber));
             velY = -GameInfo.PLAYER_VELOCITY;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) &&
-                   currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16)) {
+                   currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16) && !disableRight) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());

@@ -108,11 +108,34 @@ public class MainScene implements Screen, ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        // TODO Auto-generated method stub
+        if (contact.getFixtureA().getUserData() instanceof Player &&
+            contact.getFixtureB().getUserData() instanceof Player) {
+            Player playerA = (Player)contact.getFixtureA().getUserData();
+            Player playerB = (Player)contact.getFixtureB().getUserData();
+            Vector2 playerACoords = playerA.getBody().getPosition();
+            Vector2 playerBCoords = playerB.getBody().getPosition();
+
+            float xCoords = playerACoords.x - playerBCoords.x;
+            float yCoords = playerACoords.y - playerBCoords.y;
+            if (xCoords <= -0.5) {
+                playerA.disableRight();
+                playerB.disableLeft();
+            } else if (xCoords >= 0.5) {
+                playerA.disableLeft();
+                playerB.disableRight();
+            } else if (yCoords <= -0.5) {
+                playerA.disableUp();
+                playerB.disableDown();
+            } else if (yCoords >= 0.5) {
+                playerA.disableDown();
+                playerB.disableUp();
+            }
+        }
     }
 
     @Override
     public void endContact(Contact contact) {
+        // Update bomb body
         Object body1;
         Object body2;
 
@@ -123,10 +146,19 @@ public class MainScene implements Screen, ContactListener {
             body1 = contact.getFixtureA().getUserData();
             body2 = contact.getFixtureB().getUserData();
         }
-
         if (body1 instanceof Bomb && body2 instanceof Player) {
             Player player = (Player)body2;
             player.bombTangible((Bomb)body1);
+        }
+
+        // Set move to true
+        if (contact.getFixtureA().getUserData() instanceof Player &&
+            contact.getFixtureB().getUserData() instanceof Player) {
+            Player playerA = (Player)contact.getFixtureA().getUserData();
+            Player playerB = (Player)contact.getFixtureB().getUserData();
+
+            playerA.enableAll();
+            playerB.enableAll();
         }
     }
 
