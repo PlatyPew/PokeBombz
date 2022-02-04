@@ -1,5 +1,8 @@
 package com.ict1009.pokemanz.room;
 
+import com.badlogic.gdx.utils.Array;
+import com.ict1009.pokemanz.entity.Player;
+
 public class LevelOne extends Map {
     final private static String textureLocation = "room/background.png";
 
@@ -16,7 +19,7 @@ public class LevelOne extends Map {
     // Coordinates of breakable obstacles
     final private static int[][] breakable = {{1, 3}};
 
-    public LevelOne() {
-        super(textureLocation, unbreakable, breakable);
+    public LevelOne(Array<Player> players) {
+        super(players, textureLocation, unbreakable, breakable);
     }
 }

@@ -11,5 +11,7 @@ public class GameInfo {
     final public static int FPS = 60;
     final public static int PPM = 60;
     final public static int PLAYER_VELOCITY = 2;
+    final public static int SUDDEN_DEATH = FPS * 120;
+    final public static int SUDDEN_DEATH_DROP = FPS / 2;
     public static World world = new World(new Vector2(0, 0), true);
 }

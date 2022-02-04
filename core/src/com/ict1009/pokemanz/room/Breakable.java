@@ -1,6 +1,8 @@
 package com.ict1009.pokemanz.room;
 
-public class Breakable {
+import com.ict1009.pokemanz.helper.Destoryable;
+
+public class Breakable implements Destoryable {
     private Obstacle obstacle;
 
     private boolean toDestroy = false;
@@ -8,22 +10,6 @@ public class Breakable {
 
     public Breakable(Obstacle obstacle) {
         this.obstacle = obstacle;
-    }
-
-    /**
-     * Destroys the obstacle
-     */
-    public void setToDestroy() {
-        toDestroy = true;
-    }
-
-    /**
-     * Checks if obstacle has been destroyed
-     *
-     * @return boolean
-     */
-    public boolean getDestroyed() {
-        return destroyed;
     }
 
     /**
@@ -36,5 +22,23 @@ public class Breakable {
             obstacle.world.destroyBody(obstacle.body);
             destroyed = true;
         }
+    }
+
+    /**
+     * Destroys the obstacle
+     */
+    @Override
+    public void setToDestroy() {
+        toDestroy = true;
+    }
+
+    /**
+     * Checks if obstacle has been destroyed
+     *
+     * @return boolean
+     */
+    @Override
+    public boolean getDestroyed() {
+        return destroyed;
     }
 }
