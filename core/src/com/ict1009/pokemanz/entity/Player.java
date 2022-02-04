@@ -283,6 +283,9 @@ public class Player extends Sprite implements ControllerListener, Destoryable {
      * @param delta: 1/fps
      */
     public void update(float delta) {
+        if (destroyed)
+            return;
+
         if (toDestroy && !destroyed) {
             world.destroyBody(body);
             destroyed = true;

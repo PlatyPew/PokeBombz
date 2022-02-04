@@ -22,9 +22,9 @@ public class MainScene implements Screen, ContactListener {
     private World world;
     private SpriteBatch batch;
 
-    private Map level1;
+    private Map level;
 
-    private Array<Player> playerArray = new Array<Player>();
+    private Array<Player> players = new Array<Player>();
 
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
@@ -32,13 +32,13 @@ public class MainScene implements Screen, ContactListener {
     public MainScene(GameMain game) {
         setupCamera();
         this.batch = game.getBatch();
-        this.level1 = new LevelOne();
+        this.level = new LevelOne(players);
         this.world = new World(new Vector2(0, 0), true);
 
-        playerArray.add(new Player(world, level1, 1, "upstill.png", 0, 0, "Platy"));
-        playerArray.add(new Player(world, level1, 2, "downstill.png", 15, 9, "Helpme"));
+        players.add(new Player(world, level, 1, "upstill.png", 0, 0, "Platy"));
+        players.add(new Player(world, level, 2, "downstill.png", 15, 9, "Helpme"));
 
-        level1.createObstacles(world);
+        level.createObstacles(world);
 
         this.world.setContactListener(this);
     }
@@ -52,10 +52,10 @@ public class MainScene implements Screen, ContactListener {
     }
 
     public void update(float delta) {
-        for (Player player : playerArray) {
+        for (Player player : players) {
             player.update(delta);
         }
-        level1.update(delta);
+        level.update(delta);
     }
 
     @Override
@@ -69,11 +69,11 @@ public class MainScene implements Screen, ContactListener {
 
         batch.begin();
 
-        batch.draw(level1.getTexture(), 0, 0);
-        for (Player player : playerArray) {
+        batch.draw(level.getTexture(), 0, 0);
+        for (Player player : players) {
             player.render(batch);
         }
-        level1.render(batch);
+        level.render(batch);
         batch.end();
 
         debugRenderer.render(world, box2DCamera.combined);
