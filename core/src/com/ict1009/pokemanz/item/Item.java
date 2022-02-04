@@ -8,9 +8,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 
-public abstract class Item extends Sprite {
+public abstract class Item extends Sprite implements Destoryable {
     final private World world;
     final private Body body;
     final private int cost; // Cost of item
@@ -88,5 +89,16 @@ public abstract class Item extends Sprite {
             this.world.destroyBody(this.body);
             this.destroyed = true;
         }
+    }
+
+    @Override
+    public boolean getDestroyed() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setToDestroy() {
+        // TODO Auto-generated method stub
     }
 }

@@ -17,16 +17,20 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
+import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
 import java.util.ArrayList;
 
-public class Player extends Sprite implements ControllerListener {
+public class Player extends Sprite implements ControllerListener, Destoryable {
     final private World world;
     final private Body body;
     final private Map map;
     final private String name;
     final private int playerNumber;
+
+    private boolean toDestroy = false;
+    private boolean destroyed = false;
 
     final private TextureAtlas playerAtlasSide;
     final private TextureAtlas playerAtlasDown;
@@ -148,7 +152,7 @@ public class Player extends Sprite implements ControllerListener {
      * Gets keyboard input and moves the character using WASD
      * Also checks that player does not go over edge
      */
-    public void handleMovement() {
+    private void handleMovement() {
         float velX = 0, velY = 0;
         float currX = (getBody().getPosition().x) * GameInfo.PPM;
         float currY = (getBody().getPosition().y) * GameInfo.PPM;
@@ -213,51 +217,10 @@ public class Player extends Sprite implements ControllerListener {
     /**
      * Handles bomb placement when spacebar is pressed
      */
-    public void handleBomb() {
+    private void handleBomb(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             placeBomb();
         }
-    }
-
-    /**
-     * Renders the body of the player
-     *
-     * @param batch: The spritebatch of the game
-     */
-    public void render(SpriteBatch batch) {
-        for (Bomb bomb : bombs) {
-            bomb.render(batch);
-        }
-
-        if (isWalking) {
-            elapsedTime += Gdx.graphics.getDeltaTime();
-
-            Array<TextureAtlas.AtlasRegion> frames = playerAtlasSide.getRegions();
-
-            for (TextureRegion frame : frames) {
-                if (body.getLinearVelocity().x < 0 && frame.isFlipX()) {
-                    frame.flip(true, false);
-                } else if (body.getLinearVelocity().x > 0 && !frame.isFlipX()) {
-                    frame.flip(true, false);
-                }
-            }
-
-            batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), this.getX(),
-                       this.getY());
-        } else {
-            batch.draw(texture, this.getX(), this.getY());
-        }
-    }
-
-    /**
-     * Updates the sprite texture according to where the body is
-     *
-     * @param delta: 1/fps
-     */
-    public void update(float delta) {
-        handleMovement();
-        handleBomb();
-        setPosition((body.getPosition().x) * GameInfo.PPM, (body.getPosition().y) * GameInfo.PPM);
 
         // TODO: Super ugly code please someone help me refractor I too lazy
         ArrayList<Integer> toRemove = new ArrayList<Integer>();
@@ -279,6 +242,55 @@ public class Player extends Sprite implements ControllerListener {
         }
         for (int[] coords : toRemoveCoords) {
             map.setBombMap(coords[0], coords[1], null);
+        }
+    }
+
+    /**
+     * Renders the body of the player
+     *
+     * @param batch: The spritebatch of the game
+     */
+    public void render(SpriteBatch batch) {
+        for (Bomb bomb : bombs) {
+            bomb.render(batch);
+        }
+
+        if (!destroyed) {
+            if (isWalking) {
+                elapsedTime += Gdx.graphics.getDeltaTime();
+
+                Array<TextureAtlas.AtlasRegion> frames = playerAtlasSide.getRegions();
+
+                for (TextureRegion frame : frames) {
+                    if (body.getLinearVelocity().x < 0 && frame.isFlipX()) {
+                        frame.flip(true, false);
+                    } else if (body.getLinearVelocity().x > 0 && !frame.isFlipX()) {
+                        frame.flip(true, false);
+                    }
+                }
+
+                batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), this.getX(),
+                           this.getY());
+            } else {
+                batch.draw(texture, this.getX(), this.getY());
+            }
+        }
+    }
+
+    /**
+     * Updates the sprite texture according to where the body is
+     *
+     * @param delta: 1/fps
+     */
+    public void update(float delta) {
+        if (toDestroy && !destroyed) {
+            world.destroyBody(body);
+            destroyed = true;
+        } else {
+            handleMovement();
+            handleBomb(delta);
+            setPosition((body.getPosition().x) * GameInfo.PPM,
+                        (body.getPosition().y) * GameInfo.PPM);
         }
     }
 
@@ -339,5 +351,15 @@ public class Player extends Sprite implements ControllerListener {
     public boolean axisMoved(Controller controller, int axisCode, float value) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public boolean getDestroyed() {
+        return destroyed;
+    }
+
+    @Override
+    public void setToDestroy() {
+        toDestroy = true;
     }
 }

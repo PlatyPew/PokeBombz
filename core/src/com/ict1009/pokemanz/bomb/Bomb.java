@@ -9,9 +9,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 
-public class Bomb extends Sprite {
+public class Bomb extends Sprite implements Destoryable {
     final World world;
     final private int timer = 3;
     final private int gridX, gridY;
@@ -68,16 +69,8 @@ public class Bomb extends Sprite {
         return gridY;
     }
 
-    public void setToDestroy() {
-        toDestroy = true;
-    }
-
     public Body getBody() {
         return body;
-    }
-
-    public boolean getDestroyed() {
-        return destroyed;
     }
 
     public boolean getUpdated() {
@@ -168,5 +161,15 @@ public class Bomb extends Sprite {
             destroyed = false;
             unloadOnly = false;
         }
+    }
+
+    @Override
+    public void setToDestroy() {
+        toDestroy = true;
+    }
+
+    @Override
+    public boolean getDestroyed() {
+        return destroyed;
     }
 }
