@@ -5,18 +5,28 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.helper.GameInfo;
+import java.util.ArrayList;
 
 public abstract class Map {
+    private World world;
+
     final private Texture texture;
-    private int[][] unbreakable;
-    private int[][] breakable;
+    private int[][] unbreakable, breakable;
+
     private Obstacle[][] obstacleMap = new Obstacle[GameInfo.MAP_WIDTH][GameInfo.MAP_HEIGHT];
     private Bomb[][] bombMap = new Bomb[GameInfo.MAP_WIDTH][GameInfo.MAP_HEIGHT];
+
+    private ArrayList<int[]> suddenDeathCoords = new ArrayList<int[]>();
+
+    private int sdTimer = 0, obTimer = 0;
+    private int sdCounter = 0;
 
     public Map(String textureLocation, int[][] unbreakable, int[][] breakable) {
         this.texture = new Texture(textureLocation);
         this.unbreakable = unbreakable;
         this.breakable = breakable;
+
+        spiral();
     }
 
     public Texture getTexture() {
@@ -56,6 +66,7 @@ public abstract class Map {
      * @param world: World
      */
     public void createObstacles(World world) {
+        this.world = world;
         createBreakable(world);
         createUnbreakable(world);
     }
@@ -76,6 +87,63 @@ public abstract class Map {
         bombMap[gridX][gridY] = bomb;
     }
 
+    public void spiral() {
+        int rows = obstacleMap.length;
+        int cols = obstacleMap[0].length;
+        int top = 0, bottom = rows - 1, left = 0, right = cols - 1, direction = 1;
+
+        while (top <= bottom && left <= right) {
+            switch (direction) {
+            case 1:
+                for (int i = left; i <= right; ++i) {
+                    suddenDeathCoords.add(new int[] {top, i});
+                }
+
+                ++top;
+                direction = 2;
+                break;
+            case 2:
+                for (int i = top; i <= bottom; ++i) {
+                    suddenDeathCoords.add(new int[] {i, right});
+                }
+                --right;
+                direction = 3;
+                break;
+            case 3:
+                for (int i = right; i >= left; --i) {
+                    suddenDeathCoords.add(new int[] {bottom, i});
+                }
+                --bottom;
+                direction = 4;
+                break;
+            case 4:
+                for (int i = bottom; i >= top; --i) {
+                    suddenDeathCoords.add(new int[] {i, left});
+                }
+                ++left;
+                direction = 1;
+                break;
+            }
+        }
+    }
+
+    public void suddenDeath(float delta) {
+        if (sdTimer < GameInfo.SUDDEN_DEATH) {
+            sdTimer += 1;
+            return;
+        }
+
+        if (obTimer % GameInfo.SUDDEN_DEATH_DROP == 0 && sdCounter < suddenDeathCoords.size()) {
+            int gridX = suddenDeathCoords.get(sdCounter)[0];
+            int gridY = suddenDeathCoords.get(sdCounter)[1];
+            obstacleMap[gridX][gridY] = new Obstacle(world, "room/unbreakable.png", gridX, gridY);
+
+            obTimer = 0;
+            sdCounter += 1;
+        }
+        obTimer += 1;
+    }
+
     /**
      * Provides updates to the obstacle class
      *
@@ -89,6 +157,8 @@ public abstract class Map {
                 }
             }
         }
+
+        suddenDeath(delta);
     }
 
     /**
