@@ -17,11 +17,12 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
+import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
 import java.util.ArrayList;
 
-public class Player extends Sprite implements ControllerListener {
+public class Player extends Sprite implements ControllerListener, Destoryable {
     final private World world;
     final private Body body;
     final private Map map;
@@ -339,5 +340,16 @@ public class Player extends Sprite implements ControllerListener {
     public boolean axisMoved(Controller controller, int axisCode, float value) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public boolean getDestroyed() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setToDestroy() {
+        // TODO Auto-generated method stub
     }
 }
