@@ -232,16 +232,13 @@ public class Player extends Sprite implements ControllerListener, Destoryable {
 
             if (bomb.getDestroyed()) {
                 toRemove.add(bombs.indexOf(bomb));
-                int[] coords = {bomb.getGridX(), bomb.getGridY()};
-                toRemoveCoords.add(coords);
+                toRemoveCoords.add(new int[] {bomb.getGridX(), bomb.getGridY()});
             }
         }
 
-        for (int index : toRemove) {
-            bombs.remove(index);
-        }
-        for (int[] coords : toRemoveCoords) {
-            map.setBombMap(coords[0], coords[1], null);
+        for (int i = 0; i < toRemove.size(); i++) {
+            bombs.remove((int)toRemove.get(i));
+            map.setBombMap(toRemoveCoords.get(i)[0], toRemoveCoords.get(i)[1], null);
         }
     }
 
