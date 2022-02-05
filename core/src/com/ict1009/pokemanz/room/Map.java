@@ -8,9 +8,11 @@ import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.helper.BoardElement;
+
 import java.util.ArrayList;
 
-public abstract class Map {
+public abstract class Map implements BoardElement {
     private World world;
 
     private Array<Player> players;
@@ -169,6 +171,7 @@ public abstract class Map {
      *
      * @param delta: 1/fps
      */
+    @Override
     public void update(float delta) {
         for (Obstacle[] x : obstacleMap) {
             for (Obstacle y : x) {
@@ -186,6 +189,7 @@ public abstract class Map {
      *
      * @param batch: SpriteBatch
      */
+    @Override
     public void render(SpriteBatch batch) {
         for (Obstacle[] x : obstacleMap) {
             for (Obstacle y : x) {

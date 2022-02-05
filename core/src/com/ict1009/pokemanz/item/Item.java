@@ -10,8 +10,9 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.helper.BoardElement;
 
-public abstract class Item extends Sprite implements Destoryable {
+public abstract class Item extends Sprite implements Destoryable, BoardElement {
     final private World world;
     final private Body body;
     final private int cost; // Cost of item
@@ -74,6 +75,7 @@ public abstract class Item extends Sprite implements Destoryable {
      *
      * @param batch: The spritebatch of the game
      */
+    @Override
     public void render(SpriteBatch batch) {
         if (!destroyed)
             batch.draw(this, this.getX(), this.getY());
@@ -84,6 +86,7 @@ public abstract class Item extends Sprite implements Destoryable {
      *
      * @param delta: 1/fps
      */
+    @Override
     public void update(float delta) {
         if (toDestroy && !destroyed) {
             this.world.destroyBody(this.body);
