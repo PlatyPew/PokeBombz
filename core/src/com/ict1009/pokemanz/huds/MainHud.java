@@ -98,6 +98,9 @@ public class MainHud {
         int seconds = totalSeconds % 60;
         int minute = totalSeconds / 60;
 
+        if (totalSeconds <= 0)
+            return "SD";
+
         return String.format("%d:%02d", minute, seconds);
     }
 
