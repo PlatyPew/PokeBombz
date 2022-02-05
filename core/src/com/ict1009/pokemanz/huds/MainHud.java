@@ -108,6 +108,10 @@ public class MainHud {
         timerLabel.setText(calculateTime());
     }
 
+    public void updateScore(int playerNumber, int score) {
+        scoreLabel[playerNumber - 1].setText(score);
+    }
+
     public Stage getStage() {
         return stage;
     }
