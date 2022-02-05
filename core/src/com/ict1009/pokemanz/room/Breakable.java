@@ -1,8 +1,9 @@
 package com.ict1009.pokemanz.room;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.ict1009.pokemanz.helper.Destoryable;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.ict1009.pokemanz.helper.BoardElement;
+import com.ict1009.pokemanz.helper.Destoryable;
 
 public class Breakable implements Destoryable, BoardElement {
     private Obstacle obstacle;
@@ -12,6 +13,11 @@ public class Breakable implements Destoryable, BoardElement {
 
     public Breakable(Obstacle obstacle) {
         this.obstacle = obstacle;
+    }
+
+    @Override
+    public Body getBody() {
+        return null;
     }
 
     /**

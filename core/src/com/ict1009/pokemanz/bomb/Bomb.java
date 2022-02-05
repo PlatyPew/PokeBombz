@@ -70,6 +70,7 @@ public class Bomb extends Sprite implements Destoryable, BoardElement {
         return gridY;
     }
 
+    @Override
     public Body getBody() {
         return body;
     }

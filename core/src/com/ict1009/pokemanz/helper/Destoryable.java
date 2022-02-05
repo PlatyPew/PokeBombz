@@ -1,7 +1,9 @@
 package com.ict1009.pokemanz.helper;
 
-public interface Destoryable {
-    public void setToDestroy();
+import com.badlogic.gdx.physics.box2d.Body;
 
+public interface Destoryable {
+    public Body getBody();
+    public void setToDestroy();
     public boolean getDestroyed();
 }

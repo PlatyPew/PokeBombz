@@ -8,9 +8,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
-import com.ict1009.pokemanz.helper.BoardElement;
 
 public abstract class Item extends Sprite implements Destoryable, BoardElement {
     final private World world;
@@ -96,12 +96,9 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
 
     @Override
     public boolean getDestroyed() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public void setToDestroy() {
-        // TODO Auto-generated method stub
-    }
+    public void setToDestroy() {}
 }
