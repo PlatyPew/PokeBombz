@@ -38,28 +38,33 @@ public class MainHud {
         createImages();
         createLabels();
 
-        Table hudTable = new Table();
-        hudTable.top().left();
-        hudTable.setFillParent(true);
+        Table timerTable = new Table();
+        timerTable.top().left();
+        timerTable.setFillParent(true);
 
-        hudTable.add(timerImage)
+        timerTable.add(timerImage)
             .padTop(GameInfo.PPM / 2)
             .padLeft(GameInfo.PPM * 18 + GameInfo.PPM / 4);
-        hudTable.add(timerLabel).padTop(GameInfo.PPM / 2).padLeft(10);
+        timerTable.add(timerLabel).padTop(GameInfo.PPM / 2).padLeft(10);
 
-        hudTable.row();
-        hudTable.add().padTop(GameInfo.PPM / 2);
-        hudTable.add().padTop(GameInfo.PPM / 2);
+        Table scoreTable = new Table();
+        scoreTable.setFillParent(true);
+        scoreTable.top().left();
+
+        scoreTable.row();
+        scoreTable.add().padTop(GameInfo.PPM * 2);
+        scoreTable.add().padTop(GameInfo.PPM * 2);
 
         for (int i = 0; i < players; i++) {
-            hudTable.row();
-            hudTable.add(scoreImage[i])
+            scoreTable.row();
+            scoreTable.add(scoreImage[i])
                 .padTop(GameInfo.PPM / 5)
                 .padLeft(GameInfo.PPM * 18 + GameInfo.PPM / 4);
-            hudTable.add(scoreLabel[i]).padTop(GameInfo.PPM / 5).padLeft(10);
+            scoreTable.add(scoreLabel[i]).padTop(GameInfo.PPM / 5).padLeft(10);
         }
 
-        stage.addActor(hudTable);
+        stage.addActor(timerTable);
+        stage.addActor(scoreTable);
     }
 
     private void createImages() {
