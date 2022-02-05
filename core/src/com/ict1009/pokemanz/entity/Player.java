@@ -17,12 +17,13 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
+import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
 import java.util.ArrayList;
 
-public class Player extends Sprite implements ControllerListener, Destoryable {
+public class Player extends Sprite implements ControllerListener, Destoryable, BoardElement {
     final private World world;
     final private Body body;
     final private Map map;
@@ -80,6 +81,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable {
         }
     }
 
+    @Override
     public Body getBody() {
         return this.body;
     }
@@ -247,6 +249,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable {
      *
      * @param batch: The spritebatch of the game
      */
+    @Override
     public void render(SpriteBatch batch) {
         for (Bomb bomb : bombs) {
             bomb.render(batch);
@@ -279,6 +282,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable {
      *
      * @param delta: 1/fps
      */
+    @Override
     public void update(float delta) {
         if (destroyed)
             return;
@@ -304,14 +308,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable {
     }
 
     @Override
-    public void connected(Controller controller) {
-        // TODO Auto-generated method stub
-    }
+    public void connected(Controller controller) {}
 
     @Override
-    public void disconnected(Controller controller) {
-        // TODO Auto-generated method stub
-    }
+    public void disconnected(Controller controller) {}
 
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
@@ -349,7 +349,6 @@ public class Player extends Sprite implements ControllerListener, Destoryable {
 
     @Override
     public boolean axisMoved(Controller controller, int axisCode, float value) {
-        // TODO Auto-generated method stub
         return false;
     }
 

@@ -11,8 +11,9 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.helper.BoardElement;
 
-public class Bomb extends Sprite implements Destoryable {
+public class Bomb extends Sprite implements Destoryable, BoardElement {
     final World world;
     final private int timer = 3;
     final private int gridX, gridY;
@@ -69,6 +70,7 @@ public class Bomb extends Sprite implements Destoryable {
         return gridY;
     }
 
+    @Override
     public Body getBody() {
         return body;
     }
@@ -141,12 +143,14 @@ public class Bomb extends Sprite implements Destoryable {
         }
     }
 
+    @Override
     public void render(SpriteBatch batch) {
         if (!destroyed) {
             batch.draw(this, this.getX(), this.getY());
         }
     }
 
+    @Override
     public void update(float delta) {
         countDown(delta);
 

@@ -69,9 +69,7 @@ public class MainScene implements Screen, ContactListener {
     }
 
     @Override
-    public void show() {
-        // TODO Auto-generated method stub
-    }
+    public void show() {}
 
     @Override
     public void render(float delta) {
@@ -95,29 +93,19 @@ public class MainScene implements Screen, ContactListener {
     }
 
     @Override
-    public void resize(int width, int height) {
-        // TODO Auto-generated method stub
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void pause() {
-        // TODO Auto-generated method stub
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-        // TODO Auto-generated method stub
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-        // TODO Auto-generated method stub
-    }
+    public void hide() {}
 
     @Override
-    public void dispose() {
-        // TODO Auto-generated method stub
-    }
+    public void dispose() {}
 
     @Override
     public void beginContact(Contact contact) {
@@ -176,12 +164,8 @@ public class MainScene implements Screen, ContactListener {
     }
 
     @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-        // TODO Auto-generated method stub
-    }
+    public void preSolve(Contact contact, Manifold oldManifold) {}
 
     @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-        // TODO Auto-generated method stub
-    }
+    public void postSolve(Contact contact, ContactImpulse impulse) {}
 }
