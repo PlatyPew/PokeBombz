@@ -81,11 +81,23 @@ public class MainHud {
 
         BitmapFont font = generator.generateFont(parameter);
 
-        timerLabel = new Label("0:00", new Label.LabelStyle(font, Color.WHITE));
+        timerLabel = new Label(calculateTime(), new Label.LabelStyle(font, Color.WHITE));
 
         for (int i = 0; i < players; i++) {
             scoreLabel[i] = new Label("0", new Label.LabelStyle(font, Color.WHITE));
         }
+    }
+
+    private String calculateTime() {
+        int totalSeconds = (GameInfo.SUDDEN_DEATH - GameInfo.timeElapsed) / 60;
+        int seconds = totalSeconds % 60;
+        int minute = totalSeconds / 60;
+
+        return String.format("%d:%02d", minute, seconds);
+    }
+
+    public void updateTime() {
+        timerLabel.setText(calculateTime());
     }
 
     public Stage getStage() {

@@ -1,8 +1,5 @@
 package com.ict1009.pokemanz.helper;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-
 public class GameInfo {
     final public static int WIDTH = 1280;
     final public static int HEIGHT = 720;
@@ -13,5 +10,6 @@ public class GameInfo {
     final public static int PLAYER_VELOCITY = 2;
     final public static int SUDDEN_DEATH = FPS * 120;
     final public static int SUDDEN_DEATH_DROP = FPS / 2;
-    public static World world = new World(new Vector2(0, 0), true);
+
+    public static int timeElapsed = 0;
 }

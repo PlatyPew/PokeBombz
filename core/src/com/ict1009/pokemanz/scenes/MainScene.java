@@ -62,6 +62,10 @@ public class MainScene implements Screen, ContactListener {
             player.update(delta);
         }
         level.update(delta);
+
+        GameInfo.timeElapsed += 1;
+
+        hud.updateTime();
     }
 
     @Override

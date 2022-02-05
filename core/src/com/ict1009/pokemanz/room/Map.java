@@ -23,7 +23,7 @@ public abstract class Map {
 
     private ArrayList<int[]> suddenDeathCoords = new ArrayList<int[]>();
 
-    private int sdTimer = 0, obTimer = 0;
+    private int obTimer = 0;
     private int sdCounter = 0;
 
     public Map(Array<Player> players, String textureLocation, int[][] unbreakable,
@@ -135,10 +135,8 @@ public abstract class Map {
     }
 
     public void suddenDeath(float delta) {
-        if (sdTimer < GameInfo.SUDDEN_DEATH) {
-            sdTimer += 1;
+        if (GameInfo.timeElapsed < GameInfo.SUDDEN_DEATH)
             return;
-        }
 
         if (obTimer % GameInfo.SUDDEN_DEATH_DROP == 0 && sdCounter < suddenDeathCoords.size()) {
             int gridX = suddenDeathCoords.get(sdCounter)[0];
