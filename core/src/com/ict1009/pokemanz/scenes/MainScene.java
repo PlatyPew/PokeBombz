@@ -15,12 +15,15 @@ import com.ict1009.pokemanz.GameMain;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.huds.MainHud;
 import com.ict1009.pokemanz.room.LevelOne;
 import com.ict1009.pokemanz.room.Map;
 
 public class MainScene implements Screen, ContactListener {
     private World world;
     private SpriteBatch batch;
+
+    private MainHud hud;
 
     private Map level;
 
@@ -32,11 +35,14 @@ public class MainScene implements Screen, ContactListener {
     public MainScene(GameMain game) {
         setupCamera();
         this.batch = game.getBatch();
+
         this.level = new LevelOne(players);
         this.world = new World(new Vector2(0, 0), true);
 
         players.add(new Player(world, level, 1, "upstill.png", 0, 0, "Platy"));
         players.add(new Player(world, level, 2, "downstill.png", 15, 9, "Helpme"));
+
+        this.hud = new MainHud(game, 2);
 
         level.createObstacles(world);
 
@@ -77,6 +83,9 @@ public class MainScene implements Screen, ContactListener {
         batch.end();
 
         debugRenderer.render(world, box2DCamera.combined);
+
+        batch.setProjectionMatrix(hud.getStage().getCamera().combined);
+        hud.getStage().draw();
 
         world.step(delta, 6, 2);
     }
