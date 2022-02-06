@@ -228,35 +228,42 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             placeBomb();
         }
 
-        // TODO: Super ugly code please someone help me refractor I too lazy
-        ArrayList<Integer> toRemove = new ArrayList<Integer>();
-        ArrayList<int[]> toRemoveCoords = new ArrayList<int[]>();
+        ArrayList<Integer> bombToRemove = new ArrayList<Integer>();
+        ArrayList<int[]> bombToRemoveCoords = new ArrayList<int[]>();
 
         // Remove bombs from arraylist and bombMap once bomb has exploded
         for (Bomb bomb : bombs) {
             bomb.update(delta);
 
             if (bomb.getDestroyed()) {
-                toRemove.add(bombs.indexOf(bomb));
+                bombToRemove.add(bombs.indexOf(bomb));
                 int bombX = bomb.getGridX();
                 int bombY = bomb.getGridY();
-                toRemoveCoords.add(new int[] {bombX, bombY});
+                bombToRemoveCoords.add(new int[] {bombX, bombY});
 
                 explosions.add(new Explode(world, map, "explosion/start.png", bombX, bombY,
                                            bombRange, playerNumber, true));
             }
         }
 
-        for (int i = 0; i < toRemove.size(); i++) {
-            bombs.remove((int)toRemove.get(i));
-            map.setBombMap(toRemoveCoords.get(i)[0], toRemoveCoords.get(i)[1], null);
+        for (int i = 0; i < bombToRemove.size(); i++) {
+            bombs.remove((int)bombToRemove.get(i));
+            map.setBombMap(bombToRemoveCoords.get(i)[0], bombToRemoveCoords.get(i)[1], null);
         }
 
+        ArrayList<Integer> explodeToRemove = new ArrayList<Integer>();
+
+        // Remove explosions from arraylist
         for (Explode explosion : explosions) {
             explosion.update(delta);
 
             if (explosion.getDestroyed()) {
+                explodeToRemove.add(explosions.indexOf(explosion));
             }
+        }
+
+        for (int i = 0; i < explodeToRemove.size(); i++) {
+            explosions.remove((int)explodeToRemove.get(i));
         }
     }
 

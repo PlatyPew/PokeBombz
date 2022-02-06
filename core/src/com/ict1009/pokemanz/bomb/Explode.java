@@ -33,6 +33,19 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
     private BodyType bodyType = BodyType.StaticBody;
 
     public Explode(World world, Map map, String textureLocation, int gridX, int gridY, int range,
+                   int playerNumber) {
+        super(new Texture(textureLocation));
+        this.world = world;
+        this.gridX = gridX;
+        this.gridY = gridY;
+        this.map = map;
+        this.playerNumber = playerNumber;
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
+        this.body = createBody();
+        this.range = range;
+    }
+
+    public Explode(World world, Map map, String textureLocation, int gridX, int gridY, int range,
                    int playerNumber, boolean isCenter) {
         super(new Texture(textureLocation));
         this.world = world;
@@ -147,11 +160,11 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
                     Explode explosion = new Explode(world, map, "explosion/endleft.png", gridX - i,
-                                                    gridY, range, playerNumber, false);
+                                                    gridY, range, playerNumber);
                     explosions.add(explosion);
                 } else {
                     Explode explosion = new Explode(world, map, "explosion/middleleft.png",
-                                                    gridX - i, gridY, range, playerNumber, false);
+                                                    gridX - i, gridY, range, playerNumber);
                     explosions.add(explosion);
                 }
             }
@@ -185,11 +198,11 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
                     Explode explosion = new Explode(world, map, "explosion/endtop.png", gridX,
-                                                    gridY + i, range, playerNumber, false);
+                                                    gridY + i, range, playerNumber);
                     explosions.add(explosion);
                 } else {
                     Explode explosion = new Explode(world, map, "explosion/middletop.png", gridX,
-                                                    gridY + i, range, playerNumber, false);
+                                                    gridY + i, range, playerNumber);
                     explosions.add(explosion);
                 }
             }
@@ -222,11 +235,11 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
                     Explode explosion = new Explode(world, map, "explosion/endright.png", gridX + i,
-                                                    gridY, range, playerNumber, false);
+                                                    gridY, range, playerNumber);
                     explosions.add(explosion);
                 } else {
                     Explode explosion = new Explode(world, map, "explosion/middleright.png",
-                                                    gridX + i, gridY, range, playerNumber, false);
+                                                    gridX + i, gridY, range, playerNumber);
                     explosions.add(explosion);
                 }
             }
@@ -259,11 +272,11 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
                     Explode explosion = new Explode(world, map, "explosion/endbot.png", gridX,
-                                                    gridY - i, range, playerNumber, false);
+                                                    gridY - i, range, playerNumber);
                     explosions.add(explosion);
                 } else {
                     Explode explosion = new Explode(world, map, "explosion/middlebot.png", gridX,
-                                                    gridY - i, range, playerNumber, false);
+                                                    gridY - i, range, playerNumber);
                     explosions.add(explosion);
                 }
             }
@@ -376,6 +389,10 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
     @Override
     public void update(float delta) {
         countDown(delta);
+
+        for (Explode explosion : explosions) {
+            explosion.update(delta);
+        }
 
         if (toDestroy && !destroyed) {
             this.world.destroyBody(this.body);
