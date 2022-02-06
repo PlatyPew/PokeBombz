@@ -8,12 +8,14 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ict1009.pokemanz.helper.BoardElement;
+import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
 import com.ict1009.pokemanz.room.Obstacle;
 import java.util.ArrayList;
 
-public class Explode extends Sprite {
+public class Explode extends Sprite implements BoardElement, Destoryable {
     final World world;
     private Body body;
     private Map map;
@@ -22,14 +24,14 @@ public class Explode extends Sprite {
     private int range;
 
     private int counter = 0;
-    private boolean exploded = false;
+    private boolean destroyed = false;
     private boolean toDestroy = false;
     private ArrayList<Explode> explosions = new ArrayList<Explode>();
 
     private BodyType bodyType = BodyType.StaticBody;
 
     public Explode(World world, Map map, String textureLocation, int gridX, int gridY, int range,
-                     boolean isCenter) {
+                   boolean isCenter) {
         super(new Texture(textureLocation));
         this.world = world;
         this.gridX = gridX;
@@ -55,11 +57,6 @@ public class Explode extends Sprite {
         boolean topOfExplosionBreakable = true;
         boolean rightOfExplosionBreakable = true;
         boolean btmOfExplosionBreakable = true;
-
-        int leftTravel = 0;
-        int topTravel = 0;
-        int rightTravel = 0;
-        int btmTravel = 0;
 
         // If the explosion is not on the left or right wall
         if (gridX > 0 && gridX < 15) {
@@ -145,14 +142,12 @@ public class Explode extends Sprite {
 
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
-                    Explode explosion =
-                        new Explode(world, map, "explosion/endleft.png", this.gridX - i,
-                                      this.gridY, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/endleft.png",
+                                                    this.gridX - i, this.gridY, this.range, false);
                     explosions.add(explosion);
                 } else {
-                    Explode explosion =
-                        new Explode(world, map, "explosion/middleleft.png", this.gridX - i,
-                                      this.gridY, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/middleleft.png",
+                                                    this.gridX - i, this.gridY, this.range, false);
                     explosions.add(explosion);
                 }
             }
@@ -185,14 +180,12 @@ public class Explode extends Sprite {
                 }
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
-                    Explode explosion =
-                        new Explode(world, map, "explosion/endtop.png", this.gridX,
-                                      this.gridY + i, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/endtop.png", this.gridX,
+                                                    this.gridY + i, this.range, false);
                     explosions.add(explosion);
                 } else {
-                    Explode explosion =
-                        new Explode(world, map, "explosion/middletop.png", this.gridX,
-                                      this.gridY + i, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/middletop.png",
+                                                    this.gridX, this.gridY + i, this.range, false);
                     explosions.add(explosion);
                 }
             }
@@ -224,14 +217,12 @@ public class Explode extends Sprite {
                 }
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
-                    Explode explosion =
-                        new Explode(world, map, "explosion/endright.png", this.gridX + i,
-                                      this.gridY, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/endright.png",
+                                                    this.gridX + i, this.gridY, this.range, false);
                     explosions.add(explosion);
                 } else {
-                    Explode explosion =
-                        new Explode(world, map, "explosion/middleright.png", this.gridX + i,
-                                      this.gridY, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/middleright.png",
+                                                    this.gridX + i, this.gridY, this.range, false);
                     explosions.add(explosion);
                 }
             }
@@ -263,14 +254,12 @@ public class Explode extends Sprite {
                 }
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
-                    Explode explosion =
-                        new Explode(world, map, "explosion/endbot.png", this.gridX,
-                                      this.gridY - i, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/endbot.png", this.gridX,
+                                                    this.gridY - i, this.range, false);
                     explosions.add(explosion);
                 } else {
-                    Explode explosion =
-                        new Explode(world, map, "explosion/middlebot.png", this.gridX,
-                                      this.gridY - i, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/middlebot.png",
+                                                    this.gridX, this.gridY - i, this.range, false);
                     explosions.add(explosion);
                 }
             }
@@ -353,10 +342,6 @@ public class Explode extends Sprite {
         return body;
     }
 
-    public boolean getExploded() {
-        return exploded;
-    }
-
     private void countDown(float delta) {
         if (counter < timer / delta) {
             counter++;
@@ -365,17 +350,34 @@ public class Explode extends Sprite {
         }
     }
 
+    @Override
+    public Body getBody() {
+        return body;
+    }
+
+    @Override
+    public void setToDestroy() {
+        toDestroy = true;
+    }
+
+    @Override
+    public boolean getDestroyed() {
+        return destroyed;
+    }
+
+    @Override
     public void update(float delta) {
         countDown(delta);
 
-        if (toDestroy && !exploded) {
+        if (toDestroy && !destroyed) {
             this.world.destroyBody(this.body);
-            exploded = true;
+            destroyed = true;
         }
     }
 
+    @Override
     public void render(SpriteBatch batch) {
-        if (!exploded) {
+        if (!destroyed) {
             for (Explode explosion : explosions) {
                 explosion.render(batch);
             }
