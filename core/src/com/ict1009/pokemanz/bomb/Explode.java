@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.BoardElement;
@@ -22,6 +23,7 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
     private int gridX, gridY;
     private int timer = 2;
     private int range;
+    private int playerNumber;
 
     private int counter = 0;
     private boolean destroyed = false;
@@ -31,15 +33,17 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
     private BodyType bodyType = BodyType.StaticBody;
 
     public Explode(World world, Map map, String textureLocation, int gridX, int gridY, int range,
-                   boolean isCenter) {
+                   int playerNumber, boolean isCenter) {
         super(new Texture(textureLocation));
         this.world = world;
         this.gridX = gridX;
         this.gridY = gridY;
         this.map = map;
+        this.playerNumber = playerNumber;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.body = createBody();
         this.range = range;
+
         if (isCenter) {
             handleExplosion();
         }
@@ -142,12 +146,12 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
 
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
-                    Explode explosion = new Explode(world, map, "explosion/endleft.png",
-                                                    this.gridX - i, this.gridY, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/endleft.png", gridX - i,
+                                                    gridY, range, playerNumber, false);
                     explosions.add(explosion);
                 } else {
                     Explode explosion = new Explode(world, map, "explosion/middleleft.png",
-                                                    this.gridX - i, this.gridY, this.range, false);
+                                                    gridX - i, gridY, range, playerNumber, false);
                     explosions.add(explosion);
                 }
             }
@@ -180,12 +184,12 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 }
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
-                    Explode explosion = new Explode(world, map, "explosion/endtop.png", this.gridX,
-                                                    this.gridY + i, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/endtop.png", gridX,
+                                                    gridY + i, range, playerNumber, false);
                     explosions.add(explosion);
                 } else {
-                    Explode explosion = new Explode(world, map, "explosion/middletop.png",
-                                                    this.gridX, this.gridY + i, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/middletop.png", gridX,
+                                                    gridY + i, range, playerNumber, false);
                     explosions.add(explosion);
                 }
             }
@@ -217,12 +221,12 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 }
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
-                    Explode explosion = new Explode(world, map, "explosion/endright.png",
-                                                    this.gridX + i, this.gridY, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/endright.png", gridX + i,
+                                                    gridY, range, playerNumber, false);
                     explosions.add(explosion);
                 } else {
                     Explode explosion = new Explode(world, map, "explosion/middleright.png",
-                                                    this.gridX + i, this.gridY, this.range, false);
+                                                    gridX + i, gridY, range, playerNumber, false);
                     explosions.add(explosion);
                 }
             }
@@ -254,12 +258,12 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 }
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
-                    Explode explosion = new Explode(world, map, "explosion/endbot.png", this.gridX,
-                                                    this.gridY - i, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/endbot.png", gridX,
+                                                    gridY - i, range, playerNumber, false);
                     explosions.add(explosion);
                 } else {
-                    Explode explosion = new Explode(world, map, "explosion/middlebot.png",
-                                                    this.gridX, this.gridY - i, this.range, false);
+                    Explode explosion = new Explode(world, map, "explosion/middlebot.png", gridX,
+                                                    gridY - i, range, playerNumber, false);
                     explosions.add(explosion);
                 }
             }
@@ -337,6 +341,10 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
         shape.setAsBox((getWidth() / 2) / GameInfo.PPM, (getHeight() / 2) / GameInfo.PPM);
 
         Body body = world.createBody(bodyDef);
+
+        Fixture fixture = body.createFixture(shape, 1f);
+        fixture.setUserData(this);
+        fixture.setSensor(true);
 
         shape.dispose();
         return body;
