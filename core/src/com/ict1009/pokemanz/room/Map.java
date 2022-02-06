@@ -7,9 +7,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.entity.Player;
-import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.helper.BoardElement;
-
+import com.ict1009.pokemanz.helper.GameInfo;
 import java.util.ArrayList;
 
 public abstract class Map implements BoardElement {
@@ -177,6 +176,8 @@ public abstract class Map implements BoardElement {
             for (Obstacle y : x) {
                 if (y instanceof Obstacle) {
                     y.update(delta);
+                    if (y.getDestroyed())
+                        obstacleMap[y.getGridX()][y.getGridY()] = null;
                 }
             }
         }

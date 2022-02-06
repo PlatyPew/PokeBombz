@@ -145,7 +145,6 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                         // obstacle or not
                         if (leftObstacle.getBreakable()) {
                             leftObstacle.setToDestroy();
-                            obstacleMap[gridX - i][gridY] = null;
                             explosionEnd = true;
                         }
                     } else {
@@ -186,7 +185,6 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                         // obstacle or not
                         if (topObstacle.getBreakable()) {
                             topObstacle.setToDestroy();
-                            obstacleMap[gridX][gridY + i] = null;
                             explosionEnd = true;
                         }
                     } else {
@@ -224,7 +222,6 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                         // obstacle or not
                         if (rightObstacle.getBreakable()) {
                             rightObstacle.setToDestroy();
-                            obstacleMap[gridX + i][gridY] = null;
                             explosionEnd = true;
                         }
                     } else {
@@ -262,7 +259,6 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                         // obstacle or not
                         if (btmObstacle.getBreakable()) {
                             btmObstacle.setToDestroy();
-                            obstacleMap[gridX][gridY - i] = null;
                             explosionEnd = true;
                         }
                     } else {
