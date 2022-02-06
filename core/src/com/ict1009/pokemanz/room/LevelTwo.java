@@ -1,8 +1,5 @@
 package com.ict1009.pokemanz.room;
 
-import com.badlogic.gdx.utils.Array;
-import com.ict1009.pokemanz.entity.Player;
-
 public class LevelTwo extends Map {
     final private static String textureLocation = "room/background.png";
 
@@ -29,7 +26,7 @@ public class LevelTwo extends Map {
         {5, 9},  {6, 9},  {7, 9},  {8, 9},  {9, 9},  {10, 9}, {11, 9}, {12, 9},
     };
 
-    public LevelTwo(Array<Player> players) {
-        super(players, textureLocation, unbreakable, breakable);
+    public LevelTwo() {
+        super(textureLocation, unbreakable, breakable);
     }
 }

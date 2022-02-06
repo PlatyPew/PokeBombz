@@ -4,17 +4,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.BoardElement;
+import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.GameInfo;
 import java.util.ArrayList;
 
 public abstract class Map implements BoardElement {
     private World world;
-
-    private Array<Player> players;
 
     final private Texture texture;
     private int[][] unbreakable, breakable;
@@ -27,9 +25,8 @@ public abstract class Map implements BoardElement {
     private int obTimer = 0;
     private int sdCounter = 0;
 
-    public Map(Array<Player> players, String textureLocation, int[][] unbreakable,
+    public Map(String textureLocation, int[][] unbreakable,
                int[][] breakable) {
-        this.players = players;
         this.texture = new Texture(textureLocation);
         this.unbreakable = unbreakable;
         this.breakable = breakable;
@@ -143,7 +140,7 @@ public abstract class Map implements BoardElement {
             int gridX = suddenDeathCoords.get(sdCounter)[0];
             int gridY = suddenDeathCoords.get(sdCounter)[1];
 
-            for (Player player : players) {
+            for (Player player : BoardInfo.players) {
                 Vector2 playerCoords = player.getBody().getPosition();
                 float playerGridX = playerCoords.x - 1;
                 float playerGridY = playerCoords.y - 1;

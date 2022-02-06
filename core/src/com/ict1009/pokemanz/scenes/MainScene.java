@@ -10,10 +10,10 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.GameMain;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.entity.Player;
+import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.huds.MainHud;
 import com.ict1009.pokemanz.room.LevelOne;
@@ -27,8 +27,6 @@ public class MainScene implements Screen, ContactListener {
 
     private Map level;
 
-    private Array<Player> players = new Array<Player>();
-
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
 
@@ -36,11 +34,11 @@ public class MainScene implements Screen, ContactListener {
         setupCamera();
         this.batch = game.getBatch();
 
-        this.level = new LevelOne(players);
+        this.level = new LevelOne();
         this.world = new World(new Vector2(0, 0), true);
 
-        players.add(new Player(world, level, 1, "upstill.png", 0, 0, "Platy"));
-        players.add(new Player(world, level, 2, "downstill.png", 15, 9, "Helpme"));
+        BoardInfo.players.add(new Player(world, level, 1, "upstill.png", 0, 0, "Platy"));
+        BoardInfo.players.add(new Player(world, level, 2, "downstill.png", 15, 9, "Helpme"));
 
         this.hud = new MainHud(game, 2);
 
@@ -58,7 +56,7 @@ public class MainScene implements Screen, ContactListener {
     }
 
     public void update(float delta) {
-        for (Player player : players) {
+        for (Player player : BoardInfo.players) {
             player.update(delta);
         }
         level.update(delta);
@@ -78,7 +76,7 @@ public class MainScene implements Screen, ContactListener {
         batch.begin();
 
         batch.draw(level.getTexture(), 0, 0);
-        for (Player player : players) {
+        for (Player player : BoardInfo.players) {
             player.render(batch);
         }
         level.render(batch);
