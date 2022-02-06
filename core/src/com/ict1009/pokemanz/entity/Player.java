@@ -23,6 +23,7 @@ import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends Sprite implements ControllerListener, Destoryable, BoardElement {
     final private World world;
@@ -228,43 +229,37 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             placeBomb();
         }
 
-        ArrayList<Integer> bombToRemove = new ArrayList<Integer>();
-        ArrayList<int[]> bombToRemoveCoords = new ArrayList<int[]>();
+        List<Bomb> bombToRemove = new ArrayList<Bomb>();
 
         // Remove bombs from arraylist and bombMap once bomb has exploded
         for (Bomb bomb : bombs) {
             bomb.update(delta);
 
             if (bomb.getDestroyed()) {
-                bombToRemove.add(bombs.indexOf(bomb));
+                bombToRemove.add(bomb);
                 int bombX = bomb.getGridX();
                 int bombY = bomb.getGridY();
-                bombToRemoveCoords.add(new int[] {bombX, bombY});
 
+                map.setBombMap(bombX, bombY, null);
                 explosions.add(new Explode(world, map, "explosion/start.png", bombX, bombY,
                                            bombRange, playerNumber, true));
             }
         }
 
-        for (int i = 0; i < bombToRemove.size(); i++) {
-            bombs.remove((int)bombToRemove.get(i));
-            map.setBombMap(bombToRemoveCoords.get(i)[0], bombToRemoveCoords.get(i)[1], null);
-        }
+        bombs.removeAll(bombToRemove);
 
-        ArrayList<Integer> explodeToRemove = new ArrayList<Integer>();
+        List<Explode> explodeToRemove = new ArrayList<Explode>();
 
         // Remove explosions from arraylist
         for (Explode explosion : explosions) {
             explosion.update(delta);
 
             if (explosion.getDestroyed()) {
-                explodeToRemove.add(explosions.indexOf(explosion));
+                explodeToRemove.add(explosion);
             }
         }
 
-        for (int i = 0; i < explodeToRemove.size(); i++) {
-            explosions.remove((int)explodeToRemove.get(i));
-        }
+        explosions.removeAll(explodeToRemove);
     }
 
     /**
