@@ -3,16 +3,15 @@ package com.ict1009.pokemanz.bomb;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.ict1009.pokemanz.entity.Player;
+import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import com.ict1009.pokemanz.helper.BoardElement;
-import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
@@ -44,10 +43,9 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
         this.map = map;
         this.playerNumber = playerNumber;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
-        this.body = createBody();
         this.range = range;
 
-        killPlayers(gridX, gridY);
+        this.body = createBody();
     }
 
     public Explode(World world, Map map, String textureLocation, int gridX, int gridY, int range,
@@ -59,25 +57,11 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
         this.map = map;
         this.playerNumber = playerNumber;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
-        this.body = createBody();
         this.range = range;
-
-        killPlayers(gridX, gridY);
+        this.body = createBody();
 
         if (isCenter) {
             handleExplosion();
-        }
-    }
-
-    private void killPlayers(int gridX, int gridY) {
-        for (Player player : BoardInfo.players) {
-            Vector2 playerCoords = player.getBody().getPosition();
-            float playerGridX = playerCoords.x - 1;
-            float playerGridY = playerCoords.y - 1;
-
-            if (Math.abs(gridX - playerGridX) < 1 && Math.abs(gridY - playerGridY) < 1) {
-                player.setToDestroy();
-            }
         }
     }
 
@@ -388,6 +372,10 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
         } else {
             toDestroy = true;
         }
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
     }
 
     @Override

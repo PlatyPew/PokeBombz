@@ -193,6 +193,9 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/rightstill.png", playerNumber));
             velX = GameInfo.PLAYER_VELOCITY;
+        } else {
+            getBody().setLinearVelocity(0f, 0.0001f);
+            getBody().setLinearVelocity(0f, -0.0001f);
         }
 
         getBody().setLinearVelocity(velX, velY);

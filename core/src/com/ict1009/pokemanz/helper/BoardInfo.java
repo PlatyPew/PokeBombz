@@ -5,4 +5,5 @@ import java.util.ArrayList;
 
 public class BoardInfo {
     public static ArrayList<Player> players = new ArrayList<Player>();
+    public static int[] playerScore = new int[4];
 }
