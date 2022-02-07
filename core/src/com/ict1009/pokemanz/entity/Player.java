@@ -17,11 +17,13 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
+import com.ict1009.pokemanz.bomb.Explode;
 import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends Sprite implements ControllerListener, Destoryable, BoardElement {
     final private World world;
@@ -43,8 +45,11 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     private boolean isWalking = false;
     private Texture texture;
 
+    private int bombRange = 3;
     private int maxBombs = 10;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
+
+    private ArrayList<Explode> explosions = new ArrayList<Explode>();
 
     private String controllerID;
 
@@ -188,6 +193,9 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/rightstill.png", playerNumber));
             velX = GameInfo.PLAYER_VELOCITY;
+        } else {
+            getBody().setLinearVelocity(0f, 0.0001f);
+            getBody().setLinearVelocity(0f, -0.0001f);
         }
 
         getBody().setLinearVelocity(velX, velY);
@@ -220,28 +228,41 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
      * Handles bomb placement when spacebar is pressed
      */
     private void handleBomb(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !destroyed) {
             placeBomb();
         }
 
-        // TODO: Super ugly code please someone help me refractor I too lazy
-        ArrayList<Integer> toRemove = new ArrayList<Integer>();
-        ArrayList<int[]> toRemoveCoords = new ArrayList<int[]>();
+        List<Bomb> bombToRemove = new ArrayList<Bomb>();
 
         // Remove bombs from arraylist and bombMap once bomb has exploded
         for (Bomb bomb : bombs) {
             bomb.update(delta);
 
             if (bomb.getDestroyed()) {
-                toRemove.add(bombs.indexOf(bomb));
-                toRemoveCoords.add(new int[] {bomb.getGridX(), bomb.getGridY()});
+                bombToRemove.add(bomb);
+                int bombX = bomb.getGridX();
+                int bombY = bomb.getGridY();
+
+                map.setBombMap(bombX, bombY, null);
+                explosions.add(new Explode(world, map, "explosion/start.png", bombX, bombY,
+                                           bombRange, playerNumber, true));
             }
         }
 
-        for (int i = 0; i < toRemove.size(); i++) {
-            bombs.remove((int)toRemove.get(i));
-            map.setBombMap(toRemoveCoords.get(i)[0], toRemoveCoords.get(i)[1], null);
+        bombs.removeAll(bombToRemove);
+
+        List<Explode> explodeToRemove = new ArrayList<Explode>();
+
+        // Remove explosions from arraylist
+        for (Explode explosion : explosions) {
+            explosion.update(delta);
+
+            if (explosion.getDestroyed()) {
+                explodeToRemove.add(explosion);
+            }
         }
+
+        explosions.removeAll(explodeToRemove);
     }
 
     /**
@@ -253,6 +274,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     public void render(SpriteBatch batch) {
         for (Bomb bomb : bombs) {
             bomb.render(batch);
+        }
+
+        for (Explode explosion : explosions) {
+            explosion.render(batch);
         }
 
         if (!destroyed) {
@@ -284,8 +309,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
      */
     @Override
     public void update(float delta) {
-        if (destroyed)
+        if (destroyed) {
+            handleBomb(delta);
             return;
+        }
 
         if (toDestroy && !destroyed) {
             world.destroyBody(body);

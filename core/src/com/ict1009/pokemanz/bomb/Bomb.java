@@ -13,9 +13,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
-import com.ict1009.pokemanz.helper.BoardElement;
 
 public class Bomb extends Sprite implements Destoryable, BoardElement {
     final World world;
@@ -28,8 +28,6 @@ public class Bomb extends Sprite implements Destoryable, BoardElement {
     private float elapsedTime;
 
     private Body body;
-    private int range = 3;
-
     private int counter = 0;
 
     private boolean destroyed = false;  // When body is destroyed
@@ -50,27 +48,8 @@ public class Bomb extends Sprite implements Destoryable, BoardElement {
         this.bombAtlas = new TextureAtlas("bomb/bomb explosion.atlas");
     }
 
-    public Bomb(World world, String textureLocation, int gridX, int gridY, int range) {
-        super(new Texture(textureLocation));
-        this.world = world;
-        this.range = range;
-        this.gridX = gridX;
-        this.gridY = gridY;
-        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
-        this.body = createBody();
-        this.bombAtlas = new TextureAtlas("bomb/bomb explosion.atlas");
-    }
-
     public int getTimer() {
         return timer;
-    }
-
-    public int getRange() {
-        return range;
-    }
-
-    public void setRange(int range) {
-        this.range = range;
     }
 
     public int getGridX() {
@@ -159,10 +138,9 @@ public class Bomb extends Sprite implements Destoryable, BoardElement {
         if (!destroyed) {
             elapsedTime += Gdx.graphics.getDeltaTime();
 
-            animation =
-                    new Animation<TextureAtlas.AtlasRegion>(1f / 10f, bombAtlas.getRegions());
+            animation = new Animation<TextureAtlas.AtlasRegion>(1f / 10f, bombAtlas.getRegions());
             batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), this.getX(),
-                    this.getY());
+                       this.getY());
         }
     }
 
