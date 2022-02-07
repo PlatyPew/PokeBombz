@@ -2,6 +2,7 @@ package com.ict1009.pokemanz.scenes;
 
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -41,6 +42,7 @@ public class TitleScene implements Screen{
 	Texture exitlogo;
 	Animation<TextureRegion> animation;
     float elapsed;
+	Music menuMusic;
 	
 	public TitleScene(GameMain game) {
 		this.game = game;
@@ -56,6 +58,9 @@ public class TitleScene implements Screen{
 		titlelogo = new Texture("screen/titlelogo.png");
 		exitlogo = new Texture("screen/exitlogo.png");
 		animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("screen/bg.gif").read());
+		menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_menu.ogg"));
+		menuMusic.setLooping(true);
+		menuMusic.play();
 		
 	    
 	}
@@ -78,7 +83,7 @@ public class TitleScene implements Screen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         
-        batch.draw(animation.getKeyFrame(elapsed), 20.0f, 20.0f, GameInfo.WIDTH, GameInfo.HEIGHT);
+        batch.draw(animation.getKeyFrame(elapsed), 0f,0f, GameInfo.WIDTH, GameInfo.HEIGHT);
         batch.draw(titlelogo,GameInfo.WIDTH/2-TITLELOGO_WIDTH/2,TITLELOGO_Y);
         
         //2Player button
@@ -117,7 +122,7 @@ public class TitleScene implements Screen{
         
         //Exit button
         int ex = GameInfo.WIDTH/2-EXIT_BUTTON_WIDTH/2;
-        if (Gdx.input.getX() < ex + EXIT_BUTTON_WIDTH && Gdx.input.getX() > ex && GameInfo.HEIGHT - Gdx.input.getY() < EXIT_BUTTON_HEIGHT + EXIT_BUTTON_Y && GameInfo.HEIGHT - Gdx.input.getY() > EXIT_BUTTON_Y-66*3) {
+        if (Gdx.input.getX() < ex + EXIT_BUTTON_WIDTH && Gdx.input.getX() > ex && GameInfo.HEIGHT - Gdx.input.getY() < EXIT_BUTTON_HEIGHT + EXIT_BUTTON_Y-66*3 && GameInfo.HEIGHT - Gdx.input.getY() > EXIT_BUTTON_Y-66*3) {
         	batch.draw(exitButtonActive,ex,EXIT_BUTTON_Y-66*3);
         	if (Gdx.input.isTouched()) {
         		 titlelogo = exitlogo;
