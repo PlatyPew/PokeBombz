@@ -92,6 +92,7 @@ public class TitleScene implements Screen{
         	batch.draw(play2ButtonActive,p2x,PLAY2_BUTTON_Y);
         	if (Gdx.input.isTouched()) {
         		this.dispose();
+				menuMusic.dispose();
         		game.setScreen(new MainScene(game));
         	}
         } else {
@@ -103,6 +104,7 @@ public class TitleScene implements Screen{
 			batch.draw(play3ButtonActive,p2x,PLAY2_BUTTON_Y-66);
 			if (Gdx.input.isTouched()) {
 				this.dispose();
+				menuMusic.dispose();
 				game.setScreen(new MainScene(game));
 			}
 		} else {
@@ -114,6 +116,7 @@ public class TitleScene implements Screen{
 			batch.draw(play4ButtonActive,p2x,PLAY2_BUTTON_Y-66*2);
 			if (Gdx.input.isTouched()) {
 				this.dispose();
+				menuMusic.dispose();
 				game.setScreen(new MainScene(game));
 			}
 		} else {
