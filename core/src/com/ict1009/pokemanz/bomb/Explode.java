@@ -7,16 +7,15 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
 import com.ict1009.pokemanz.room.Obstacle;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Explode extends Sprite implements BoardElement, Destoryable {
     final World world;
@@ -32,10 +31,12 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
     private boolean toDestroy = false;
     private ArrayList<Explode> explosions = new ArrayList<Explode>();
 
+    final private UUID uuid;
+
     private BodyType bodyType = BodyType.StaticBody;
 
     public Explode(World world, Map map, String textureLocation, int gridX, int gridY, int range,
-                   int playerNumber) {
+                   int playerNumber, UUID uuid) {
         super(new Texture(textureLocation));
         this.world = world;
         this.gridX = gridX;
@@ -44,6 +45,7 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
         this.playerNumber = playerNumber;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.range = range;
+        this.uuid = uuid;
 
         this.body = createBody();
     }
@@ -58,11 +60,17 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
         this.playerNumber = playerNumber;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.range = range;
+        this.uuid = UUID.randomUUID();
+
         this.body = createBody();
 
         if (isCenter) {
             handleExplosion();
         }
+    }
+
+    public UUID getUUID() {
+        return uuid;
     }
 
     private void handleExplosion() {
@@ -163,11 +171,11 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
                     Explode explosion = new Explode(world, map, "explosion/endleft.png", gridX - i,
-                                                    gridY, range, playerNumber);
+                                                    gridY, range, playerNumber, uuid);
                     explosions.add(explosion);
                 } else {
                     Explode explosion = new Explode(world, map, "explosion/middleleft.png",
-                                                    gridX - i, gridY, range, playerNumber);
+                                                    gridX - i, gridY, range, playerNumber, uuid);
                     explosions.add(explosion);
                 }
             }
@@ -201,11 +209,11 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
                     Explode explosion = new Explode(world, map, "explosion/endtop.png", gridX,
-                                                    gridY + i, range, playerNumber);
+                                                    gridY + i, range, playerNumber, uuid);
                     explosions.add(explosion);
                 } else {
                     Explode explosion = new Explode(world, map, "explosion/middletop.png", gridX,
-                                                    gridY + i, range, playerNumber);
+                                                    gridY + i, range, playerNumber, uuid);
                     explosions.add(explosion);
                 }
             }
@@ -238,11 +246,11 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
                     Explode explosion = new Explode(world, map, "explosion/endright.png", gridX + i,
-                                                    gridY, range, playerNumber);
+                                                    gridY, range, playerNumber, uuid);
                     explosions.add(explosion);
                 } else {
                     Explode explosion = new Explode(world, map, "explosion/middleright.png",
-                                                    gridX + i, gridY, range, playerNumber);
+                                                    gridX + i, gridY, range, playerNumber, uuid);
                     explosions.add(explosion);
                 }
             }
@@ -275,11 +283,11 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 // Render the respective explosion sprite according to the explosionEnd boolean
                 if (explosionEnd) {
                     Explode explosion = new Explode(world, map, "explosion/endbot.png", gridX,
-                                                    gridY - i, range, playerNumber);
+                                                    gridY - i, range, playerNumber, uuid);
                     explosions.add(explosion);
                 } else {
                     Explode explosion = new Explode(world, map, "explosion/middlebot.png", gridX,
-                                                    gridY - i, range, playerNumber);
+                                                    gridY - i, range, playerNumber, uuid);
                     explosions.add(explosion);
                 }
             }

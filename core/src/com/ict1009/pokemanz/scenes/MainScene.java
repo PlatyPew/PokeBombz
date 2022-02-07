@@ -39,7 +39,7 @@ public class MainScene implements Screen, ContactListener {
         this.world = new World(new Vector2(0, 0), true);
 
         BoardInfo.players.add(new Player(world, level, 1, "upstill.png", 0, 0, "Platy"));
-        // BoardInfo.players.add(new Player(world, level, 2, "downstill.png", 15, 9, "Helpme"));
+        BoardInfo.players.add(new Player(world, level, 2, "downstill.png", 15, 9, "Helpme"));
 
         this.hud = new MainHud(game, BoardInfo.players.size());
 
@@ -157,22 +157,25 @@ public class MainScene implements Screen, ContactListener {
         }
 
         if (body1 instanceof Explode && body2 instanceof Player) {
-            System.out.println("Death by touch");
             Explode explosion = (Explode)body1;
             Player player = (Player)body2;
 
-            if (explosion.getPlayerNumber() != player.getPlayerNumber()) {
-                BoardInfo.playerScore[player.getPlayerNumber() - 1] -= 1;
-                BoardInfo.playerScore[explosion.getPlayerNumber() - 1] += 1;
+            if (!BoardInfo.explosionIDs.contains(explosion.getUUID())) {
+                if (explosion.getPlayerNumber() != player.getPlayerNumber()) {
+                    BoardInfo.playerScore[player.getPlayerNumber() - 1] -= 1;
+                    BoardInfo.playerScore[explosion.getPlayerNumber() - 1] += 1;
 
-                hud.updateScore(player.getPlayerNumber(),
-                                BoardInfo.playerScore[player.getPlayerNumber() - 1]);
+                    hud.updateScore(player.getPlayerNumber(),
+                                    BoardInfo.playerScore[player.getPlayerNumber() - 1]);
 
-                hud.updateScore(explosion.getPlayerNumber(),
-                                BoardInfo.playerScore[explosion.getPlayerNumber() - 1]);
+                    hud.updateScore(explosion.getPlayerNumber(),
+                                    BoardInfo.playerScore[explosion.getPlayerNumber() - 1]);
+                }
+
+                BoardInfo.explosionIDs.add(explosion.getUUID());
+
+                player.setToDestroy();
             }
-
-            player.setToDestroy();
         }
     }
 
