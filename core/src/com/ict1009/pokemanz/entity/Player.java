@@ -228,7 +228,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
      * Handles bomb placement when spacebar is pressed
      */
     private void handleBomb(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !destroyed) {
             placeBomb();
         }
 
@@ -309,8 +309,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
      */
     @Override
     public void update(float delta) {
-        if (destroyed)
+        if (destroyed) {
+            handleBomb(delta);
             return;
+        }
 
         if (toDestroy && !destroyed) {
             world.destroyBody(body);
