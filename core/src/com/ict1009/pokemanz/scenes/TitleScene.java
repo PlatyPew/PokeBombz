@@ -31,6 +31,10 @@ public class TitleScene implements Screen{
 	private SpriteBatch batch;
 	Texture play2ButtonActive;
 	Texture play2ButtonInactive;
+	Texture play3ButtonActive;
+	Texture play3ButtonInactive;
+	Texture play4ButtonActive;
+	Texture play4ButtonInactive;
 	Texture exitButtonActive;
 	Texture exitButtonInactive;
 	Texture titlelogo;
@@ -43,6 +47,10 @@ public class TitleScene implements Screen{
 		this.batch = game.getBatch();
 		play2ButtonActive = new Texture("screen/2playersactive.png");
 		play2ButtonInactive = new Texture("screen/2playersinactive.png");
+		play3ButtonActive = new Texture("screen/3playersactive.png");
+		play3ButtonInactive = new Texture("screen/3playersinactive.png");
+		play4ButtonActive = new Texture("screen/4playersactive.png");
+		play4ButtonInactive = new Texture("screen/4playersinactive.png");
 		exitButtonActive = new Texture("screen/exitactive.png");
 		exitButtonInactive = new Texture("screen/exitinactive.png");
 		titlelogo = new Texture("screen/titlelogo.png");
@@ -84,11 +92,33 @@ public class TitleScene implements Screen{
         } else {
         	batch.draw(play2ButtonInactive,GameInfo.WIDTH/2-PLAY2_BUTTON_WIDTH/2,PLAY2_BUTTON_Y);
         }
+
+		//3Player button
+		if (Gdx.input.getX() < p2x + PLAY2_BUTTON_WIDTH && Gdx.input.getX() > p2x && GameInfo.HEIGHT - Gdx.input.getY() < PLAY2_BUTTON_HEIGHT + PLAY2_BUTTON_Y-66 && GameInfo.HEIGHT - Gdx.input.getY() > PLAY2_BUTTON_Y-66) {
+			batch.draw(play3ButtonActive,p2x,PLAY2_BUTTON_Y-66);
+			if (Gdx.input.isTouched()) {
+				this.dispose();
+				game.setScreen(new MainScene(game));
+			}
+		} else {
+			batch.draw(play3ButtonInactive,GameInfo.WIDTH/2-PLAY2_BUTTON_WIDTH/2,PLAY2_BUTTON_Y-66);
+		}
+
+		//4Player button
+		if (Gdx.input.getX() < p2x + PLAY2_BUTTON_WIDTH && Gdx.input.getX() > p2x && GameInfo.HEIGHT - Gdx.input.getY() < PLAY2_BUTTON_HEIGHT + PLAY2_BUTTON_Y-66*2 && GameInfo.HEIGHT - Gdx.input.getY() > PLAY2_BUTTON_Y-66*2) {
+			batch.draw(play4ButtonActive,p2x,PLAY2_BUTTON_Y-66*2);
+			if (Gdx.input.isTouched()) {
+				this.dispose();
+				game.setScreen(new MainScene(game));
+			}
+		} else {
+			batch.draw(play4ButtonInactive,GameInfo.WIDTH/2-PLAY2_BUTTON_WIDTH/2,PLAY2_BUTTON_Y-66*2);
+		}
         
         //Exit button
         int ex = GameInfo.WIDTH/2-EXIT_BUTTON_WIDTH/2;
-        if (Gdx.input.getX() < ex + EXIT_BUTTON_WIDTH && Gdx.input.getX() > ex && GameInfo.HEIGHT - Gdx.input.getY() < EXIT_BUTTON_HEIGHT + EXIT_BUTTON_Y && GameInfo.HEIGHT - Gdx.input.getY() > EXIT_BUTTON_Y) {
-        	batch.draw(exitButtonActive,ex,EXIT_BUTTON_Y);
+        if (Gdx.input.getX() < ex + EXIT_BUTTON_WIDTH && Gdx.input.getX() > ex && GameInfo.HEIGHT - Gdx.input.getY() < EXIT_BUTTON_HEIGHT + EXIT_BUTTON_Y && GameInfo.HEIGHT - Gdx.input.getY() > EXIT_BUTTON_Y-66*3) {
+        	batch.draw(exitButtonActive,ex,EXIT_BUTTON_Y-66*3);
         	if (Gdx.input.isTouched()) {
         		 titlelogo = exitlogo;
         		 Timer.schedule(new Task() {
@@ -99,7 +129,7 @@ public class TitleScene implements Screen{
         			}, 2);
         	}
         } else {
-        	batch.draw(exitButtonInactive,GameInfo.WIDTH/2-EXIT_BUTTON_WIDTH/2,EXIT_BUTTON_Y);
+        	batch.draw(exitButtonInactive,GameInfo.WIDTH/2-EXIT_BUTTON_WIDTH/2,EXIT_BUTTON_Y-66*3);
         }
         batch.end();
 		
