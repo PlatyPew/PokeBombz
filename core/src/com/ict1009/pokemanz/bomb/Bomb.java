@@ -19,7 +19,7 @@ import com.ict1009.pokemanz.helper.GameInfo;
 
 public class Bomb extends Sprite implements Destoryable, BoardElement {
     final World world;
-    final private int timer = 3;
+    final private int timer = 2;
     final private int gridX, gridY;
 
     final private TextureAtlas bombAtlas;

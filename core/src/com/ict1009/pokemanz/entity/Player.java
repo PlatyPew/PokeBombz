@@ -46,7 +46,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     private Texture texture;
 
     private int bombRange = 3;
-    private int maxBombs = 10;
+    private int maxBombs = 1;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
     private ArrayList<Explode> explosions = new ArrayList<Explode>();
