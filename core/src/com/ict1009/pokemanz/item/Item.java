@@ -8,9 +8,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ict1009.pokemanz.helper.BoardElement;
+import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 
-public abstract class Item extends Sprite {
+public abstract class Item extends Sprite implements Destoryable, BoardElement {
     final private World world;
     final private Body body;
     final private int cost; // Cost of item
@@ -18,19 +20,19 @@ public abstract class Item extends Sprite {
     private boolean destroyed = false;
     protected boolean toDestroy = false;
 
-    public Item(World world, String textureLocation, int initialX, int initialY) {
+    public Item(World world, String textureLocation, int gridX, int gridY) {
         super(new Texture(textureLocation));
         this.cost = 0;
-        setPosition(initialX * GameInfo.PPM, initialY * GameInfo.PPM);
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.world = world;
 
         this.body = createBody();
     }
 
-    public Item(World world, String textureLocation, int initialX, int initialY, int cost) {
+    public Item(World world, String textureLocation, int gridX, int gridY, int cost) {
         super(new Texture(textureLocation));
         this.cost = cost;
-        setPosition(initialX * GameInfo.PPM, initialY * GameInfo.PPM);
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.world = world;
 
         this.body = createBody();
@@ -73,6 +75,7 @@ public abstract class Item extends Sprite {
      *
      * @param batch: The spritebatch of the game
      */
+    @Override
     public void render(SpriteBatch batch) {
         if (!destroyed)
             batch.draw(this, this.getX(), this.getY());
@@ -83,10 +86,19 @@ public abstract class Item extends Sprite {
      *
      * @param delta: 1/fps
      */
+    @Override
     public void update(float delta) {
         if (toDestroy && !destroyed) {
             this.world.destroyBody(this.body);
             this.destroyed = true;
         }
     }
+
+    @Override
+    public boolean getDestroyed() {
+        return false;
+    }
+
+    @Override
+    public void setToDestroy() {}
 }
