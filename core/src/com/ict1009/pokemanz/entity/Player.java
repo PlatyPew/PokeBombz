@@ -218,7 +218,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
         // Place bombs only if player has remaining bombs and bomb does not exist in the spot
         if (bombs.size() < maxBombs && map.getBombMap()[bombX][bombY] == null) {
-            Bomb bomb = new Bomb(world, "bomb/bomb1.png", bombX, bombY);
+            Bomb bomb = new Bomb(world, "bomb/bomb1.png", bombX, bombY, playerNumber);
             bombs.add(bomb);
             map.setBombMap(bombX, bombY, bomb); // Places bomb is grid
         }

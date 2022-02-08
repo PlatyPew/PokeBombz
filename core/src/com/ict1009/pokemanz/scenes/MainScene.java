@@ -198,8 +198,24 @@ public class MainScene implements Screen, ContactListener {
             body2 = contact.getFixtureB().getUserData();
         }
         if (body1 instanceof Bomb && body2 instanceof Player) {
-            Player player = (Player)body2;
-            player.bombTangible((Bomb)body1);
+            boolean lock = false;
+            Bomb bomb = (Bomb)body1;
+
+            for (Player player : BoardInfo.players) {
+                float playerGridX = player.getBody().getPosition().x - 1;
+                float playerGridY = player.getBody().getPosition().y - 1;
+
+                float bombGridX = bomb.getGridX();
+                float bombGridY = bomb.getGridY();
+
+                if (Math.abs(bombGridX - playerGridX) < 0.9 &&
+                    Math.abs(bombGridY - playerGridY) < 0.9) {
+                    lock = true;
+                }
+            }
+
+            if (!lock)
+                BoardInfo.players.get(bomb.getPlayerNumber() - 1).bombTangible(bomb);
         }
     }
 
