@@ -21,6 +21,7 @@ public class Bomb extends Sprite implements Destoryable, BoardElement {
     final World world;
     final private int timer = 2;
     final private int gridX, gridY;
+    final private int playerNumber;
 
     final private TextureAtlas bombAtlas;
 
@@ -38,7 +39,7 @@ public class Bomb extends Sprite implements Destoryable, BoardElement {
     private boolean sensor = true;
     private BodyType bodyType = BodyType.StaticBody;
 
-    public Bomb(World world, String textureLocation, int gridX, int gridY) {
+    public Bomb(World world, String textureLocation, int gridX, int gridY, int playerNumber) {
         super(new Texture(textureLocation));
         this.world = world;
         this.gridX = gridX;
@@ -46,6 +47,7 @@ public class Bomb extends Sprite implements Destoryable, BoardElement {
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.body = createBody();
         this.bombAtlas = new TextureAtlas("bomb/bomb explosion.atlas");
+        this.playerNumber = playerNumber;
     }
 
     public int getTimer() {
@@ -67,6 +69,10 @@ public class Bomb extends Sprite implements Destoryable, BoardElement {
 
     public boolean getUpdated() {
         return updated;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
     }
 
     /**

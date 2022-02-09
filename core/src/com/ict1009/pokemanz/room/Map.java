@@ -3,6 +3,9 @@ package com.ict1009.pokemanz.room;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.entity.Player;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 
 public abstract class Map implements BoardElement {
     private World world;
+    private Body body;
 
     final private Texture texture;
     private int[][] unbreakable, breakable;
@@ -25,8 +29,7 @@ public abstract class Map implements BoardElement {
     private int obTimer = 0;
     private int sdCounter = 0;
 
-    public Map(String textureLocation, int[][] unbreakable,
-               int[][] breakable) {
+    public Map(String textureLocation, int[][] unbreakable, int[][] breakable) {
         this.texture = new Texture(textureLocation);
         this.unbreakable = unbreakable;
         this.breakable = breakable;
@@ -65,6 +68,29 @@ public abstract class Map implements BoardElement {
         }
     }
 
+    private Body createBoundary(World world) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.fixedRotation = true;
+
+        Body body = world.createBody(bodyDef);
+
+        ChainShape shape = new ChainShape();
+        Vector2[] vertices = new Vector2[5];
+        vertices[0] = new Vector2(0.5f, 0.5f);
+        vertices[1] = new Vector2(16.5f, 0.5f);
+        vertices[2] =
+            new Vector2(GameInfo.MAP_WIDTH + 0.5f, GameInfo.MAP_HEIGHT + 0.5f);
+        vertices[3] = new Vector2(0.5f, GameInfo.MAP_HEIGHT + 0.5f);
+        vertices[4] = new Vector2(0.5f, 0.5f);
+        shape.createChain(vertices);
+
+        body.createFixture(shape, 1f);
+
+        shape.dispose();
+        return body;
+    }
+
     /**
      * Creates both unbreakable and breakable obstacles
      *
@@ -74,6 +100,7 @@ public abstract class Map implements BoardElement {
         this.world = world;
         createBreakable(world);
         createUnbreakable(world);
+        this.body = createBoundary(world);
     }
 
     public Obstacle[][] getObstacleMap() {
