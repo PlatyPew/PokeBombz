@@ -22,7 +22,7 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
     private Body body;
     private Map map;
     private int gridX, gridY;
-    private int timer = 2;
+    private int timer = 1;
     private int range;
     private int playerNumber;
 
