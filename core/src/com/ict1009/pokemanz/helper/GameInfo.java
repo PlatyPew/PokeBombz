@@ -9,6 +9,7 @@ public class GameInfo {
     final public static int PPM = 60;
     final public static int SUDDEN_DEATH = FPS * 120;
     final public static int SUDDEN_DEATH_DROP = FPS / 2;
+    final public static int ITEM_SPAWN_CHANCE = 25; // In percent
 
     final public static int PLAYER_VELOCITY = 2;
     final public static int PLAYER_BOMBS = 1;

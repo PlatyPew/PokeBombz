@@ -12,6 +12,8 @@ import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.item.Item;
+
 import java.util.ArrayList;
 
 public abstract class Map implements BoardElement {
@@ -23,6 +25,7 @@ public abstract class Map implements BoardElement {
 
     private Obstacle[][] obstacleMap = new Obstacle[GameInfo.MAP_WIDTH][GameInfo.MAP_HEIGHT];
     private Bomb[][] bombMap = new Bomb[GameInfo.MAP_WIDTH][GameInfo.MAP_HEIGHT];
+    private Item[][] itemMap = new Item[GameInfo.MAP_WIDTH][GameInfo.MAP_HEIGHT];
 
     private ArrayList<int[]> suddenDeathCoords = new ArrayList<int[]>();
 
@@ -117,6 +120,14 @@ public abstract class Map implements BoardElement {
 
     public void setBombMap(int gridX, int gridY, Bomb bomb) {
         bombMap[gridX][gridY] = bomb;
+    }
+
+    public Item[][] getItemMap() {
+        return itemMap;
+    }
+
+    public void setItemMap(int gridX, int gridY, Item item) {
+        itemMap[gridX][gridY] = item;
     }
 
     public void spiral() {
