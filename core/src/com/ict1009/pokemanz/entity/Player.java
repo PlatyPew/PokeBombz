@@ -584,4 +584,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     public void setToDestroy() {
         toDestroy = true;
     }
+    public void changeSpeed(int newSpeed) {
+    	this.baseSpeed = newSpeed;
+    }
 }

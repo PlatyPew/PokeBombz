@@ -1,5 +1,6 @@
 package com.ict1009.pokemanz.chatbot;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.helper.BoardInfo;
 import java.io.IOException;
 import java.util.*;
 public class Chatbot {
@@ -179,7 +180,10 @@ public class Chatbot {
     	else if (speedup < 1) {
     		speedup =1;
     	}
-    	GameInfo.PLAYER_VELOCITY = (int) speedup; 
+    	for(int i = 0; i < BoardInfo.players.size(); i++) {
+    		BoardInfo.players.get(i).changeSpeed((int)speedup);
+    	}
+
     }
     public boolean chatbot_is_ChangeDeathTimer() {
     	try {
