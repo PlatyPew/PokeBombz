@@ -1,7 +1,12 @@
 package com.ict1009.pokemanz.room;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+
 public class LevelOne extends Map {
     final private static String textureLocation = "room/background.png";
+
+    private Music gameMusic;
 
     // Coordinates of unbreakable obstacles
     final private static int[][] unbreakable = {
@@ -12,6 +17,8 @@ public class LevelOne extends Map {
         {11, 1}, {11, 2}, {11, 4}, {11, 5}, {11, 7}, {11, 8}, {13, 1}, {13, 2}, {13, 4},
         {13, 5}, {13, 7}, {13, 8}, {14, 1}, {14, 2}, {14, 4}, {14, 5}, {14, 7}, {14, 8},
     };
+
+
 
     // Coordinates of breakable obstacles
     final private static int[][] breakable = {
@@ -29,5 +36,12 @@ public class LevelOne extends Map {
 
     public LevelOne() {
         super(textureLocation, unbreakable, breakable);
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_game.ogg"));
+        gameMusic.setLooping(true);
+        gameMusic.play();
+    }
+
+    public Music getGameMusic(){
+        return gameMusic;
     }
 }

@@ -19,6 +19,8 @@ import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.huds.MainHud;
 import com.ict1009.pokemanz.item.Item;
 import com.ict1009.pokemanz.room.LevelOne;
+import com.ict1009.pokemanz.room.LevelTwo;
+import com.ict1009.pokemanz.room.LevelThree;
 import com.ict1009.pokemanz.room.Map;
 
 public class MainScene implements Screen, ContactListener {

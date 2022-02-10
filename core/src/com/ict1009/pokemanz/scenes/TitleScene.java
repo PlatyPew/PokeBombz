@@ -24,10 +24,7 @@ public class TitleScene implements Screen{
 	private static final int TITLELOGO_WIDTH=615;
 	private static final int TITLELOGO_HEIGHT=152;
 	private static final int TITLELOGO_Y=GameInfo.HEIGHT-TITLELOGO_HEIGHT-70;
-	private static final int EXITLOGO_Y=GameInfo.HEIGHT-TITLELOGO_HEIGHT-70;
 
-	
-	
 	GameMain game;
 	private SpriteBatch batch;
 	Texture play2ButtonActive;
@@ -94,7 +91,8 @@ public class TitleScene implements Screen{
         		this.dispose();
 				menuMusic.dispose();
         		game.setScreen(new MainScene(game));
-        	}
+
+			}
         } else {
         	batch.draw(play2ButtonInactive,GameInfo.WIDTH/2-PLAY2_BUTTON_WIDTH/2,PLAY2_BUTTON_Y);
         }

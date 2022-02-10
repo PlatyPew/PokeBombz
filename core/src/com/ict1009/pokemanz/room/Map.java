@@ -39,9 +39,6 @@ public abstract class Map implements BoardElement {
         this.texture = new Texture(textureLocation);
         this.unbreakable = unbreakable;
         this.breakable = breakable;
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_game2.ogg"));
-        gameMusic.setLooping(true);
-        gameMusic.play();
 
         spiral();
 
@@ -53,6 +50,8 @@ public abstract class Map implements BoardElement {
     public Texture getTexture() {
         return this.texture;
     }
+
+    public abstract Music getGameMusic();
 
     /**
      * Creates unbreakable obstacles using 2d array
@@ -182,6 +181,7 @@ public abstract class Map implements BoardElement {
     public void suddenDeath(float delta) {
         if (GameInfo.timeElapsed < GameInfo.SUDDEN_DEATH)
             return;
+        gameMusic = getGameMusic();
         gameMusic.dispose();
         sdMusic.play();
         if (obTimer % GameInfo.SUDDEN_DEATH_DROP == 0 && sdCounter < suddenDeathCoords.size()) {
