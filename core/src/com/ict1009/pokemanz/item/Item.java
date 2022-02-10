@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
@@ -37,6 +38,8 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
 
         this.body = createBody();
     }
+
+    public abstract void applyProperty(Player player);
 
     public int getCost() {
         return this.cost;

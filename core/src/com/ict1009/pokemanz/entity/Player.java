@@ -47,6 +47,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
     private int bombRange = 3;
     private int maxBombs = 1;
+    private int baseSpeed = GameInfo.PLAYER_VELOCITY;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
     private ArrayList<Explode> explosions = new ArrayList<Explode>();
@@ -134,6 +135,15 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         disableRight = false;
     }
 
+    public void setBaseSpeed(int baseSpeed) {
+        if (baseSpeed <= GameInfo.MAX_PLAYER_SPEED)
+            this.baseSpeed = baseSpeed;
+    }
+
+    public int getBaseSpeed() {
+        return baseSpeed;
+    }
+
     /**
      * Creates a dynamic body with a square shape
      *
@@ -171,28 +181,28 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
             texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
-            velY = GameInfo.PLAYER_VELOCITY;
+            velY = baseSpeed;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > GameInfo.PPM &&
                    !disableLeft) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/leftstill.png", playerNumber));
-            velX = -GameInfo.PLAYER_VELOCITY;
+            velX = -baseSpeed;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > GameInfo.PPM &&
                    !disableDown) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
             texture = new Texture(String.format("player/%d/downstill.png", playerNumber));
-            velY = -GameInfo.PLAYER_VELOCITY;
+            velY = -baseSpeed;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) &&
                    currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16) && !disableRight) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/rightstill.png", playerNumber));
-            velX = GameInfo.PLAYER_VELOCITY;
+            velX = baseSpeed;
         } else {
             getBody().setLinearVelocity(0f, 0.0001f);
             getBody().setLinearVelocity(0f, -0.0001f);

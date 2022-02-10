@@ -11,5 +11,7 @@ public class GameInfo {
     final public static int SUDDEN_DEATH = FPS * 120;
     final public static int SUDDEN_DEATH_DROP = FPS / 2;
 
+    final public static int MAX_PLAYER_SPEED = 5;
+
     public static int timeElapsed = 0;
 }
