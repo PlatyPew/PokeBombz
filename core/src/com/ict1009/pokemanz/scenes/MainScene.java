@@ -32,6 +32,9 @@ public class MainScene implements Screen, ContactListener {
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
 
+    private boolean gameOver = false;
+    private Player winner;
+
     public MainScene(GameMain game) {
         setupCamera();
         this.batch = game.getBatch();
@@ -57,10 +60,30 @@ public class MainScene implements Screen, ContactListener {
         this.debugRenderer = new Box2DDebugRenderer();
     }
 
+    public boolean getGameOver() {
+        return gameOver;
+    }
+
+    public Player getWinner() {
+        if (gameOver)
+            return winner;
+        else
+            return null;
+    }
+
     public void update(float delta) {
+        int alive = 0;
         for (Player player : BoardInfo.players) {
             player.update(delta);
+            if (!player.getDestroyed()) {
+                winner = player;
+                alive++;
+            }
         }
+
+        if (alive <= 1)
+            gameOver = true;
+
         level.update(delta);
 
         GameInfo.timeElapsed += 1;
