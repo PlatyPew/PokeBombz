@@ -55,7 +55,7 @@ public class  textInputRunner extends ApplicationAdapter {
 		stage.getViewport().update(width, height, true);
 	}
 
-	public void render () {
+	public void activateChatBot () {
 
 		if((Gdx.input.isKeyJustPressed(Input.Keys.ENTER))){
 			//Code here
@@ -95,6 +95,9 @@ public class  textInputRunner extends ApplicationAdapter {
 		float width = glyphLayout.width;
 		font.draw(batch, aiText,Gdx.graphics.getWidth()/2-width/2,Gdx.graphics.getHeight()-100);
 
+	}
+	public void changeFocus() {
+		this.stage.setKeyboardFocus(null);
 	}
 
 }

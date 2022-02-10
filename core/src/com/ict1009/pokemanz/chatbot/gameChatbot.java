@@ -32,9 +32,16 @@ public class gameChatbot {
         else if(chatbot.chatbot_is_load()){
             
         }
+        else if (chatbot.chatbot_is_changeSpeed()) {
+        	
+        }
+        else if(chatbot.chatbot_is_ChangeDeathTimer()) {
+        	
+        }
         else{
             chatbot.chatbot_do_not_understand();
         }
+        
 
     }
 }

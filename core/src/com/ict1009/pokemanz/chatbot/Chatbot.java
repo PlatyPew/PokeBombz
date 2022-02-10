@@ -1,4 +1,5 @@
 package com.ict1009.pokemanz.chatbot;
+import com.ict1009.pokemanz.helper.GameInfo;
 import java.io.IOException;
 import java.util.*;
 public class Chatbot {
@@ -154,6 +155,55 @@ public class Chatbot {
     }
     public void chatbot_do_load() throws IOException{
         knowledgeList.loadKnowledge();
+    }
+    public boolean chatbot_is_changeSpeed() {
+    	try {
+	    		float value = Float.parseFloat(words[2]);
+    		if(this.words[0].toLowerCase().equals("change") && 
+    				this.words[1].toLowerCase().equals("speed")
+        			&& words.length == 3 ){
+        		changeSpeed(value);
+        	return true;
+        	}
+    	} catch (NumberFormatException | ArrayIndexOutOfBoundsException e ) {
+    	    System.out.println("Input String cannot be parsed to Integer.");
+    	}
+
+    	
+    	return false;
+    }
+    public void changeSpeed(float speedup) {
+    	if(speedup > 8) {
+    		speedup = 8;
+    	}
+    	else if (speedup < 1) {
+    		speedup =1;
+    	}
+    	GameInfo.PLAYER_VELOCITY = (int) speedup; 
+    }
+    public boolean chatbot_is_ChangeDeathTimer() {
+    	try {
+    		float value = Float.parseFloat(words[3]);
+    		if(this.words[0].toLowerCase().equals("change") && 
+    				this.words[1].toLowerCase().equals("death") &&
+    				this.words[2].toLowerCase().equals("timer")
+        			&& words.length == 4 ){
+    			changeDeathTimer(value);
+        	return true;
+        	}
+    	} catch (NumberFormatException | ArrayIndexOutOfBoundsException e ) {
+    	    System.out.println("Input String cannot be parsed to Integer.");
+    	}
+    	return false;
+    }
+    public void changeDeathTimer(float seconds) {
+    	if(seconds < 50) {
+    		seconds = 50;
+    	}
+    	else if (seconds > 500) {
+    		seconds = 500;
+    	}
+    	GameInfo.SUDDEN_DEATH = (int) (seconds * GameInfo.FPS); 
     }
 }
 

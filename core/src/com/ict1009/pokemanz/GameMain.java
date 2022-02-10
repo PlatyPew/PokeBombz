@@ -38,9 +38,11 @@ public class GameMain extends Game {
     	}
     	if(pause != true) {
     		super.render();
+    		chatBot.changeFocus();
     	}
     	else {
-    		chatBot.render();	
+    		
+    		chatBot.activateChatBot();	
     	}
         
     }
