@@ -46,7 +46,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     private Texture texture;
 
     private int bombRange = 3;
-    private int maxBombs = 1;
+    private int maxBombs = GameInfo.PLAYER_BOMBS;
     private int baseSpeed = GameInfo.PLAYER_VELOCITY;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
@@ -101,7 +101,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     }
 
     public void setMaxBombs(int maxBombs) {
-        this.maxBombs = maxBombs;
+        if (maxBombs <= GameInfo.MAX_PLAYER_BOMBS)
+            this.maxBombs = maxBombs;
     }
 
     public String getControllerID() {
