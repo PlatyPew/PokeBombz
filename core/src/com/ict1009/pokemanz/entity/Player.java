@@ -45,7 +45,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     private boolean isWalking = false;
     private Texture texture;
 
-    private int bombRange = 3;
+    private int bombRange = GameInfo.PLAYER_BOMB_RANGE;
     private int maxBombs = GameInfo.PLAYER_BOMBS;
     private int baseSpeed = GameInfo.PLAYER_VELOCITY;
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
@@ -143,6 +143,15 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
     public int getBaseSpeed() {
         return baseSpeed;
+    }
+
+    public void setBombRange(int bombRange) {
+        if (bombRange <= GameInfo.MAX_PLAYER_BOMB_RANGE)
+            this.bombRange = bombRange;
+    }
+
+    public int getBombRange() {
+        return bombRange;
     }
 
     /**

@@ -12,9 +12,11 @@ public class GameInfo {
 
     final public static int PLAYER_VELOCITY = 2;
     final public static int PLAYER_BOMBS = 1;
+    final public static int PLAYER_BOMB_RANGE = 2;
 
     final public static int MAX_PLAYER_SPEED = 5;
     final public static int MAX_PLAYER_BOMBS = 5;
+    final public static int MAX_PLAYER_BOMB_RANGE = 5;
 
     public static int timeElapsed = 0;
 }
