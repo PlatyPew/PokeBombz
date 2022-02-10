@@ -49,6 +49,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     private int maxBombs = GameInfo.PLAYER_BOMBS;
     private int baseSpeed = GameInfo.PLAYER_VELOCITY;
     private boolean kick = false;
+    private boolean throwing = false;
 
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
@@ -162,6 +163,14 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
     public boolean getKick() {
         return kick;
+    }
+
+    public void setThrowing(boolean throwing) {
+        this.throwing = throwing;
+    }
+
+    public boolean getThrowing() {
+        return throwing;
     }
 
     /**
