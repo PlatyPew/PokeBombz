@@ -17,6 +17,7 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
     final private World world;
     final private Body body;
     final private int cost; // Cost of item
+    final int gridX, gridY;
 
     private boolean destroyed = false;
     protected boolean toDestroy = false;
@@ -27,14 +28,8 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.world = world;
 
-        this.body = createBody();
-    }
-
-    public Item(World world, String textureLocation, int gridX, int gridY, int cost) {
-        super(new Texture(textureLocation));
-        this.cost = cost;
-        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
-        this.world = world;
+        this.gridX = gridX;
+        this.gridY = gridY;
 
         this.body = createBody();
     }
@@ -70,6 +65,14 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
 
     public Body getBody() {
         return body;
+    }
+
+    public int getGridX() {
+        return gridX;
+    }
+
+    public int getGridY() {
+        return gridY;
     }
 
     /**
