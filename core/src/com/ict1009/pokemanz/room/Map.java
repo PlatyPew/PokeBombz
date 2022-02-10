@@ -217,6 +217,14 @@ public abstract class Map implements BoardElement {
             }
         }
 
+        for (Item[] itemRow : itemMap) {
+            for (Item item : itemRow) {
+                if (item instanceof Item) {
+                    item.update(delta);
+                }
+            }
+        }
+
         suddenDeath(delta);
     }
 
@@ -231,6 +239,14 @@ public abstract class Map implements BoardElement {
             for (Obstacle y : x) {
                 if (y instanceof Obstacle) {
                     y.render(batch);
+                }
+            }
+        }
+
+        for (Item[] itemRow : itemMap) {
+            for (Item item : itemRow) {
+                if (item instanceof Item) {
+                    item.render(batch);
                 }
             }
         }

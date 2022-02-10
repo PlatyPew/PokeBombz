@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.item.Item;
 import com.ict1009.pokemanz.room.Map;
 import com.ict1009.pokemanz.room.Obstacle;
 import java.util.ArrayList;
@@ -155,8 +156,13 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                         // If there is an obstacle, stop rendering, and check if it is a breakable
                         // obstacle or not
                         if (leftObstacle.getBreakable()) {
+                            int gridX = leftObstacle.getGridX();
+                            int gridY = leftObstacle.getGridY();
+
                             leftObstacle.setToDestroy();
                             explosionEnd = true;
+
+                            map.setItemMap(gridX, gridY, Item.randomItem(world, gridX, gridY));
                         }
                     } else {
                         // Else if its the end of the explosion, render the end sprite
@@ -195,8 +201,13 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                         // If there is an obstacle, stop rendering, and check if it is a breakable
                         // obstacle or not
                         if (topObstacle.getBreakable()) {
+                            int gridX = topObstacle.getGridX();
+                            int gridY = topObstacle.getGridY();
+
                             topObstacle.setToDestroy();
                             explosionEnd = true;
+
+                            map.setItemMap(gridX, gridY, Item.randomItem(world, gridX, gridY));
                         }
                     } else {
                         if (i + 1 == range) {
@@ -232,8 +243,13 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                         // If there is an obstacle, stop rendering, and check if it is a breakable
                         // obstacle or not
                         if (rightObstacle.getBreakable()) {
+                            int gridX = rightObstacle.getGridX();
+                            int gridY = rightObstacle.getGridY();
+
                             rightObstacle.setToDestroy();
                             explosionEnd = true;
+
+                            map.setItemMap(gridX, gridY, Item.randomItem(world, gridX, gridY));
                         }
                     } else {
                         if (i + 1 == range) {
@@ -269,8 +285,13 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                         // If there is an obstacle, stop rendering, and check if it is a breakable
                         // obstacle or not
                         if (btmObstacle.getBreakable()) {
+                            int gridX = btmObstacle.getGridX();
+                            int gridY = btmObstacle.getGridY();
+
                             btmObstacle.setToDestroy();
                             explosionEnd = true;
+
+                            map.setItemMap(gridX, gridY, Item.randomItem(world, gridX, gridY));
                         }
                     } else {
                         if (i + 1 == range) {
