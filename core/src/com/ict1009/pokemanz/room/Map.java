@@ -12,6 +12,8 @@ import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.item.Item;
+
 import java.util.ArrayList;
 
 public abstract class Map implements BoardElement {
@@ -23,6 +25,7 @@ public abstract class Map implements BoardElement {
 
     private Obstacle[][] obstacleMap = new Obstacle[GameInfo.MAP_WIDTH][GameInfo.MAP_HEIGHT];
     private Bomb[][] bombMap = new Bomb[GameInfo.MAP_WIDTH][GameInfo.MAP_HEIGHT];
+    private Item[][] itemMap = new Item[GameInfo.MAP_WIDTH][GameInfo.MAP_HEIGHT];
 
     private ArrayList<int[]> suddenDeathCoords = new ArrayList<int[]>();
 
@@ -119,6 +122,14 @@ public abstract class Map implements BoardElement {
         bombMap[gridX][gridY] = bomb;
     }
 
+    public Item[][] getItemMap() {
+        return itemMap;
+    }
+
+    public void setItemMap(int gridX, int gridY, Item item) {
+        itemMap[gridX][gridY] = item;
+    }
+
     public void spiral() {
         int rows = obstacleMap.length;
         int cols = obstacleMap[0].length;
@@ -206,6 +217,16 @@ public abstract class Map implements BoardElement {
             }
         }
 
+        for (Item[] itemRow : itemMap) {
+            for (Item item : itemRow) {
+                if (item instanceof Item) {
+                    item.update(delta);
+                    if (item.getDestroyed())
+                        itemMap[item.getGridX()][item.getGridY()] = null;
+                }
+            }
+        }
+
         suddenDeath(delta);
     }
 
@@ -220,6 +241,14 @@ public abstract class Map implements BoardElement {
             for (Obstacle y : x) {
                 if (y instanceof Obstacle) {
                     y.render(batch);
+                }
+            }
+        }
+
+        for (Item[] itemRow : itemMap) {
+            for (Item item : itemRow) {
+                if (item instanceof Item) {
+                    item.render(batch);
                 }
             }
         }

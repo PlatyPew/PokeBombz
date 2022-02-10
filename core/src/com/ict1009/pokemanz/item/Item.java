@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
@@ -16,6 +17,7 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
     final private World world;
     final private Body body;
     final private int cost; // Cost of item
+    final int gridX, gridY;
 
     private boolean destroyed = false;
     protected boolean toDestroy = false;
@@ -26,17 +28,36 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.world = world;
 
-        this.body = createBody();
-    }
-
-    public Item(World world, String textureLocation, int gridX, int gridY, int cost) {
-        super(new Texture(textureLocation));
-        this.cost = cost;
-        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
-        this.world = world;
+        this.gridX = gridX;
+        this.gridY = gridY;
 
         this.body = createBody();
     }
+
+    public static Item randomItem(World world, int gridX, int gridY) {
+        if ((int)(Math.random() * 100) >= GameInfo.ITEM_SPAWN_CHANCE)
+            return null;
+
+        // Chooses a random item
+        int choice = (int)(Math.random() * 5);
+
+        switch (choice) {
+        case 0:
+            return new BombExtra(world, gridX, gridY);
+        case 1:
+            return new BombKick(world, gridX, gridY);
+        case 2:
+            return new BombRange(world, gridX, gridY);
+        case 3:
+            return new BombThrow(world, gridX, gridY);
+        case 4:
+            return new SpeedUp(world, gridX, gridY);
+        default:
+            return null;
+        }
+    }
+
+    public abstract void applyProperty(Player player);
 
     public int getCost() {
         return this.cost;
@@ -44,6 +65,14 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
 
     public Body getBody() {
         return body;
+    }
+
+    public int getGridX() {
+        return gridX;
+    }
+
+    public int getGridY() {
+        return gridY;
     }
 
     /**
@@ -100,5 +129,7 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
     }
 
     @Override
-    public void setToDestroy() {}
+    public void setToDestroy() {
+        this.toDestroy = true;
+    }
 }

@@ -17,6 +17,7 @@ import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.huds.MainHud;
+import com.ict1009.pokemanz.item.Item;
 import com.ict1009.pokemanz.room.LevelOne;
 import com.ict1009.pokemanz.room.Map;
 
@@ -144,6 +145,25 @@ public class MainScene implements Screen, ContactListener {
         }
     }
 
+    private void detectPlayerItem(Contact contact) {
+        Object body1;
+        Object body2;
+
+        if (contact.getFixtureA().getUserData() instanceof Player) {
+            body1 = contact.getFixtureB().getUserData();
+            body2 = contact.getFixtureA().getUserData();
+        } else {
+            body1 = contact.getFixtureA().getUserData();
+            body2 = contact.getFixtureB().getUserData();
+        }
+
+        if (body1 instanceof Item && body2 instanceof Player) {
+            Item item = (Item)body1;
+            Player player = (Player)body2;
+            item.applyProperty(player);
+        }
+    }
+
     private void detectPlayerExplode(Contact contact) {
         Object body1;
         Object body2;
@@ -183,6 +203,7 @@ public class MainScene implements Screen, ContactListener {
     public void beginContact(Contact contact) {
         preventPlayerPush(contact);
         detectPlayerExplode(contact);
+        detectPlayerItem(contact);
     }
 
     private void updateBombTangible(Contact contact) {
