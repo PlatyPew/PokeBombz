@@ -36,12 +36,17 @@ public class LevelOne extends Map {
 
     public LevelOne() {
         super(textureLocation, unbreakable, breakable);
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_game.ogg"));
-        gameMusic.setLooping(true);
-        gameMusic.play();
     }
 
     public Music getGameMusic(){
         return gameMusic;
+    }
+
+
+    @Override
+    public void setGameMusic() {
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_game.ogg"));
+        gameMusic.setLooping(true);
+        gameMusic.play();
     }
 }

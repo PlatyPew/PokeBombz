@@ -42,6 +42,7 @@ public class MainScene implements Screen, ContactListener {
         this.batch = game.getBatch();
 
         this.level = new LevelOne();
+        this.level.setGameMusic();
         this.world = new World(new Vector2(0, 0), true);
 
         BoardInfo.players.add(new Player(world, level, 1, "upstill.png", 0, 0, "Platy"));

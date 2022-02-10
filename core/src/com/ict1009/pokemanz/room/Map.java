@@ -278,4 +278,10 @@ public abstract class Map implements BoardElement {
             }
         }
     }
+
+    public void setGameMusic() {
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_game2.ogg"));
+        gameMusic.setLooping(true);
+        gameMusic.play();
+    }
 }

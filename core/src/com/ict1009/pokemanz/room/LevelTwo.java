@@ -32,6 +32,9 @@ public class LevelTwo extends Map {
 
     public LevelTwo() {
         super(textureLocation, unbreakable, breakable);
+    }
+    @Override
+    public void setGameMusic(){
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_game5.ogg"));
         gameMusic.setLooping(true);
         gameMusic.play();
