@@ -221,6 +221,8 @@ public abstract class Map implements BoardElement {
             for (Item item : itemRow) {
                 if (item instanceof Item) {
                     item.update(delta);
+                    if (item.getDestroyed())
+                        itemMap[item.getGridX()][item.getGridY()] = null;
                 }
             }
         }

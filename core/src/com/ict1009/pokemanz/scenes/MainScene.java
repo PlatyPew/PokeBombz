@@ -161,8 +161,6 @@ public class MainScene implements Screen, ContactListener {
             Item item = (Item)body1;
             Player player = (Player)body2;
             item.applyProperty(player);
-
-            level.setItemMap(item.getGridX(), item.getGridY(), null);
         }
     }
 

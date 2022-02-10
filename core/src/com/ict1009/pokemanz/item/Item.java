@@ -129,5 +129,7 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
     }
 
     @Override
-    public void setToDestroy() {}
+    public void setToDestroy() {
+        this.toDestroy = true;
+    }
 }
