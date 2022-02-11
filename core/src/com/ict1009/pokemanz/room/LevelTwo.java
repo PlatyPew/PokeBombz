@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 
 public class LevelTwo extends Map {
-    final private static String textureLocation = "room/background.png";
+    final private static String textureLocation = "room/background2.png";
 
     private Music gameMusic;
     // Coordinates of unbreakable obstacles

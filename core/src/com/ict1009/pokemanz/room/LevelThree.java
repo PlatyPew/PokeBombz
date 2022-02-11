@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 
 public class LevelThree extends Map {
-    final private static String textureLocation = "room/background.png";
+    final private static String textureLocation = "room/background3.png";
 
     private Music gameMusic;
 
