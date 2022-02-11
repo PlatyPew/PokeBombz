@@ -227,6 +227,16 @@ public abstract class Map implements BoardElement {
             }
         }
 
+        for (Bomb[] bombRow : bombMap) {
+            for (Bomb bomb : bombRow) {
+                if (bomb instanceof Bomb) {
+                    bomb.update(delta);
+                    if (bomb.getDestroyed())
+                        bombMap[bomb.getGridX()][bomb.getGridY()] = null;
+                }
+            }
+        }
+
         suddenDeath(delta);
     }
 

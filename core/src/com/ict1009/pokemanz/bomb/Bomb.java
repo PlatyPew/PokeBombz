@@ -20,7 +20,7 @@ import com.ict1009.pokemanz.helper.GameInfo;
 public class Bomb extends Sprite implements Destoryable, BoardElement {
     final World world;
     final private int timer = 2;
-    final private int gridX, gridY;
+    private int gridX, gridY;
     final private int playerNumber;
 
     final private TextureAtlas bombAtlas;
@@ -137,6 +137,13 @@ public class Bomb extends Sprite implements Destoryable, BoardElement {
             toDestroy = true;
             updated = true;
         }
+    }
+
+    public void updatePosition(int gridX, int gridY) {
+        this.gridX = gridX;
+        this.gridY = gridY;
+        super.setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
+        body.setTransform(getX() / GameInfo.PPM, getY() / GameInfo.PPM, 0);
     }
 
     @Override

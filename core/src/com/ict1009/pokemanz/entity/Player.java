@@ -343,14 +343,11 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
 		// Remove bombs from arraylist and bombMap once bomb has exploded
 		for (Bomb bomb : bombs) {
-			bomb.update(delta);
-
 			if (bomb.getDestroyed()) {
 				bombToRemove.add(bomb);
 				int bombX = bomb.getGridX();
 				int bombY = bomb.getGridY();
 
-				map.setBombMap(bombX, bombY, null);
 				explosions.add(
 						new Explode(world, map, "explosion/start.png", bombX, bombY, bombRange, playerNumber, true));
 			}
@@ -374,17 +371,15 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
 	public void handleBombThrow(int gridX, int gridY, String direction) {
 //		System.out.println("handleBombThrow with parameters " + gridX + gridY + direction);
-		bombs.remove(map.getBombMap()[gridX][gridY]); // Remove the bomb from the ArrayList in Player
-		map.getBombMap()[gridX][gridY].setToDestroy();
-		map.setBombMap(gridX, gridY, null); // Remove the bomb from the bomb map
+        Bomb bomb = (Bomb)map.getBombMap()[gridX][gridY];
+        map.setBombMap(gridX, gridY, null);
 
 		// Calculation of bomb throw
 		// Logic for bomb throwing left
 		if (direction == "left" && gridX > 0) {
 			for (int i = 1; gridX - i >= 0; i++) {
 				if (map.getBombMap()[gridX - i][gridY] == null && map.getObstacleMap()[gridX - i][gridY] == null) {
-					Bomb bomb = new Bomb(world, "bomb/bomb1.png", gridX - i, gridY, this.playerNumber);
-					bombs.add(bomb);
+                    bomb.updatePosition(gridX - i, gridY);
 					map.setBombMap(gridX - i, gridY, bomb);
 					return;
 				}
@@ -394,8 +389,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 		else if (direction == "up" && gridY < 9) {
 			for (int i = 1; gridY + i <= 9; i++) {
 				if (map.getBombMap()[gridX][gridY + i] == null && map.getObstacleMap()[gridX][gridY + i] == null) {
-					Bomb bomb = new Bomb(world, "bomb/bomb1.png", gridX, gridY + i, this.playerNumber);
-					bombs.add(bomb);
+                    bomb.updatePosition(gridX, gridY + i);
 					map.setBombMap(gridX, gridY + i, bomb);
 					return;
 				}
@@ -406,8 +400,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
 			for (int i = 1; gridX + i <= 15; i++) {
 				if (map.getBombMap()[gridX + i][gridY] == null && map.getObstacleMap()[gridX + i][gridY] == null) {
-					Bomb bomb = new Bomb(world, "bomb/bomb1.png", gridX + i, gridY, this.playerNumber);
-					bombs.add(bomb);
+                    bomb.updatePosition(gridX + i, gridY);
 					map.setBombMap(gridX + i, gridY, bomb);
 					return;
 				}
@@ -419,8 +412,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 				int finalY = gridY - i;
 				System.out.print("calculating " + finalY);
 				if (map.getBombMap()[gridX][gridY - i] == null && map.getObstacleMap()[gridX][gridY - i] == null) {
-					Bomb bomb = new Bomb(world, "bomb/bomb1.png", gridX, gridY - i, this.playerNumber);
-					bombs.add(bomb);
+                    bomb.updatePosition(gridX, gridY - i);
 					map.setBombMap(gridX, gridY - i, bomb);
 					return;
 				}
