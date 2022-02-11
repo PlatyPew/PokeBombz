@@ -325,8 +325,9 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 //					break;
 //				}
 //			}
-
+			if (getThrowing() == true) {
 			handleBombThrow(posX, posY, player_direction);
+			}
 		}
 	}
 
