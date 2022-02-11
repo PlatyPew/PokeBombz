@@ -69,8 +69,6 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 	private boolean disableDown = false;
 	private boolean disableRight = false;
 
-	private boolean testBoo = true;
-
 	public Player(World world, Map map, int playerNumber, String textureLocation, int gridX, int gridY, String name) {
 		super(new Texture(String.format("player/%d/%s", playerNumber, textureLocation)));
 		this.name = name;
@@ -374,7 +372,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 	}
 
 	public void handleBombThrow(int gridX, int gridY, String direction) {
-		bombs.remove(map.getBombMap()[gridX][gridY]); //  Remove the bomb from the ArrayList in Player
+//		System.out.println("handleBombThrow with parameters " + gridX + gridY + direction);
+		bombs.remove(map.getBombMap()[gridX][gridY]); // Remove the bomb from the ArrayList in Player
 		map.getBombMap()[gridX][gridY].setToDestroy();
 		map.setBombMap(gridX, gridY, null); // Remove the bomb from the bomb map
 
@@ -406,7 +405,6 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
 			for (int i = 1; gridX + i <= 15; i++) {
 				if (map.getBombMap()[gridX + i][gridY] == null && map.getObstacleMap()[gridX + i][gridY] == null) {
-					System.out.println("yeeted to ");
 					Bomb bomb = new Bomb(world, "bomb/bomb1.png", gridX + i, gridY, this.playerNumber);
 					bombs.add(bomb);
 					map.setBombMap(gridX + i, gridY, bomb);
@@ -416,11 +414,13 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 		}
 		// Logic for bomb throwing down
 		else if (direction == "down" && gridY > 0) {
-			for (int i = 1; gridY - i <= 0; i++) {
+			for (int i = 1; gridY - i >= 0; i++) {
+				int finalY = gridY - i;
+				System.out.print("calculating " + finalY);
 				if (map.getBombMap()[gridX][gridY - i] == null && map.getObstacleMap()[gridX][gridY - i] == null) {
 					Bomb bomb = new Bomb(world, "bomb/bomb1.png", gridX, gridY - i, this.playerNumber);
 					bombs.add(bomb);
-					map.setBombMap(gridX, gridY = i, bomb);
+					map.setBombMap(gridX, gridY - i, bomb);
 					return;
 				}
 			}
