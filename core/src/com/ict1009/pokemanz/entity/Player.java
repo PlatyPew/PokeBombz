@@ -308,9 +308,9 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 			// using if-else to check if the player direction is null
 			// if player_direction is not null then execute the case condition for each
 			// direction
-			if (player_direction == null) {
-				player_direction = "up";
-			}
+//			if (player_direction == null) {
+//				player_direction = "up";
+//			}
 //			else {
 //				switch (player_direction) {
 //				case "up":
