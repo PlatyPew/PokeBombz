@@ -372,7 +372,6 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 	public void handleBombThrow(int gridX, int gridY, String direction) {
 //		System.out.println("handleBombThrow with parameters " + gridX + gridY + direction);
         Bomb bomb = (Bomb)map.getBombMap()[gridX][gridY];
-        map.setBombMap(gridX, gridY, null);
 
 		// Calculation of bomb throw
 		// Logic for bomb throwing left
@@ -381,6 +380,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 				if (map.getBombMap()[gridX - i][gridY] == null && map.getObstacleMap()[gridX - i][gridY] == null) {
                     bomb.updatePosition(gridX - i, gridY);
 					map.setBombMap(gridX - i, gridY, bomb);
+                    map.setBombMap(gridX, gridY, null);
 					return;
 				}
 			}
@@ -391,6 +391,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 				if (map.getBombMap()[gridX][gridY + i] == null && map.getObstacleMap()[gridX][gridY + i] == null) {
                     bomb.updatePosition(gridX, gridY + i);
 					map.setBombMap(gridX, gridY + i, bomb);
+                    map.setBombMap(gridX, gridY, null);
 					return;
 				}
 			}
@@ -402,6 +403,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 				if (map.getBombMap()[gridX + i][gridY] == null && map.getObstacleMap()[gridX + i][gridY] == null) {
                     bomb.updatePosition(gridX + i, gridY);
 					map.setBombMap(gridX + i, gridY, bomb);
+                    map.setBombMap(gridX, gridY, null);
 					return;
 				}
 			}
@@ -414,6 +416,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 				if (map.getBombMap()[gridX][gridY - i] == null && map.getObstacleMap()[gridX][gridY - i] == null) {
                     bomb.updatePosition(gridX, gridY - i);
 					map.setBombMap(gridX, gridY - i, bomb);
+                    map.setBombMap(gridX, gridY, null);
 					return;
 				}
 			}
