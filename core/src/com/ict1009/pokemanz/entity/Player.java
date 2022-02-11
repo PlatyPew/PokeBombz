@@ -51,6 +51,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     private boolean kick = false;
     private boolean throwing = false;
 
+    private String player_direction;
+    
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
     private ArrayList<Explode> explosions = new ArrayList<Explode>();
@@ -202,6 +204,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         float velX = 0, velY = 0;
         float currX = (getBody().getPosition().x) * GameInfo.PPM;
         float currY = (getBody().getPosition().y) * GameInfo.PPM;
+
         isWalking = false;
 
         if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) &&
@@ -210,6 +213,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
             texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
+            player_direction = "up";
             velY = baseSpeed;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > GameInfo.PPM &&
                    !disableLeft) {
@@ -217,6 +221,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/leftstill.png", playerNumber));
+            player_direction = "left";
             velX = -baseSpeed;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > GameInfo.PPM &&
                    !disableDown) {
@@ -224,6 +229,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
             texture = new Texture(String.format("player/%d/downstill.png", playerNumber));
+            player_direction = "down";
             velY = -baseSpeed;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) &&
                    currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16) && !disableRight) {
@@ -231,6 +237,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/rightstill.png", playerNumber));
+            player_direction = "right";
             velX = baseSpeed;
         } else {
             getBody().setLinearVelocity(0f, 0.0001f);
@@ -262,7 +269,66 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             map.setBombMap(bombX, bombY, bomb); // Places bomb is grid
         }
     }
-
+    /**
+     * Check for player direction when F is pressed
+     */
+    private void player_Direction() {
+        float currX = getX() / GameInfo.PPM;
+        float currY = getY() / GameInfo.PPM;
+        int posX = (int)Math.floor(currX);
+        int posY = (int)Math.floor(currY);
+       
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+            System.out.println("position X ====> " + posX);
+            System.out.println("position Y ====> " + posY);
+            System.out.println("Player number ====> " + playerNumber);
+        	System.out.println("Player direction ====> " + player_direction);
+        	
+        	// if-else method with up, down as one condition and left, right as one condition
+//        	if (player_direction == "up" || player_direction == "down") {
+//        		System.out.println("character facing up/down");
+//        	}else if (player_direction == "left" || player_direction == "right") {
+//        		System.out.println("character facing left/right");
+//        	}else {
+//        		System.out.println("player have not moved");
+//        	}
+        	
+        	// if-else method with each direction as one condition
+//        	if (player_direction == "up") {
+//        		System.out.println("character facing up");
+//        	}else if ( player_direction == "down"){
+//        		System.out.println("character facing down");
+//        	}else if (player_direction == "left") {
+//        		System.out.println("character facing left");
+//        	}else if ( player_direction == "right") {
+//        		System.out.println("character facing right");
+//        	}else {
+//        		System.out.println("player have not moved");
+//        	}
+        	
+        	//using if-else to check if the player direction is null
+        	// if player_direction is not null then execute the case condition for each direction
+        	if (player_direction == null) {
+        		System.out.println("player have not moved");
+        	}
+        	else {
+	        	switch (player_direction) {
+	        	case "up":
+	        		System.out.println("character facing up");
+	        		break;
+	            case "down":
+	        		System.out.println("character facing down");
+	        		break;       	
+	            case "right":
+	        		System.out.println("character facing right");
+	        		break; 
+	            case "left":
+	        		System.out.println("character facing left");
+	        		break;
+	        	}
+        	}
+        }
+    }
     /**
      * Handles bomb placement when spacebar is pressed
      */
@@ -361,6 +427,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             handleBomb(delta);
             setPosition((body.getPosition().x) * GameInfo.PPM,
                         (body.getPosition().y) * GameInfo.PPM);
+            player_Direction();
         }
     }
 
