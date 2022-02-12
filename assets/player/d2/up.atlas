@@ -4,21 +4,21 @@ size: 256, 64
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-player1uprun1
+player3uprun1
   rotate: false
   xy: 126, 2
   size: 60, 60
   orig: 60, 60
   offset: 0, 0
   index: -1
-player1uprun2
-  rotate: false
+player3uprun2
+  rota3te: false
   xy: 2, 2
   size: 60, 60
   orig: 60, 60
   offset: 0, 0
   index: -1
-player1upstill
+player3upstill
   rotate: false
   xy: 64, 2
   size: 60, 60
