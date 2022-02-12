@@ -310,7 +310,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             posY -= 1;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && map.getBombMap()[posX][posY] != null &&
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F) && map.getBombMap()[posX][posY] != null &&
             !destroyed) {
 
             // if-else method with up, down as one condition and left, right as one
@@ -548,10 +548,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 down = true;
             else if (buttonCode == 14)
                 right = true;
-            else if (buttonCode == 1 && !destroyed) {
-                controllerHandleThrow();
+            else if (buttonCode == 1 && !destroyed)
                 placeBomb();
-            }
+            else if (buttonCode == 10)
+                controllerHandleThrow();
         }
 
         return false;
