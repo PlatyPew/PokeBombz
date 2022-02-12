@@ -23,6 +23,8 @@ import com.ict1009.pokemanz.room.LevelTwo;
 import com.ict1009.pokemanz.room.LevelThree;
 import com.ict1009.pokemanz.room.Map;
 
+import java.util.ArrayList;
+
 public class MainScene implements Screen, ContactListener {
     private World world;
     private SpriteBatch batch;
@@ -37,16 +39,38 @@ public class MainScene implements Screen, ContactListener {
     private boolean gameOver = false;
     private Player winner;
 
-    public MainScene(GameMain game) {
+    public MainScene(GameMain game, int numPlayers, int numLevel) {
         setupCamera();
         this.batch = game.getBatch();
+        switch(numLevel){
+            case 1:
+                this.level = new LevelOne();
+                break;
+            case 2:
+                this.level = new LevelTwo();
+                break;
+            case 3:
+                this.level = new LevelThree();
+                break;
+            default:
+                this.level = new LevelOne();
+                break;
+        }
 
-        this.level = new LevelOne();
         this.level.setGameMusic();
         this.world = new World(new Vector2(0, 0), true);
 
         BoardInfo.players.add(new Player(world, level, 1, "upstill.png", 0, 0, "Platy"));
         BoardInfo.players.add(new Player(world, level, 2, "downstill.png", 15, 9, "Helpme"));
+        BoardInfo.players.add(new Player(world, level, 3, "upstill.png", 15, 0, "Saveme"));
+        BoardInfo.players.add(new Player(world, level, 4, "downstill.png", 0, 9, "Iamdie"));
+        if (numPlayers == 2){
+            BoardInfo.players.remove(2);
+            BoardInfo.players.remove(3);
+        }
+        if (numPlayers == 3){
+            BoardInfo.players.remove(3);
+        }
 
         this.hud = new MainHud(game, BoardInfo.players.size());
 

@@ -1,7 +1,12 @@
 package com.ict1009.pokemanz.chatbot;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.helper.BoardInfo;
+import com.ict1009.pokemanz.item.Item;
 import java.io.IOException;
+import java.util.regex.Matcher;
+
+import java.util.regex.Pattern;
+
 import java.util.*;
 public class Chatbot {
     protected Bot bot;
@@ -69,7 +74,9 @@ public class Chatbot {
         }
     }
     public void  chatbot_do_exit(){
+
         bot.bot_output("ExITING");
+    	System.exit(1);
     }
     public boolean chatbot_is_question(){
         if (this.words[0].toLowerCase().equals("what") || this.words[0].toLowerCase().equals("who")
@@ -209,6 +216,42 @@ public class Chatbot {
     	}
     	GameInfo.SUDDEN_DEATH = (int) (seconds * GameInfo.FPS); 
     }
+    public boolean chatbot_is_ChangeSpawnTime() {
+    	if(isPatternMatch(this.input, "^change spawn chance [0-9]+$" ))
+    		{
+    			int SpawnChance = Integer.parseInt(words[3]);
+    			if (SpawnChance < 0)
+    				SpawnChance = 0;
+    			else if (SpawnChance > 100)
+    				SpawnChance = 100;
+    			changeItemSpawn(SpawnChance);
+    			bot.bot_output("Spawn chance has been changed to " + words[3]);
+    			return true;
+    		}
+    	return false;
+    }
+    private void changeItemSpawn(int SpawnChance) {
+    	
+    	GameInfo.ITEM_SPAWN_CHANCE = SpawnChance;
+    }
+    public boolean chatbot_is_StartSuddenDeath() {
+    	if(isPatternMatch(this.input,"start sudden death")) {
+    		startSuddenDeath();
+    		return true;
+    	}
+    	return false;
+    	
+    }
+    private void startSuddenDeath() {
+    	GameInfo.timeElapsed = 1055550;
+    }
+    private boolean isPatternMatch(String Input, String patternString) {
+
+    	Pattern pattern = Pattern.compile(patternString,Pattern.CASE_INSENSITIVE);
+    	Matcher matcher = pattern.matcher(Input);
+    	return matcher.find();
+	}
+
 }
 
 

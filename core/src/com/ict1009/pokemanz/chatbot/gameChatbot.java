@@ -29,6 +29,9 @@ public class gameChatbot {
         else if(chatbot.chatbot_is_save()){
             
         }
+        else if(chatbot.chatbot_is_ChangeSpawnTime()){
+            
+        }
         else if(chatbot.chatbot_is_load()){
             
         }
@@ -36,6 +39,9 @@ public class gameChatbot {
         	
         }
         else if(chatbot.chatbot_is_ChangeDeathTimer()) {
+        	
+        }
+        else if(chatbot.chatbot_is_StartSuddenDeath()) {
         	
         }
         else{

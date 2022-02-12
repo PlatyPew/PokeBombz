@@ -10,7 +10,7 @@ public class GameInfo {
 
     public static int SUDDEN_DEATH = FPS * 120;
     public static int SUDDEN_DEATH_DROP = FPS / 2;
-    public static int ITEM_SPAWN_CHANCE = 25; // In percent
+    public static int ITEM_SPAWN_CHANCE = 100; // In percent
 
     public static int PLAYER_VELOCITY = 2;
     public static int PLAYER_BOMBS = 1;
