@@ -192,6 +192,10 @@ public abstract class Map implements BoardElement {
             if (bomb != null)
                 bomb.setToDestroy();
 
+            Item item = itemMap[gridX][gridY];
+            if (item != null)
+                item.setToDestroy();
+
             obstacleMap[gridX][gridY] = new Obstacle(world, "room/unbreakable.png", gridX, gridY);
 
             obTimer = 0;
