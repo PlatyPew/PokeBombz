@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class MainScene implements Screen, ContactListener {
     private World world;
     private SpriteBatch batch;
+    private GameMain game;
 
     private MainHud hud;
 
@@ -41,6 +42,7 @@ public class MainScene implements Screen, ContactListener {
 
     public MainScene(GameMain game, int numPlayers, int numLevel) {
         setupCamera();
+        this.game = game;
         this.batch = game.getBatch();
         switch(numLevel){
             case 1:
@@ -97,24 +99,40 @@ public class MainScene implements Screen, ContactListener {
             return null;
     }
 
-    public void update(float delta) {
+    private void checkScore(float delta) {
         int alive = 0;
+
         for (Player player : BoardInfo.players) {
             player.update(delta);
-            if (!player.getDestroyed()) {
-                winner = player;
+            if (!player.getDestroyed())
                 alive++;
+        }
+
+        int largest = 0;
+        int largestIndex = 0;
+        for (int i = 0; i < BoardInfo.playerScore.length; i++) {
+            if (BoardInfo.playerScore[i] > largest) {
+                largestIndex = i;
+                largest = BoardInfo.playerScore[i];
             }
         }
 
+        winner = BoardInfo.players.get(largestIndex);
+
         if (alive <= 1)
             gameOver = true;
+    }
 
+    public void update(float delta) {
+        checkScore(delta);
         level.update(delta);
 
         GameInfo.timeElapsed += 1;
 
         hud.updateTime();
+
+        if (getWinner() != null)
+            game.setScreen(new EndScene(game, getWinner()));
     }
 
     @Override
