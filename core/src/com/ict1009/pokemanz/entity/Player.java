@@ -47,6 +47,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     final private TextureAtlas playerAtlasDown;
     final private TextureAtlas playerAtlasUp;
 
+    final private TextureAtlas playerDeadAtlasSide;
+    final private TextureAtlas playerDeadAtlasDown;
+    final private TextureAtlas playerDeadAtlasUp;
+
     private Animation<TextureAtlas.AtlasRegion> animation;
     private float elapsedTime;
 
@@ -93,6 +97,12 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         this.playerAtlasDown =
             new TextureAtlas(String.format("player/%d/down.atlas", playerNumber));
         this.playerAtlasUp = new TextureAtlas(String.format("player/%d/up.atlas", playerNumber));
+
+        this.playerDeadAtlasSide =
+            new TextureAtlas(String.format("player/d%d/left.atlas", playerNumber));
+        this.playerDeadAtlasDown =
+            new TextureAtlas(String.format("player/d%d/down.atlas", playerNumber));
+        this.playerDeadAtlasUp = new TextureAtlas(String.format("player/d%d/up.atlas", playerNumber));
 
         if (Controllers.getControllers().notEmpty()) {
             this.controllerID = Controllers.getControllers().pop().getUniqueId();
@@ -375,7 +385,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
      * Handles bomb placement when spacebar is pressed
      */
     private void handleBomb(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !destroyed) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !destroyed && !dead) {
             placeBomb();
         }
 
@@ -625,6 +635,16 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                     }
                 }
 
+                frames = playerDeadAtlasSide.getRegions();
+
+                for (TextureRegion frame : frames) {
+                    if (body.getLinearVelocity().x < 0 && frame.isFlipX()) {
+                        frame.flip(true, false);
+                    } else if (body.getLinearVelocity().x > 0 && !frame.isFlipX()) {
+                        frame.flip(true, false);
+                    }
+                }
+
                 batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), this.getX(),
                            this.getY());
             } else {
@@ -653,28 +673,28 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) && currY < GameInfo.HEIGHT - GameInfo.PPM) {
             isWalking = true;
             animation =
-                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasUp.getRegions());
             texture = new Texture(String.format("player/d%d/upstill.png", playerNumber));
             player_direction = "up";
             velY = baseSpeed;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > GameInfo.PPM) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > 0) {
             isWalking = true;
             animation =
-                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasSide.getRegions());
             texture = new Texture(String.format("player/d%d/leftstill.png", playerNumber));
             player_direction = "left";
             velX = -baseSpeed;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > 0) {
             isWalking = true;
             animation =
-                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasDown.getRegions());
             texture = new Texture(String.format("player/d%d/downstill.png", playerNumber));
             player_direction = "down";
             velY = -baseSpeed;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) && currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 17)) {
             isWalking = true;
             animation =
-                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasSide.getRegions());
             texture = new Texture(String.format("player/d%d/rightstill.png", playerNumber));
             player_direction = "right";
             velX = baseSpeed;
