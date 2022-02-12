@@ -51,6 +51,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     private boolean kick = false;
     private boolean throwing = false;
 
+    private String player_direction;
+
     private ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
     private ArrayList<Explode> explosions = new ArrayList<Explode>();
@@ -195,13 +197,14 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     }
 
     /**
-     * Gets keyboard input and moves the character using WASD
-     * Also checks that player does not go over edge
+     * Gets keyboard input and moves the character using WASD Also checks that
+     * player does not go over edge
      */
     private void handleMovement() {
         float velX = 0, velY = 0;
         float currX = (getBody().getPosition().x) * GameInfo.PPM;
         float currY = (getBody().getPosition().y) * GameInfo.PPM;
+
         isWalking = false;
 
         if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) &&
@@ -210,6 +213,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
             texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
+            player_direction = "up";
             velY = baseSpeed;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > GameInfo.PPM &&
                    !disableLeft) {
@@ -217,6 +221,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/leftstill.png", playerNumber));
+            player_direction = "left";
             velX = -baseSpeed;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > GameInfo.PPM &&
                    !disableDown) {
@@ -224,6 +229,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
             texture = new Texture(String.format("player/%d/downstill.png", playerNumber));
+            player_direction = "down";
             velY = -baseSpeed;
         } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) &&
                    currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16) && !disableRight) {
@@ -231,6 +237,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/rightstill.png", playerNumber));
+            player_direction = "right";
             velX = baseSpeed;
         } else {
             getBody().setLinearVelocity(0f, 0.0001f);
@@ -255,11 +262,102 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             bombY -= 1;
         }
 
-        // Place bombs only if player has remaining bombs and bomb does not exist in the spot
+        // Place bombs only if player has remaining bombs and bomb does not exist in the
+        // spot
         if (bombs.size() < maxBombs && map.getBombMap()[bombX][bombY] == null) {
             Bomb bomb = new Bomb(world, "bomb/bomb1.png", bombX, bombY, playerNumber);
             bombs.add(bomb);
             map.setBombMap(bombX, bombY, bomb); // Places bomb is grid
+        }
+    }
+
+    private void controllerHandleThrow() {
+        float currX = getX() / GameInfo.PPM;
+        float currY = getY() / GameInfo.PPM;
+        int posX = (int)Math.floor(currX);
+        int posY = (int)Math.floor(currY);
+
+        // Snaps the bomb if player passes the 0.5 threshold
+        if (currX - posX < 0.5) {
+            posX -= 1;
+        }
+        if (currY - posY < 0.5) {
+            posY -= 1;
+        }
+
+        if (map.getBombMap()[posX][posY] != null && !destroyed && getThrowing()) {
+            handleBombThrow(posX, posY, player_direction);
+        }
+    }
+
+    /**
+     * Check for player direction when F is pressed
+     */
+    private void handleThrow() {
+        float currX = getX() / GameInfo.PPM;
+        float currY = getY() / GameInfo.PPM;
+        int posX = (int)Math.floor(currX);
+        int posY = (int)Math.floor(currY);
+
+        // Snaps the bomb if player passes the 0.5 threshold
+        if (currX - posX < 0.5) {
+            posX -= 1;
+        }
+        if (currY - posY < 0.5) {
+            posY -= 1;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && map.getBombMap()[posX][posY] != null &&
+            !destroyed) {
+
+            // if-else method with up, down as one condition and left, right as one
+            // condition
+            //        	if (player_direction == "up" || player_direction == "down") {
+            //        		System.out.println("character facing up/down");
+            //        	}else if (player_direction == "left" || player_direction == "right") {
+            //        		System.out.println("character facing left/right");
+            //        	}else {
+            //        		System.out.println("player have not moved");
+            //        	}
+
+            // if-else method with each direction as one condition
+            //        	if (player_direction == "up") {
+            //        		System.out.println("character facing up");
+            //        	}else if ( player_direction == "down"){
+            //        		System.out.println("character facing down");
+            //        	}else if (player_direction == "left") {
+            //        		System.out.println("character facing left");
+            //        	}else if ( player_direction == "right") {
+            //        		System.out.println("character facing right");
+            //        	}else {
+            //        		System.out.println("player have not moved");
+            //        	}
+
+            // using if-else to check if the player direction is null
+            // if player_direction is not null then execute the case condition for each
+            // direction
+            //			if (player_direction == null) {
+            //				player_direction = "up";
+            //			}
+            //			else {
+            //				switch (player_direction) {
+            //				case "up":
+            //					System.out.println("character facing up");
+            //					break;
+            //				case "down":
+            //					System.out.println("character facing down");
+            //					break;
+            //				case "right":
+            //					System.out.println("character facing right");
+            //					break;
+            //				case "left":
+            //					System.out.println("character facing left");
+            //					break;
+            //				}
+            //			}
+            if (getThrowing() == true) {
+                handleBombThrow(posX, posY, player_direction);
+            }
         }
     }
 
@@ -275,14 +373,11 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
         // Remove bombs from arraylist and bombMap once bomb has exploded
         for (Bomb bomb : bombs) {
-            bomb.update(delta);
-
             if (bomb.getDestroyed()) {
                 bombToRemove.add(bomb);
                 int bombX = bomb.getGridX();
                 int bombY = bomb.getGridY();
 
-                map.setBombMap(bombX, bombY, null);
                 explosions.add(new Explode(world, map, "explosion/start.png", bombX, bombY,
                                            bombRange, playerNumber, true));
             }
@@ -302,6 +397,65 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         }
 
         explosions.removeAll(explodeToRemove);
+    }
+
+    public void handleBombThrow(int gridX, int gridY, String direction) {
+        //		System.out.println("handleBombThrow with parameters " + gridX + gridY +
+        // direction);
+        Bomb bomb = (Bomb)map.getBombMap()[gridX][gridY];
+
+        // Calculation of bomb throw
+        // Logic for bomb throwing left
+        if (direction == "left" && gridX > 0) {
+            for (int i = 1; gridX - i >= 0; i++) {
+                if (map.getBombMap()[gridX - i][gridY] == null &&
+                    map.getObstacleMap()[gridX - i][gridY] == null) {
+                    bomb.updatePosition(gridX - i, gridY);
+                    map.setBombMap(gridX - i, gridY, bomb);
+                    map.setBombMap(gridX, gridY, null);
+                    return;
+                }
+            }
+        }
+        // Logic for bomb throwing up
+        else if (direction == "up" && gridY < 9) {
+            for (int i = 1; gridY + i <= 9; i++) {
+                if (map.getBombMap()[gridX][gridY + i] == null &&
+                    map.getObstacleMap()[gridX][gridY + i] == null) {
+                    bomb.updatePosition(gridX, gridY + i);
+                    map.setBombMap(gridX, gridY + i, bomb);
+                    map.setBombMap(gridX, gridY, null);
+                    return;
+                }
+            }
+        }
+        // Logic for bomb throwing right
+        else if (direction == "right" && gridX < 15) {
+
+            for (int i = 1; gridX + i <= 15; i++) {
+                if (map.getBombMap()[gridX + i][gridY] == null &&
+                    map.getObstacleMap()[gridX + i][gridY] == null) {
+                    bomb.updatePosition(gridX + i, gridY);
+                    map.setBombMap(gridX + i, gridY, bomb);
+                    map.setBombMap(gridX, gridY, null);
+                    return;
+                }
+            }
+        }
+        // Logic for bomb throwing down
+        else if (direction == "down" && gridY > 0) {
+            for (int i = 1; gridY - i >= 0; i++) {
+                int finalY = gridY - i;
+                System.out.print("calculating " + finalY);
+                if (map.getBombMap()[gridX][gridY - i] == null &&
+                    map.getObstacleMap()[gridX][gridY - i] == null) {
+                    bomb.updatePosition(gridX, gridY - i);
+                    map.setBombMap(gridX, gridY - i, bomb);
+                    map.setBombMap(gridX, gridY, null);
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -358,6 +512,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             destroyed = true;
         } else {
             handleMovement();
+            handleThrow();
             handleBomb(delta);
             setPosition((body.getPosition().x) * GameInfo.PPM,
                         (body.getPosition().y) * GameInfo.PPM);
@@ -390,8 +545,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 down = true;
             else if (buttonCode == 14)
                 right = true;
-            else if (buttonCode == 1)
+            else if (buttonCode == 1 && !destroyed) {
+                controllerHandleThrow();
                 placeBomb();
+            }
         }
 
         return false;
