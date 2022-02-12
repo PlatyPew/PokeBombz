@@ -271,10 +271,29 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         }
     }
 
+    private void controllerHandleThrow() {
+        float currX = getX() / GameInfo.PPM;
+        float currY = getY() / GameInfo.PPM;
+        int posX = (int)Math.floor(currX);
+        int posY = (int)Math.floor(currY);
+
+        // Snaps the bomb if player passes the 0.5 threshold
+        if (currX - posX < 0.5) {
+            posX -= 1;
+        }
+        if (currY - posY < 0.5) {
+            posY -= 1;
+        }
+
+        if (map.getBombMap()[posX][posY] != null && !destroyed && getThrowing()) {
+            handleBombThrow(posX, posY, player_direction);
+        }
+    }
+
     /**
      * Check for player direction when F is pressed
      */
-    private void player_Direction() {
+    private void handleThrow() {
         float currX = getX() / GameInfo.PPM;
         float currY = getY() / GameInfo.PPM;
         int posX = (int)Math.floor(currX);
@@ -382,7 +401,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
     public void handleBombThrow(int gridX, int gridY, String direction) {
         //		System.out.println("handleBombThrow with parameters " + gridX + gridY +
-        //direction);
+        // direction);
         Bomb bomb = (Bomb)map.getBombMap()[gridX][gridY];
 
         // Calculation of bomb throw
@@ -493,7 +512,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             destroyed = true;
         } else {
             handleMovement();
-            player_Direction();
+            handleThrow();
             handleBomb(delta);
             setPosition((body.getPosition().x) * GameInfo.PPM,
                         (body.getPosition().y) * GameInfo.PPM);
@@ -526,8 +545,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 down = true;
             else if (buttonCode == 14)
                 right = true;
-            else if (buttonCode == 1)
+            else if (buttonCode == 1 && !destroyed) {
+                controllerHandleThrow();
                 placeBomb();
+            }
         }
 
         return false;
