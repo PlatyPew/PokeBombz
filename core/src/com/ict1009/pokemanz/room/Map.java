@@ -13,7 +13,6 @@ import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.item.Item;
-
 import java.util.ArrayList;
 
 public abstract class Map implements BoardElement {
@@ -82,8 +81,7 @@ public abstract class Map implements BoardElement {
         Vector2[] vertices = new Vector2[5];
         vertices[0] = new Vector2(0.5f, 0.5f);
         vertices[1] = new Vector2(16.5f, 0.5f);
-        vertices[2] =
-            new Vector2(GameInfo.MAP_WIDTH + 0.5f, GameInfo.MAP_HEIGHT + 0.5f);
+        vertices[2] = new Vector2(GameInfo.MAP_WIDTH + 0.5f, GameInfo.MAP_HEIGHT + 0.5f);
         vertices[3] = new Vector2(0.5f, GameInfo.MAP_HEIGHT + 0.5f);
         vertices[4] = new Vector2(0.5f, 0.5f);
         shape.createChain(vertices);
