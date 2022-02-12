@@ -239,6 +239,10 @@ public class MainScene implements Screen, ContactListener {
 
                     hud.updateScore(explosion.getPlayerNumber(),
                                     BoardInfo.playerScore[explosion.getPlayerNumber() - 1]);
+                } else {
+                    BoardInfo.playerScore[player.getPlayerNumber() - 1] -= 1;
+                    hud.updateScore(player.getPlayerNumber(),
+                                    BoardInfo.playerScore[player.getPlayerNumber() - 1]);
                 }
 
                 BoardInfo.explosionIDs.add(explosion.getUUID());
