@@ -127,10 +127,10 @@ public class MainScene implements Screen, ContactListener {
         batch.begin();
 
         batch.draw(level.getTexture(), 0, 0);
+        level.render(batch);
         for (Player player : BoardInfo.players) {
             player.render(batch);
         }
-        level.render(batch);
         batch.end();
 
         debugRenderer.render(world, box2DCamera.combined);
