@@ -87,7 +87,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         this.playerAtlasUp = new TextureAtlas(String.format("player/%d/up.atlas", playerNumber));
 
         if (Controllers.getControllers().notEmpty()) {
-            this.controllerID = Controllers.getControllers().get(playerNumber - 1).getUniqueId();
+            this.controllerID = Controllers.getControllers().pop().getUniqueId();
             Controllers.addListener(this);
         }
     }

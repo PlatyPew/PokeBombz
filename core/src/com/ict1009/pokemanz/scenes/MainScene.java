@@ -62,11 +62,13 @@ public class MainScene implements Screen, ContactListener {
 
         BoardInfo.players.add(new Player(world, level, 1, "upstill.png", 0, 0, "Platy"));
         BoardInfo.players.add(new Player(world, level, 2, "downstill.png", 15, 9, "Helpme"));
-        BoardInfo.players.add(new Player(world, level, 3, "upstill.png", 15, 0, "Saveme"));
-        BoardInfo.players.add(new Player(world, level, 4, "downstill.png", 0, 9, "Iamdie"));
 
-        for (int i = 0; i < 4 - numPlayers; i++) {
-            BoardInfo.players.remove(BoardInfo.players.size() - 1);
+        if (numPlayers >= 3) {
+            BoardInfo.players.add(new Player(world, level, 3, "upstill.png", 15, 0, "Saveme"));
+        }
+
+        if (numPlayers >= 4) {
+            BoardInfo.players.add(new Player(world, level, 4, "downstill.png", 0, 9, "Iamdie"));
         }
 
         this.hud = new MainHud(game, BoardInfo.players.size());
