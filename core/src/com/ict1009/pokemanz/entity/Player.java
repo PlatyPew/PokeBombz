@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
@@ -191,7 +192,9 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
         Body body = world.createBody(bodyDef);
 
-        body.createFixture(shape, 1f).setUserData(this);
+        Fixture fixture = body.createFixture(shape, 1f);
+        fixture.setUserData(this);
+        fixture.setFriction(0);
         shape.dispose();
         return body;
     }
