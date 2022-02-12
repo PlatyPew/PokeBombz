@@ -733,6 +733,74 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     }
 
     private void handleDeadBomb() {
+        float currX = getX() / GameInfo.PPM;
+        float currY = getY() / GameInfo.PPM;
+        int posX = (int)Math.floor(currX);
+        int posY = (int)Math.floor(currY);
+
+        // Snaps the bomb if player passes the 0.5 threshold
+        if (currX - posX < 0.5) {
+            posX -= 1;
+        }
+        if (currY - posY < 0.5) {
+            posY -= 1;
+        }
+
+        if (player_direction != null && posX >= -1 && posY >= -1) {
+            int i;
+            switch(player_direction) {
+                case "up":
+                    posY -= 2;
+                    for (i = posY; i >= 0; i--) {
+                        if (!isObjectAt(posX, i))
+                            break;
+                    }
+                    if (i >= 0 && i < GameInfo.MAP_HEIGHT) {
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber);
+                        bombs.add(bomb);
+                        map.setBombMap(posX, i, bomb);
+                    }
+                    break;
+                case "left":
+                    posX += 2;
+                    for (i = posX; i < GameInfo.MAP_WIDTH; i++) {
+                        if (!isObjectAt(i, posY))
+                            break;
+                    }
+                    if (i >= 0 && i < GameInfo.MAP_WIDTH) {
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber);
+                        bombs.add(bomb);
+                        map.setBombMap(i, posY, bomb);
+                    }
+                    break;
+                case "down":
+                    posY += 2;
+                    for (i = posY; i < GameInfo.MAP_HEIGHT; i++) {
+                        if (!isObjectAt(posX, i))
+                            break;
+                    }
+                    if (i >= 0 && i < GameInfo.MAP_HEIGHT) {
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber);
+                        bombs.add(bomb);
+                        map.setBombMap(posX, i, bomb);
+                    }
+                    break;
+                case "right":
+                    posX -= 2;
+                    for (i = posX; i >= 0; i--) {
+                        if (!isObjectAt(i, posY))
+                            break;
+                    }
+                    if (i >= 0 && i < GameInfo.MAP_WIDTH) {
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber);
+                        bombs.add(bomb);
+                        map.setBombMap(i, posY, bomb);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     /**
@@ -753,7 +821,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         } else if (dead && !unloadOnly) {
             handleDeadMovement();
             handleBomb(delta);
-            handleDeadBomb();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+                handleDeadBomb();
             setPosition((body.getPosition().x) * GameInfo.PPM,
                         (body.getPosition().y) * GameInfo.PPM);
         } else {
