@@ -61,7 +61,7 @@ public class MainScene implements Screen, ContactListener {
 
         this.level.setGameMusic();
         this.world = new World(new Vector2(0, 0), true);
-
+        BoardInfo.players.clear();
         BoardInfo.players.add(new Player(world, level, 1, "upstill.png", 0, 0, "Platy"));
         BoardInfo.players.add(new Player(world, level, 2, "downstill.png", 15, 9, "Helpme"));
 
@@ -116,6 +116,14 @@ public class MainScene implements Screen, ContactListener {
                 largest = BoardInfo.playerScore[i];
             }
         }
+        /*boolean draw = false;
+        for(int j = 0; j < BoardInfo.playerScore.length; j++){
+            if (BoardInfo.playerScore[0] != BoardInfo.playerScore[j]){
+
+            } else {
+                draw = true;
+            }
+        }*/
 
         winner = BoardInfo.players.get(largestIndex);
 
@@ -131,8 +139,11 @@ public class MainScene implements Screen, ContactListener {
 
         hud.updateTime();
 
-        if (getWinner() != null)
+        if (getWinner() != null) {
+            level.getSdMusic().dispose();
+            level.getGameMusic().dispose();
             game.setScreen(new EndScene(game, getWinner()));
+        }
     }
 
     @Override

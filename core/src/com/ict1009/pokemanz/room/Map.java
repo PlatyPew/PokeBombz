@@ -284,4 +284,7 @@ public abstract class Map implements BoardElement {
         gameMusic.setLooping(true);
         gameMusic.play();
     }
+    public Music getSdMusic() {
+        return sdMusic;
+    }
 }

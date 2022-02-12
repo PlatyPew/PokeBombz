@@ -32,31 +32,32 @@ public class TitleScene implements Screen{
 	private static final int TITLELOGO_Y=GameInfo.HEIGHT-TITLELOGO_HEIGHT-70;
 
 
-	GameMain game;
+	private GameMain game;
 	private SpriteBatch batch;
-	Texture play2ButtonActive;
-	Texture play2ButtonInactive;
-	Texture play3ButtonActive;
-	Texture play3ButtonInactive;
-	Texture play4ButtonActive;
-	Texture play4ButtonInactive;
-	Texture exitButtonActive;
-	Texture exitButtonInactive;
-	Texture backButtonActive;
-	Texture backButtonInactive;
-	Texture levelOneButtonActive;
-	Texture levelOneButtonInactive;
-	Texture levelTwoButtonActive;
-	Texture levelTwoButtonInactive;
-	Texture levelThreeButtonActive;
-	Texture levelThreeButtonInactive;
-	Texture titlelogo;
-	Texture exitlogo;
-	Animation<TextureRegion> animation;
-    float elapsed;
-	Music menuMusic;
+	private Texture play2ButtonActive;
+	private Texture play2ButtonInactive;
+	private Texture play3ButtonActive;
+	private Texture play3ButtonInactive;
+	private Texture play4ButtonActive;
+	private Texture play4ButtonInactive;
+	private Texture exitButtonActive;
+	private Texture exitButtonInactive;
+	private Texture backButtonActive;
+	private Texture backButtonInactive;
+	private Texture levelOneButtonActive;
+	private Texture levelOneButtonInactive;
+	private Texture levelTwoButtonActive;
+	private Texture levelTwoButtonInactive;
+	private Texture levelThreeButtonActive;
+	private Texture levelThreeButtonInactive;
+	private Texture titlelogo;
+	private Texture exitlogo;
+	private Animation<TextureRegion> animation;
+	private float elapsed;
+	private Music menuMusic;
 
     private boolean active = true;
+	private boolean bye = false;
 	private int numP = 1;
 
 	public TitleScene(GameMain game) {
@@ -107,7 +108,9 @@ public class TitleScene implements Screen{
         batch.begin();
 
         batch.draw(animation.getKeyFrame(elapsed), 0f,0f, GameInfo.WIDTH, GameInfo.HEIGHT);
-        batch.draw(titlelogo,GameInfo.WIDTH/2-TITLELOGO_WIDTH/2,TITLELOGO_Y);
+        if (!bye) batch.draw(titlelogo,GameInfo.WIDTH/2-TITLELOGO_WIDTH/2,TITLELOGO_Y);
+		if (bye) batch.draw(exitlogo,GameInfo.WIDTH/2-1010/2,TITLELOGO_Y);
+
 
         //2Player button
 		if (active && Gdx.input.getX() < PLAY2_BUTTON_X + PLAY2_BUTTON_WIDTH  && Gdx.input.getX() > PLAY2_BUTTON_X - PLAY2_BUTTON_WIDTH && GameInfo.HEIGHT - Gdx.input.getY() < PLAY2_BUTTON_HEIGHT + PLAY2_BUTTON_Y && GameInfo.HEIGHT - Gdx.input.getY() > PLAY2_BUTTON_Y) {
@@ -193,7 +196,7 @@ public class TitleScene implements Screen{
         if (active && Gdx.input.getX() < ex + EXIT_BUTTON_WIDTH && Gdx.input.getX() > ex && GameInfo.HEIGHT - Gdx.input.getY() < EXIT_BUTTON_HEIGHT + EXIT_BUTTON_Y-PLAY2_BUTTON_HEIGHT*3 && GameInfo.HEIGHT - Gdx.input.getY() > EXIT_BUTTON_Y-PLAY2_BUTTON_HEIGHT*3) {
         	if (active) batch.draw(exitButtonActive,ex,EXIT_BUTTON_Y-PLAY2_BUTTON_HEIGHT*3);
         	if (Gdx.input.justTouched()) {
-        		 titlelogo = exitlogo;
+        		 bye = true;
         		 Timer.schedule(new Task() {
         			    @Override
         			    public void run() {
