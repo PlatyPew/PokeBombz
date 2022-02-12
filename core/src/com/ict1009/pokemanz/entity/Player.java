@@ -206,25 +206,6 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         return body;
     }
 
-    private Body createBody(boolean sensor) {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
-        bodyDef.fixedRotation = true;
-
-        CircleShape shape = new CircleShape();
-        shape.setRadius((getWidth() / 2) / GameInfo.PPM - 0.02f);
-
-        Body body = world.createBody(bodyDef);
-
-        Fixture fixture = body.createFixture(shape, 1f);
-        fixture.setUserData(this);
-        fixture.setFriction(0);
-        fixture.setSensor(sensor);
-        shape.dispose();
-        return body;
-    }
-
     /**
      * Gets keyboard input and moves the character using WASD Also checks that
      * player does not go over edge
@@ -662,6 +643,53 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         return dead;
     }
 
+    private void handleDeadMovement() {
+        float velX = 0, velY = 0;
+        float currX = (getBody().getPosition().x) * GameInfo.PPM;
+        float currY = (getBody().getPosition().y) * GameInfo.PPM;
+
+        isWalking = false;
+
+        if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) && currY < GameInfo.HEIGHT - GameInfo.PPM) {
+            isWalking = true;
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
+            texture = new Texture(String.format("player/d%d/upstill.png", playerNumber));
+            player_direction = "up";
+            velY = baseSpeed;
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > GameInfo.PPM) {
+            isWalking = true;
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
+            texture = new Texture(String.format("player/d%d/leftstill.png", playerNumber));
+            player_direction = "left";
+            velX = -baseSpeed;
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > 0) {
+            isWalking = true;
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
+            texture = new Texture(String.format("player/d%d/downstill.png", playerNumber));
+            player_direction = "down";
+            velY = -baseSpeed;
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) && currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 17)) {
+            isWalking = true;
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
+            texture = new Texture(String.format("player/d%d/rightstill.png", playerNumber));
+            player_direction = "right";
+            velX = baseSpeed;
+        } else {
+            getBody().setLinearVelocity(0f, 0.0001f);
+            getBody().setLinearVelocity(0f, -0.0001f);
+        }
+
+        getBody().setLinearVelocity(velX, velY);
+    }
+
+    private void handleDeadBomb() {
+
+    }
+
     /**
      * Updates the sprite texture according to where the body is
      *
@@ -677,6 +705,12 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         if (toDestroy && !destroyed) {
             world.destroyBody(body);
             destroyed = true;
+        } else if (dead && !unloadOnly) {
+            handleDeadMovement();
+            handleBomb(delta);
+            handleDeadBomb();
+            setPosition((body.getPosition().x) * GameInfo.PPM,
+                        (body.getPosition().y) * GameInfo.PPM);
         } else {
             handleMovement();
             handleThrow();
@@ -688,14 +722,12 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         }
 
         if (destroyed && unloadOnly) {
-            createBody(true);
+            createBody();
             toDestroy = false;
             destroyed = false;
             unloadOnly = false;
-        }
-
-        if (dead && !unloadOnly) {
             updatePosition(-1, -1);
+            this.texture = new Texture(String.format("player/d%d/downstill.png", playerNumber));
         }
     }
 
