@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.bomb.Explode;
 import com.ict1009.pokemanz.helper.BoardElement;
+import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
@@ -310,7 +312,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             posY -= 1;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && map.getBombMap()[posX][posY] != null &&
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F) && map.getBombMap()[posX][posY] != null &&
             !destroyed) {
 
             // if-else method with up, down as one condition and left, right as one
@@ -402,6 +404,19 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         explosions.removeAll(explodeToRemove);
     }
 
+    private boolean isPlayerAt(int gridX, int gridY) {
+        for (Player player : BoardInfo.players) {
+            Vector2 playerCoords = player.getBody().getPosition();
+            float playerGridX = playerCoords.x - 1;
+            float playerGridY = playerCoords.y - 1;
+
+            if (Math.abs(gridX - playerGridX) < 1 && Math.abs(gridY - playerGridY) < 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void handleBombThrow(int gridX, int gridY, String direction) {
         //		System.out.println("handleBombThrow with parameters " + gridX + gridY +
         // direction);
@@ -414,6 +429,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 if (map.getBombMap()[gridX - i][gridY] == null &&
                     map.getObstacleMap()[gridX - i][gridY] == null) {
                     bomb.updatePosition(gridX - i, gridY);
+                    if (!isPlayerAt(gridX - i, gridY))
+                        bomb.updateBody(false);
                     map.setBombMap(gridX - i, gridY, bomb);
                     map.setBombMap(gridX, gridY, null);
                     return;
@@ -426,6 +443,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 if (map.getBombMap()[gridX][gridY + i] == null &&
                     map.getObstacleMap()[gridX][gridY + i] == null) {
                     bomb.updatePosition(gridX, gridY + i);
+                    if (!isPlayerAt(gridX, gridY + i))
+                        bomb.updateBody(false);
                     map.setBombMap(gridX, gridY + i, bomb);
                     map.setBombMap(gridX, gridY, null);
                     return;
@@ -439,6 +458,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 if (map.getBombMap()[gridX + i][gridY] == null &&
                     map.getObstacleMap()[gridX + i][gridY] == null) {
                     bomb.updatePosition(gridX + i, gridY);
+                    if (!isPlayerAt(gridX + i, gridY))
+                        bomb.updateBody(false);
                     map.setBombMap(gridX + i, gridY, bomb);
                     map.setBombMap(gridX, gridY, null);
                     return;
@@ -453,6 +474,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 if (map.getBombMap()[gridX][gridY - i] == null &&
                     map.getObstacleMap()[gridX][gridY - i] == null) {
                     bomb.updatePosition(gridX, gridY - i);
+                    if (!isPlayerAt(gridX, gridY - i))
+                        bomb.updateBody(false);
                     map.setBombMap(gridX, gridY - i, bomb);
                     map.setBombMap(gridX, gridY, null);
                     return;
@@ -548,10 +571,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 down = true;
             else if (buttonCode == 14)
                 right = true;
-            else if (buttonCode == 1 && !destroyed) {
-                controllerHandleThrow();
+            else if (buttonCode == 1 && !destroyed)
                 placeBomb();
-            }
+            else if (buttonCode == 10)
+                controllerHandleThrow();
         }
 
         return false;
