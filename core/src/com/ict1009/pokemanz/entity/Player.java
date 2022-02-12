@@ -39,6 +39,9 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
     private boolean toDestroy = false;
     private boolean destroyed = false;
+    private boolean unloadOnly = false;
+
+    private boolean dead = false;
 
     final private TextureAtlas playerAtlasSide;
     final private TextureAtlas playerAtlasDown;
@@ -199,6 +202,25 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         Fixture fixture = body.createFixture(shape, 1f);
         fixture.setUserData(this);
         fixture.setFriction(0);
+        shape.dispose();
+        return body;
+    }
+
+    private Body createBody(boolean sensor) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(getX() / GameInfo.PPM, getY() / GameInfo.PPM);
+        bodyDef.fixedRotation = true;
+
+        CircleShape shape = new CircleShape();
+        shape.setRadius((getWidth() / 2) / GameInfo.PPM - 0.02f);
+
+        Body body = world.createBody(bodyDef);
+
+        Fixture fixture = body.createFixture(shape, 1f);
+        fixture.setUserData(this);
+        fixture.setFriction(0);
+        fixture.setSensor(sensor);
         shape.dispose();
         return body;
     }
@@ -588,6 +610,11 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         }
     }
 
+    public void updatePosition(int gridX, int gridY) {
+        super.setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
+        body.setTransform(getX() / GameInfo.PPM, getY() / GameInfo.PPM, 0);
+    }
+
     /**
      * Renders the body of the player
      *
@@ -625,6 +652,16 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         }
     }
 
+    public void setDead() {
+        dead = true;
+        unloadOnly = true;
+        toDestroy = true;
+    }
+
+    public boolean getDead() {
+        return dead;
+    }
+
     /**
      * Updates the sprite texture according to where the body is
      *
@@ -648,6 +685,17 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 handleBombKick();
             setPosition((body.getPosition().x) * GameInfo.PPM,
                         (body.getPosition().y) * GameInfo.PPM);
+        }
+
+        if (destroyed && unloadOnly) {
+            createBody(true);
+            toDestroy = false;
+            destroyed = false;
+            unloadOnly = false;
+        }
+
+        if (dead && !unloadOnly) {
+            updatePosition(-1, -1);
         }
     }
 

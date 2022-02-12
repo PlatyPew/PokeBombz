@@ -276,7 +276,7 @@ public class MainScene implements Screen, ContactListener {
 
                 BoardInfo.explosionIDs.add(explosion.getUUID());
 
-                player.setToDestroy();
+                player.setDead();
             }
         }
     }
