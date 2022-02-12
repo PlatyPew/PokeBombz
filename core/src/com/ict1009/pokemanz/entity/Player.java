@@ -288,7 +288,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             posY -= 1;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F) && map.getBombMap()[posX][posY] != null &&
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && map.getBombMap()[posX][posY] != null &&
             !destroyed) {
 
             // if-else method with up, down as one condition and left, right as one
@@ -493,10 +493,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             destroyed = true;
         } else {
             handleMovement();
+            player_Direction();
             handleBomb(delta);
             setPosition((body.getPosition().x) * GameInfo.PPM,
                         (body.getPosition().y) * GameInfo.PPM);
-            player_Direction();
         }
     }
 
