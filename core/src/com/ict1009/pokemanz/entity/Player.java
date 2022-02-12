@@ -845,7 +845,22 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             toDestroy = false;
             destroyed = false;
             unloadOnly = false;
-            updatePosition(-1, -1);
+            switch (playerNumber) {
+                case 1:
+                    updatePosition(-1, -1);
+                    break;
+                case 2:
+                    updatePosition(16, 10);
+                    break;
+                case 3:
+                    updatePosition(16, -1);
+                    break;
+                case 4:
+                    updatePosition(-1, 10);
+                    break;
+                default:
+                    break;
+            }
             this.texture = new Texture(String.format("player/d%d/downstill.png", playerNumber));
         }
     }
