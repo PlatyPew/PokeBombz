@@ -25,6 +25,8 @@ import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
+import com.ict1009.pokemanz.room.Obstacle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -484,6 +486,108 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         }
     }
 
+    private boolean isObjectAt(int gridX, int gridY) {
+        if (map.getBombMap()[gridX][gridY] instanceof Bomb) {
+            return true;
+        }
+        else if (isPlayerAt(gridX, gridY)) {
+            return true;
+        }
+        else if (map.getObstacleMap()[gridX][gridY] instanceof Obstacle) {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    private void handleBombKick() {
+        float currX = getX() / GameInfo.PPM;
+        float currY = getY() / GameInfo.PPM;
+        int posX = (int)Math.floor(currX);
+        int posY = (int)Math.floor(currY);
+
+        // Snaps the bomb if player passes the 0.5 threshold
+        if (currX - posX < 0.5) {
+            posX -= 1;
+        }
+        if (currY - posY < 0.5) {
+            posY -= 1;
+        }
+
+        if (player_direction == null)
+            return;
+
+        switch(player_direction) {
+            case "up":
+                if (posY < GameInfo.MAP_HEIGHT - 1 && map.getBombMap()[posX][++posY] instanceof Bomb) {
+                    System.out.println(posX + " " + posY);
+                    int i;
+                    for (i = posY; i < GameInfo.MAP_HEIGHT - 1; i++) {
+                        if (isObjectAt(posX, i + 1))
+                            break;
+                    }
+                    if (map.getBombMap()[posX][i] == null) {
+                        System.out.println(String.format("Land in %d %d", posX, i));
+                        Bomb bomb = map.getBombMap()[posX][posY];
+                        bomb.updatePosition(posX, i);
+                        map.setBombMap(posX, i, bomb);
+                        map.setBombMap(posX, posY, null);
+                    }
+                }
+                break;
+            case "left":
+                if (posX > 0 && map.getBombMap()[--posX][posY] instanceof Bomb) {
+                    int i;
+                    for (i = posX; i > 0; i--) {
+                        if (isObjectAt(i - 1, posY))
+                            break;
+                    }
+                    if (map.getBombMap()[i][posY] == null) {
+                        System.out.println(String.format("Land in %d %d", i, posY));
+                        Bomb bomb = map.getBombMap()[posX][posY];
+                        bomb.updatePosition(i, posY);
+                        map.setBombMap(i, posY, bomb);
+                        map.setBombMap(posX, posY, null);
+                    }
+                }
+                break;
+            case "down":
+                if (posY > 0 && map.getBombMap()[posX][--posY] instanceof Bomb) {
+                    int i;
+                    for (i = posY; i > 0; i--) {
+                        if (isObjectAt(posX, i - 1))
+                            break;
+                    }
+                    if (map.getBombMap()[posX][i] == null) {
+                        System.out.println(String.format("Land in %d %d", posX, i));
+                        Bomb bomb = map.getBombMap()[posX][posY];
+                        bomb.updatePosition(posX, i);
+                        map.setBombMap(posX, i, bomb);
+                        map.setBombMap(posX, posY, null);
+                    }
+                }
+                break;
+            case "right":
+                if (posX < GameInfo.MAP_WIDTH - 1 && map.getBombMap()[++posX][posY] instanceof Bomb) {
+                    int i;
+                    for (i = posX; i < GameInfo.MAP_WIDTH - 1; i++) {
+                        if (isObjectAt(i + 1, posY))
+                            break;
+                    }
+                    if (map.getBombMap()[i][posY] == null) {
+                        System.out.println(String.format("Land in %d %d", i, posY));
+                        Bomb bomb = map.getBombMap()[posX][posY];
+                        bomb.updatePosition(i, posY);
+                        map.setBombMap(i, posY, bomb);
+                        map.setBombMap(posX, posY, null);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     /**
      * Renders the body of the player
      *
@@ -540,6 +644,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             handleMovement();
             handleThrow();
             handleBomb(delta);
+            if (Gdx.input.isKeyJustPressed(Input.Keys.K) && kick)
+                handleBombKick();
             setPosition((body.getPosition().x) * GameInfo.PPM,
                         (body.getPosition().y) * GameInfo.PPM);
         }
@@ -575,6 +681,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 placeBomb();
             else if (buttonCode == 10)
                 controllerHandleThrow();
+            else if (buttonCode == 9 && kick)
+                handleBombKick();
         }
 
         return false;
