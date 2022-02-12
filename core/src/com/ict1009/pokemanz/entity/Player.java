@@ -657,6 +657,11 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         dead = true;
         unloadOnly = true;
         toDestroy = true;
+        bombRange = GameInfo.PLAYER_BOMB_RANGE;
+        maxBombs = GameInfo.PLAYER_BOMBS;
+        baseSpeed = GameInfo.PLAYER_VELOCITY;
+        kick = false;
+        throwing = false;
     }
 
     public boolean getDead() {
@@ -755,7 +760,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                         if (!isObjectAt(posX, i))
                             break;
                     }
-                    if (i >= 0 && i < GameInfo.MAP_HEIGHT) {
+                    if (i >= 0 && i < GameInfo.MAP_HEIGHT && bombs.size() == 0) {
                         Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber);
                         bombs.add(bomb);
                         map.setBombMap(posX, i, bomb);
@@ -767,7 +772,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                         if (!isObjectAt(i, posY))
                             break;
                     }
-                    if (i >= 0 && i < GameInfo.MAP_WIDTH) {
+                    if (i >= 0 && i < GameInfo.MAP_WIDTH && bombs.size() == 0) {
                         Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber);
                         bombs.add(bomb);
                         map.setBombMap(i, posY, bomb);
@@ -779,7 +784,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                         if (!isObjectAt(posX, i))
                             break;
                     }
-                    if (i >= 0 && i < GameInfo.MAP_HEIGHT) {
+                    if (i >= 0 && i < GameInfo.MAP_HEIGHT && bombs.size() == 0) {
                         Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber);
                         bombs.add(bomb);
                         map.setBombMap(posX, i, bomb);
@@ -791,7 +796,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                         if (!isObjectAt(i, posY))
                             break;
                     }
-                    if (i >= 0 && i < GameInfo.MAP_WIDTH) {
+                    if (i >= 0 && i < GameInfo.MAP_WIDTH && bombs.size() == 0) {
                         Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber);
                         bombs.add(bomb);
                         map.setBombMap(i, posY, bomb);
