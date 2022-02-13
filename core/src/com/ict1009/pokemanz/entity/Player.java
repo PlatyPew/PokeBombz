@@ -61,7 +61,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
     private int bombRange = GameInfo.PLAYER_BOMB_RANGE;
     private int maxBombs = GameInfo.PLAYER_BOMBS;
-    private int baseSpeed = GameInfo.PLAYER_VELOCITY;
+    private float baseSpeed = GameInfo.PLAYER_VELOCITY;
     private boolean kick = false;
     private boolean throwing = false;
 
@@ -163,12 +163,12 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         disableRight = false;
     }
 
-    public void setBaseSpeed(int baseSpeed) {
+    public void setBaseSpeed(float baseSpeed) {
         if (baseSpeed <= GameInfo.MAX_PLAYER_SPEED)
             this.baseSpeed = baseSpeed;
     }
 
-    public int getBaseSpeed() {
+    public float getBaseSpeed() {
         return baseSpeed;
     }
 
@@ -968,7 +968,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     public void setToDestroy() {
         toDestroy = true;
     }
-    public void changeSpeed(int newSpeed) {
-    	this.baseSpeed = newSpeed;
+    public void changeSpeed(float baseSpeed) {
+        this.baseSpeed = baseSpeed;
     }
 }
