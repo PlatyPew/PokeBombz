@@ -931,8 +931,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 down = true;
             else if (buttonCode == 14)
                 right = true;
-            else if (buttonCode == 1 && !destroyed)
+            else if (buttonCode == 1 && !destroyed) {
                 placeBomb();
+                handleDeadBomb();
+            }
             else if (buttonCode == 10)
                 controllerHandleThrow();
             else if (buttonCode == 9 && kick)

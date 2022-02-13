@@ -202,6 +202,7 @@ public abstract class Map implements BoardElement {
 
                 if (Math.abs(gridX - playerGridX) < 1 && Math.abs(gridY - playerGridY) < 1) {
                     player.setToDestroy();
+                    player.setDead();
                 }
             }
 

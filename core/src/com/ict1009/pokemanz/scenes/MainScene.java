@@ -100,25 +100,6 @@ public class MainScene implements Screen, ContactListener {
                 alive++;
         }
 
-        /*int largest = 0;
-        int largestIndex = 0;
-        for (int i = 0; i < BoardInfo.playerScore.length; i++) {
-            if (BoardInfo.playerScore[i] > largest) {
-                largestIndex = i;
-                largest = BoardInfo.playerScore[i];
-            }
-        }*/
-        /*boolean draw = false;
-        for(int j = 0; j < BoardInfo.playerScore.length; j++){
-            if (BoardInfo.playerScore[0] != BoardInfo.playerScore[j]){
-
-            } else {
-                draw = true;
-            }
-        }*/
-
-        //winner = BoardInfo.players.get(largestIndex);
-
         if (alive <= 1) {
             level.getSdMusic().dispose();
             level.getGameMusic().dispose();
