@@ -109,6 +109,7 @@ public class ScoreBoardUpdater {
       writer.close();
       System.out.println(content);
 	}
+	
 	public int getLatestIdNumber() {
 		return LatestIdNumber;
 	}

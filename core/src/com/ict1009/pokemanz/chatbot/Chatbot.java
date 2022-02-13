@@ -432,7 +432,13 @@ public class Chatbot {
 		}
     	
     }
-    
+    public boolean chatbot_is_reset_scores() {
+    	if(isPatternMatch(this.input,"^Reset score$")) {
+    		BoardInfo.playerScore = new int[] {0,0,0,0};
+    		return true;
+    }
+    	return false;
+    }
 
 }
 

@@ -164,5 +164,6 @@ class KnowledgeList{
     public String cleanInput(String data){
         return data.replaceAll("[^a-zA-Z0-9 ]","");
     } 
+    
 
 }
