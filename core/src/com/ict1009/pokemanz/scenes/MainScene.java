@@ -36,9 +36,11 @@ public class MainScene implements Screen, ContactListener {
 
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
+    private int numPlayers;
 
     public MainScene(GameMain game, int numPlayers, int numLevel) {
         setupCamera();
+        this.numPlayers = numPlayers;
         this.game = game;
         this.batch = game.getBatch();
         switch(numLevel){
@@ -117,7 +119,7 @@ public class MainScene implements Screen, ContactListener {
         if (alive <= 1) {
             level.getSdMusic().dispose();
             level.getGameMusic().dispose();
-            game.setScreen(new EndScene(game));
+            game.setScreen(new EndScene(game, numPlayers));
         }
     }
 

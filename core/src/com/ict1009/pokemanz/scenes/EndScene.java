@@ -30,11 +30,13 @@ public class EndScene implements Screen {
     private Animation<TextureRegion> pikachu;
     private Animation<TextureRegion> pokeball;
     private float elapsed;
+    private int numPlayers;
 
-    public EndScene(GameMain game) {
+    public EndScene(GameMain game, int numPlayers) {
         this.winnerHud = new WinnerHud(game, BoardInfo.players.size());
         this.batch = game.getBatch();
         this.game = game;
+        this.numPlayers = numPlayers;
         exitToTitleButtonActive = new Texture("screen/exittotitleactive.png");
         exitToTitleButtonInactive = new Texture("screen/exittotitleinactive.png");
         pikachu = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("screen/pikachu-running.gif").read());
@@ -74,7 +76,7 @@ public class EndScene implements Screen {
     }
 
     public void getScore() {
-        for (int i = 0; i < BoardInfo.playerScore.length; i++) {
+        for (int i = 0; i < numPlayers; i++) {
             winnerHud.updateScore(i+1,
                     BoardInfo.playerScore[i]);
         }
