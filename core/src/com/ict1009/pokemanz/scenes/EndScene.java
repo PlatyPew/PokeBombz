@@ -14,6 +14,7 @@ import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.huds.MainHud;
 import com.ict1009.pokemanz.huds.WinnerHud;
+import com.ict1009.pokemanz.room.Map;
 
 public class EndScene implements Screen {
     private SpriteBatch batch;
@@ -32,9 +33,11 @@ public class EndScene implements Screen {
     private Animation<TextureRegion> pikachu;
     private Animation<TextureRegion> pokeball;
     private float elapsed;
+    private Player winner;
     private int numPlayers;
 
     public EndScene(GameMain game, int numPlayers) {
+        GameInfo.timeElapsed = 0;
         this.winnerHud = new WinnerHud(game, BoardInfo.players.size());
         this.batch = game.getBatch();
         this.game = game;
@@ -84,6 +87,19 @@ public class EndScene implements Screen {
             winnerHud.updateScore(i+1,
                     BoardInfo.playerScore[i]);
         }
+        int largest = 0;
+        int largestIndex = 0;
+        for (int i = 0; i < BoardInfo.playerScore.length; i++) {
+            if (BoardInfo.playerScore[i] > largest) {
+                largestIndex = i;
+                largest = BoardInfo.playerScore[i];
+            }
+        }
+        winner = BoardInfo.players.get(largestIndex);
+    }
+
+    public Player getWinner() {
+        return winner;
     }
 
     @Override
