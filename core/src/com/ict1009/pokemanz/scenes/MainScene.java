@@ -37,6 +37,7 @@ public class MainScene implements Screen, ContactListener {
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
     private int numPlayers;
+    private int winnerNum;
 
     public MainScene(GameMain game, int numPlayers, int numLevel) {
         setupCamera();
@@ -103,7 +104,12 @@ public class MainScene implements Screen, ContactListener {
         if (alive <= 1) {
             level.getSdMusic().dispose();
             level.getGameMusic().dispose();
-            game.setScreen(new EndScene(game, numPlayers));
+            for (Player player : BoardInfo.players) {
+                player.update(delta);
+                if (!player.getDead())
+                    winnerNum = player.getPlayerNumber();
+            }
+            game.setScreen(new EndScene(game, numPlayers, winnerNum));
         }
     }
 

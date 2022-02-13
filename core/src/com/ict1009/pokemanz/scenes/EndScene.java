@@ -26,6 +26,7 @@ public class EndScene implements Screen {
     private static final int ETT_BUTTON_Y=120;
     private static final int ETT_BUTTON_X=GameInfo.WIDTH/2-ETT_BUTTON_WIDTH/2;
     private static final int GAME_OVER_WIDTH=513;
+    private static final int WINNER_WIDTH=232;
     private Texture exitToTitleButtonActive;
     private Texture exitToTitleButtonInactive;
     private Texture gameOver;
@@ -35,14 +36,20 @@ public class EndScene implements Screen {
     private float elapsed;
     private Player winner;
     private int numPlayers;
+    private Texture winnerPlayer;
 
-    public EndScene(GameMain game, int numPlayers) {
+    public EndScene(GameMain game, int numPlayers, int winnerNum) {
         GameInfo.timeElapsed = 0;
         this.winnerHud = new WinnerHud(game, BoardInfo.players.size());
         this.batch = game.getBatch();
         this.game = game;
         this.numPlayers = numPlayers;
         gameOver = new Texture("screen/gameover.png");
+        if (winnerNum != 0) {
+            winnerPlayer = new Texture(String.format("player/%d/win.png", winnerNum));
+        } else {
+            winnerPlayer = new Texture("player/draw.png");
+        }
         exitToTitleButtonActive = new Texture("screen/exittotitleactive.png");
         exitToTitleButtonInactive = new Texture("screen/exittotitleinactive.png");
         pikachu = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("screen/pikachu-running.gif").read());
@@ -64,7 +71,8 @@ public class EndScene implements Screen {
         batch.begin();
 
         batch.draw(new Texture("room/scorescreen.png"), 0, 0);
-        batch.draw(gameOver, GameInfo.WIDTH/2F - GAME_OVER_WIDTH/2, GameInfo.HEIGHT/2F + 110);
+        batch.draw(gameOver, GameInfo.WIDTH/2F - GAME_OVER_WIDTH/2, GameInfo.HEIGHT/2F + 150);
+        batch.draw(winnerPlayer, GameInfo.WIDTH/2F - WINNER_WIDTH/2, GameInfo.HEIGHT/2F + 100);
         batch.draw(pikachu.getKeyFrame(elapsed), 190f,720/2f-50f,439/2, 321/2);
         batch.draw(pokeball.getKeyFrame(elapsed), 830f,720/2f-115f,480/2, 480/2);
         if (Gdx.input.getX() < ETT_BUTTON_X + ETT_BUTTON_WIDTH  && Gdx.input.getX() > ETT_BUTTON_X - ETT_BUTTON_WIDTH && GameInfo.HEIGHT - Gdx.input.getY() < ETT_BUTTON_HEIGHT + ETT_BUTTON_Y && GameInfo.HEIGHT - Gdx.input.getY() > ETT_BUTTON_Y) {
