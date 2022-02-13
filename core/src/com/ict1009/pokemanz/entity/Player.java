@@ -130,6 +130,9 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     public void setMaxBombs(int maxBombs) {
         if (maxBombs <= GameInfo.MAX_PLAYER_BOMBS)
             this.maxBombs = maxBombs;
+        else {
+        	this.maxBombs = GameInfo.MAX_PLAYER_BOMBS;
+        }
     }
 
     public String getControllerID() {
@@ -175,6 +178,10 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     public void setBombRange(int bombRange) {
         if (bombRange <= GameInfo.MAX_PLAYER_BOMB_RANGE)
             this.bombRange = bombRange;
+        else {
+        	this.bombRange = GameInfo.MAX_PLAYER_BOMB_RANGE;
+        }
+        	
     }
 
     public int getBombRange() {
@@ -974,7 +981,13 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     public void setToDestroy() {
         toDestroy = true;
     }
-    public void changeSpeed(float baseSpeed) {
-        this.baseSpeed = baseSpeed;
+    public void changeSpeed(float speedup) {
+    	if(speedup > 8) {
+    		speedup = 8;
+    	}
+    	else if (speedup < 1) {
+    		speedup =1;
+    	}
+        this.baseSpeed = speedup;
     }
 }

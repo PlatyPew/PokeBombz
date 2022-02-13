@@ -1,10 +1,10 @@
 package com.ict1009.pokemanz.chatbot;
 import java.util.*;
 
-public class Player{
+public class ChatBotUser{
     protected String name;
     protected String input;
-    public Player(){
+    public ChatBotUser(){
         this.name = "Player";
         this.input = "";
     }

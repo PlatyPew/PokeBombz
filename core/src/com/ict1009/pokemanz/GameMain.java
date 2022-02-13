@@ -3,12 +3,10 @@ package com.ict1009.pokemanz;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
-import java.io.IOException;
+
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.ict1009.pokemanz.scenes.MainScene;
-import com.ict1009.pokemanz.chatbot.gameChatbot;
 import com.ict1009.pokemanz.chatbot.textInputRunner;
 import com.ict1009.pokemanz.scenes.TitleScene;
 
@@ -27,7 +25,7 @@ public class GameMain extends Game {
     public void create() {
         batch = new SpriteBatch();
         setScreen(new TitleScene(this));
-        chatBot = new textInputRunner();
+        chatBot = new textInputRunner(this);
 		chatBot.create();
     }
 
@@ -42,7 +40,6 @@ public class GameMain extends Game {
     		chatBot.changeFocus();
     	}
     	else {
-    		
     		chatBot.activateChatBot();	
     	}
         

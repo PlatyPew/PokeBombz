@@ -1,19 +1,28 @@
 package com.ict1009.pokemanz.chatbot;
 import java.util.*;
+
+import com.ict1009.pokemanz.GameMain;
+import com.ict1009.pokemanz.scenes.TitleScene;
+
 import java.io.IOException;
 import java.lang.Math;
 import java.text.DecimalFormat;
 
 public class gameChatbot {
 		Chatbot chatbot;
-    public gameChatbot() {
+	    private GameMain game;
+	    public gameChatbot(GameMain game) {
+    	 this.game = game;
          chatbot = new Chatbot();
-
+         chatbot.chatbot_do_load("init.ini");
 }
     public void run(String newInput) throws IOException {
     	chatbot.setUserInput(newInput);
         if(chatbot.chatbot_is_exit()){
         	
+        }
+        else if(chatbot.chatbot_is_exitMenu(game)) {
+    		
         }
         else if(chatbot.chatbot_is_question()){
 
@@ -24,7 +33,7 @@ public class gameChatbot {
         else if(chatbot.chatbot_is_smalltalk()){ 
         }
         else if(chatbot.chatbot_is_reset()){
-            
+        	chatbot.chatbot_do_load("init.ini");
         }
         else if(chatbot.chatbot_is_save()){
             
@@ -42,6 +51,15 @@ public class gameChatbot {
         	
         }
         else if(chatbot.chatbot_is_StartSuddenDeath()) {
+        	
+        }
+        else if(chatbot.chatbot_is_Change_Bomb_Count()) {
+        	
+        }
+        else if(chatbot.chatbot_is_Change_Bomb_Range()) {
+        	
+        }
+        else if(chatbot.chat_bot_is_upload_score()) {
         	
         }
         else{

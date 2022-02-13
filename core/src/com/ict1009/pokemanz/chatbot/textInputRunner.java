@@ -12,7 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ict1009.pokemanz.GameMain;
 import com.ict1009.pokemanz.chatbot.gameChatbot;
+import com.ict1009.pokemanz.scenes.TitleScene;
 public class  textInputRunner extends ApplicationAdapter {
 	private Stage stage;
 	private Skin skin;
@@ -20,13 +22,18 @@ public class  textInputRunner extends ApplicationAdapter {
 	private BitmapFont font;
 	private SpriteBatch batch;
 	private GlyphLayout glyphLayout;
-	private static String aiText = "helloworld";
+	private static String aiText;
 	private String userInput;
 	private gameChatbot theChatBot;
+	private GameMain game;
 	
+	public textInputRunner(GameMain game) {
+		this.aiText = "helloworld";
+		this.game = game;
+	}
 	public void create () {
 		
-		theChatBot = new gameChatbot();
+		theChatBot = new gameChatbot(game);
 		stage = new Stage();
 		batch = new SpriteBatch();
 		// Get Default skin

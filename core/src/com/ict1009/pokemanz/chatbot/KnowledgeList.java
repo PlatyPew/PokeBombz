@@ -12,16 +12,12 @@ class KnowledgeList{
 
     public KnowledgeList(){
         listOfKnowledge = new ArrayList[totalNumberOfCategory];
-        Knowledge newKnowledge = null, targetKnowledge = null;
-        for(int i = 0; i < listOfKnowledge.length; i++){
-            listOfKnowledge[i] = new ArrayList<Knowledge>();
-            newKnowledge = new Knowledge("Where","SIT located at","DOVER");
-            listOfKnowledge[i].add(newKnowledge);
-            listOfKnowledge[i].add(newKnowledge);
-            listOfKnowledge[i].add(newKnowledge);
-            listOfKnowledge[i].add(newKnowledge);
+//        Knowledge newKnowledge = null, targetKnowledge = null;
+        for(int i = 0; i < listOfKnowledge.length; i++) {
+        	listOfKnowledge[i] = new ArrayList<Knowledge>();
         }
-
+        
+        
     }
     public Knowledge getTargetKnowledge(){
         return this.targetKnowledge;
@@ -30,7 +26,7 @@ class KnowledgeList{
         if(firstWord.toLowerCase().equals("what")){
             return 0;
         }
-        else if(firstWord.toLowerCase().equals("where")){
+        else if(firstWord.toLowerCase().equals("who")){
             return 1;
         }
         else if(firstWord.toLowerCase().equals("how")){
@@ -93,7 +89,7 @@ class KnowledgeList{
             content += ("\n");
         }
         content = content.trim();
-        FileWriter writer = new FileWriter("test.ini",false);
+        FileWriter writer = new FileWriter("knowledge.ini",false);
         writer.write(content);
         writer.close();
     }
@@ -101,11 +97,11 @@ class KnowledgeList{
         if(page == 0)
             return "what";
         else if(page ==1)
-            return "where";
+            return "who";
         else return "how";
     }
     public void loadKnowledge() throws IOException{
-        File file = new File("test.ini");
+        File file = new File("knowledge.ini");
         Scanner scan = new Scanner(file);
         String content = "", line = "", firstWord ="";
         String [] questionAndAnswer;
@@ -115,8 +111,8 @@ class KnowledgeList{
                 if(line.equals("[what]")){
                     firstWord = "what";
                 }
-                else if(line.equals("[where]")){
-                    firstWord = "where";
+                else if(line.equals("[who]")){
+                    firstWord = "who";
                 }
                 else if(line.equals("[how]")){
                     firstWord = "how";
@@ -132,8 +128,39 @@ class KnowledgeList{
 
             
         }
+        scan.close();
     }
 
+    public void loadKnowledge(String input) throws IOException{
+        File file = new File(input);
+        Scanner scan = new Scanner(file);
+        String content = "", line = "", firstWord ="";
+        String [] questionAndAnswer;
+        while(scan.hasNextLine()){
+            line = scan.nextLine();
+            if(line != ""){
+                if(line.equals("[what]")){
+                    firstWord = "what";
+                }
+                else if(line.equals("[who]")){
+                    firstWord = "who";
+                }
+                else if(line.equals("[how]")){
+                    firstWord = "how";
+                }
+                else{
+                    questionAndAnswer = line.split("=",2);
+                    questionAndAnswer[0] = cleanInput(questionAndAnswer[0]);
+                    questionAndAnswer[1] = cleanInput(questionAndAnswer[1]);
+                    addKnowledge(firstWord,questionAndAnswer[0].toLowerCase(),questionAndAnswer[1]);
+                }
+                
+            }
+
+            
+        }
+        scan.close();
+    }
     public String cleanInput(String data){
         return data.replaceAll("[^a-zA-Z0-9 ]","");
     } 

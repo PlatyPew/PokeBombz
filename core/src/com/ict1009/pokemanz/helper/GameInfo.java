@@ -14,6 +14,7 @@ public class GameInfo {
 
     public static float PLAYER_VELOCITY = 2.5f;
     public static int PLAYER_BOMBS = 1;
+
     public static int PLAYER_BOMB_RANGE = 2;
 
     public static int MAX_PLAYER_SPEED = 5;
