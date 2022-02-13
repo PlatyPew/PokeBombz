@@ -45,9 +45,22 @@ public class Bomb extends Sprite implements Destoryable, BoardElement {
         this.gridX = gridX;
         this.gridY = gridY;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
-        this.body = createBody();
         this.bombAtlas = new TextureAtlas("bomb/bomb explosion.atlas");
         this.playerNumber = playerNumber;
+        this.body = createBody();
+    }
+
+    public Bomb(World world, String textureLocation, int gridX, int gridY, int playerNumber,
+                boolean sensor) {
+        super(new Texture(textureLocation));
+        this.world = world;
+        this.gridX = gridX;
+        this.gridY = gridY;
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
+        this.bombAtlas = new TextureAtlas("bomb/bomb explosion.atlas");
+        this.playerNumber = playerNumber;
+        this.sensor = sensor;
+        this.body = createBody();
     }
 
     public int getTimer() {

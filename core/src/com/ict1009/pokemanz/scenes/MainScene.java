@@ -268,6 +268,15 @@ public class MainScene implements Screen, ContactListener {
 
                     hud.updateScore(explosion.getPlayerNumber(),
                                     BoardInfo.playerScore[explosion.getPlayerNumber() - 1]);
+
+                    Player explosionPlayer = BoardInfo.players.get(explosion.getPlayerNumber() - 1);
+                    if (explosionPlayer.getDead()) {
+                        float locX = player.getX();
+                        float locY = player.getY();
+
+                        explosionPlayer.setAlive(locX, locY);
+                    }
+
                 } else {
                     BoardInfo.playerScore[player.getPlayerNumber() - 1] -= 1;
                     hud.updateScore(player.getPlayerNumber(),
@@ -276,7 +285,7 @@ public class MainScene implements Screen, ContactListener {
 
                 BoardInfo.explosionIDs.add(explosion.getUUID());
 
-                player.setToDestroy();
+                player.setDead();
             }
         }
     }

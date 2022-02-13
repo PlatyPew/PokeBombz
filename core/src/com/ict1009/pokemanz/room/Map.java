@@ -184,6 +184,12 @@ public abstract class Map implements BoardElement {
         gameMusic = getGameMusic();
         gameMusic.dispose();
         sdMusic.play();
+
+        for (Player player : BoardInfo.players) {
+            if (player.getDead())
+                player.setToDestroy();
+        }
+
         if (obTimer % GameInfo.SUDDEN_DEATH_DROP == 0 && sdCounter < suddenDeathCoords.size()) {
 
             int gridX = suddenDeathCoords.get(sdCounter)[0];

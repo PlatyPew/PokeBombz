@@ -32,17 +32,26 @@ import java.util.List;
 
 public class Player extends Sprite implements ControllerListener, Destoryable, BoardElement {
     final private World world;
-    final private Body body;
+    private Body body;
     final private Map map;
     final private String name;
     final private int playerNumber;
 
+    private int gridX, gridY;
+
     private boolean toDestroy = false;
     private boolean destroyed = false;
+    private boolean unloadOnly = false;
+
+    private boolean dead = false;
 
     final private TextureAtlas playerAtlasSide;
     final private TextureAtlas playerAtlasDown;
     final private TextureAtlas playerAtlasUp;
+
+    final private TextureAtlas playerDeadAtlasSide;
+    final private TextureAtlas playerDeadAtlasDown;
+    final private TextureAtlas playerDeadAtlasUp;
 
     private Animation<TextureAtlas.AtlasRegion> animation;
     private float elapsedTime;
@@ -52,7 +61,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
     private int bombRange = GameInfo.PLAYER_BOMB_RANGE;
     private int maxBombs = GameInfo.PLAYER_BOMBS;
-    private int baseSpeed = GameInfo.PLAYER_VELOCITY;
+    private float baseSpeed = GameInfo.PLAYER_VELOCITY;
     private boolean kick = false;
     private boolean throwing = false;
 
@@ -82,6 +91,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         this.map = map;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.body = createBody();
+        this.gridX = gridX;
+        this.gridY = gridY;
 
         this.playerNumber = playerNumber;
         this.texture = new Texture(String.format("player/%d/%s", playerNumber, textureLocation));
@@ -90,6 +101,12 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         this.playerAtlasDown =
             new TextureAtlas(String.format("player/%d/down.atlas", playerNumber));
         this.playerAtlasUp = new TextureAtlas(String.format("player/%d/up.atlas", playerNumber));
+
+        this.playerDeadAtlasSide =
+            new TextureAtlas(String.format("player/d%d/left.atlas", playerNumber));
+        this.playerDeadAtlasDown =
+            new TextureAtlas(String.format("player/d%d/down.atlas", playerNumber));
+        this.playerDeadAtlasUp = new TextureAtlas(String.format("player/d%d/up.atlas", playerNumber));
 
         if (Controllers.getControllers().notEmpty()) {
             this.controllerID = Controllers.getControllers().pop().getUniqueId();
@@ -146,12 +163,12 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         disableRight = false;
     }
 
-    public void setBaseSpeed(int baseSpeed) {
+    public void setBaseSpeed(float baseSpeed) {
         if (baseSpeed <= GameInfo.MAX_PLAYER_SPEED)
             this.baseSpeed = baseSpeed;
     }
 
-    public int getBaseSpeed() {
+    public float getBaseSpeed() {
         return baseSpeed;
     }
 
@@ -372,7 +389,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
      * Handles bomb placement when spacebar is pressed
      */
     private void handleBomb(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !destroyed) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !destroyed && !dead) {
             placeBomb();
         }
 
@@ -588,6 +605,11 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         }
     }
 
+    public void updatePosition(int gridX, int gridY) {
+        super.setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
+        body.setTransform(getX() / GameInfo.PPM, getY() / GameInfo.PPM, 0);
+    }
+
     /**
      * Renders the body of the player
      *
@@ -617,10 +639,197 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                     }
                 }
 
+                frames = playerDeadAtlasSide.getRegions();
+
+                for (TextureRegion frame : frames) {
+                    if (body.getLinearVelocity().x < 0 && frame.isFlipX()) {
+                        frame.flip(true, false);
+                    } else if (body.getLinearVelocity().x > 0 && !frame.isFlipX()) {
+                        frame.flip(true, false);
+                    }
+                }
+
                 batch.draw((TextureRegion)animation.getKeyFrame(elapsedTime, true), this.getX(),
                            this.getY());
             } else {
                 batch.draw(texture, this.getX(), this.getY());
+            }
+        }
+    }
+
+    public void setDead() {
+        dead = true;
+        unloadOnly = true;
+        toDestroy = true;
+        bombRange = GameInfo.PLAYER_BOMB_RANGE;
+        maxBombs = GameInfo.PLAYER_BOMBS;
+        baseSpeed = GameInfo.PLAYER_VELOCITY;
+        kick = false;
+        throwing = false;
+    }
+
+    public void setAlive(float locX, float locY) {
+        float currX = locX / GameInfo.PPM;
+        float currY = locY / GameInfo.PPM;
+        int posX = (int)Math.floor(currX);
+        int posY = (int)Math.floor(currY);
+
+        // Snaps the bomb if player passes the 0.5 threshold
+        if (currX - posX < 0.5) {
+            posX -= 1;
+        }
+        if (currY - posY < 0.5) {
+            posY -= 1;
+        }
+
+        this.gridX = posX;
+        this.gridY = posY;
+
+        dead = false;
+        unloadOnly = true;
+        toDestroy = true;
+    }
+
+    public boolean getDead() {
+        return dead;
+    }
+
+    private String getDeadDirection() {
+        float bodyX = body.getPosition().x;
+        float bodyY = body.getPosition().y;
+        if (bodyX > 0.5 && bodyX < 16.5 && bodyY > -0.1 && bodyY < 0.1)
+            return "down";
+        else if (bodyX > -0.1 && bodyX < 0.1 && bodyY > 0.5 && bodyY < 10.5)
+            return "left";
+        else if (bodyX > 0.5 && bodyX < 16.5 && bodyY > 10.9 && bodyY < 11.1)
+            return "up";
+        else if (bodyX > 16.9 && bodyX < 17.1 && bodyY > 0.5 && bodyY < 10.5)
+            return "right";
+
+        return null;
+    }
+
+    private void handleDeadMovement() {
+        float velX = 0, velY = 0;
+        float currX = (getBody().getPosition().x) * GameInfo.PPM;
+        float currY = (getBody().getPosition().y) * GameInfo.PPM;
+
+        isWalking = false;
+
+        if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) && currY < GameInfo.HEIGHT - GameInfo.PPM) {
+            isWalking = true;
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasUp.getRegions());
+            velY = baseSpeed;
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > 0) {
+            isWalking = true;
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasSide.getRegions());
+            velX = -baseSpeed;
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > 0) {
+            isWalking = true;
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasDown.getRegions());
+            velY = -baseSpeed;
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) && currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 17)) {
+            isWalking = true;
+            animation =
+                new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasSide.getRegions());
+            velX = baseSpeed;
+        }
+
+        player_direction = getDeadDirection();
+
+
+        if (player_direction != null) {
+            switch(player_direction) {
+                case "up":
+                    texture = new Texture(String.format("player/d%d/downstill.png", playerNumber));
+                    break;
+                case "left":
+                    texture = new Texture(String.format("player/d%d/rightstill.png", playerNumber));
+                    break;
+                case "down":
+                    texture = new Texture(String.format("player/d%d/upstill.png", playerNumber));
+                    break;
+                case "right":
+                    texture = new Texture(String.format("player/d%d/leftstill.png", playerNumber));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        getBody().setLinearVelocity(velX, velY);
+    }
+
+    private void handleDeadBomb() {
+        float currX = getX() / GameInfo.PPM;
+        float currY = getY() / GameInfo.PPM;
+        int posX = (int)Math.floor(currX);
+        int posY = (int)Math.floor(currY);
+
+        // Snaps the bomb if player passes the 0.5 threshold
+        if (currX - posX < 0.5) {
+            posX -= 1;
+        }
+        if (currY - posY < 0.5) {
+            posY -= 1;
+        }
+
+        if (player_direction != null && posX >= -1 && posY >= -1) {
+            int i;
+            switch(player_direction) {
+                case "up":
+                    posY -= 2;
+                    for (i = posY; i >= 0; i--) {
+                        if (!isObjectAt(posX, i))
+                            break;
+                    }
+                    if (i >= 0 && i < GameInfo.MAP_HEIGHT && bombs.size() == 0) {
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber, false);
+                        bombs.add(bomb);
+                        map.setBombMap(posX, i, bomb);
+                    }
+                    break;
+                case "left":
+                    posX += 2;
+                    for (i = posX; i < GameInfo.MAP_WIDTH; i++) {
+                        if (!isObjectAt(i, posY))
+                            break;
+                    }
+                    if (i >= 0 && i < GameInfo.MAP_WIDTH && bombs.size() == 0) {
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber, false);
+                        bombs.add(bomb);
+                        map.setBombMap(i, posY, bomb);
+                    }
+                    break;
+                case "down":
+                    posY += 2;
+                    for (i = posY; i < GameInfo.MAP_HEIGHT; i++) {
+                        if (!isObjectAt(posX, i))
+                            break;
+                    }
+                    if (i >= 0 && i < GameInfo.MAP_HEIGHT && bombs.size() == 0) {
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber, false);
+                        bombs.add(bomb);
+                        map.setBombMap(posX, i, bomb);
+                    }
+                    break;
+                case "right":
+                    posX -= 2;
+                    for (i = posX; i >= 0; i--) {
+                        if (!isObjectAt(i, posY))
+                            break;
+                    }
+                    if (i >= 0 && i < GameInfo.MAP_WIDTH && bombs.size() == 0) {
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber, false);
+                        bombs.add(bomb);
+                        map.setBombMap(i, posY, bomb);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -640,6 +849,13 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         if (toDestroy && !destroyed) {
             world.destroyBody(body);
             destroyed = true;
+        } else if (dead && !unloadOnly) {
+            handleDeadMovement();
+            handleBomb(delta);
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+                handleDeadBomb();
+            setPosition((body.getPosition().x) * GameInfo.PPM,
+                        (body.getPosition().y) * GameInfo.PPM);
         } else {
             handleMovement();
             handleThrow();
@@ -648,6 +864,40 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 handleBombKick();
             setPosition((body.getPosition().x) * GameInfo.PPM,
                         (body.getPosition().y) * GameInfo.PPM);
+        }
+
+        if (dead && destroyed && unloadOnly) {
+            this.body = createBody();
+            toDestroy = false;
+            destroyed = false;
+            unloadOnly = false;
+            switch (playerNumber) {
+                case 1:
+                    updatePosition(-1, -1);
+                    break;
+                case 2:
+                    updatePosition(16, 10);
+                    break;
+                case 3:
+                    updatePosition(16, -1);
+                    break;
+                case 4:
+                    updatePosition(-1, 10);
+                    break;
+                default:
+                    break;
+            }
+            this.texture = new Texture(String.format("player/d%d/downstill.png", playerNumber));
+        }
+
+        if (!dead && destroyed && unloadOnly) {
+            this.body = createBody();
+            toDestroy = false;
+            destroyed = false;
+            unloadOnly = false;
+
+            updatePosition(gridX, gridY);
+            this.texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
         }
     }
 
@@ -718,7 +968,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     public void setToDestroy() {
         toDestroy = true;
     }
-    public void changeSpeed(int newSpeed) {
-    	this.baseSpeed = newSpeed;
+    public void changeSpeed(float baseSpeed) {
+        this.baseSpeed = baseSpeed;
     }
 }
