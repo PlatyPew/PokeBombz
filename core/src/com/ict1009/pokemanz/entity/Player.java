@@ -787,7 +787,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                             break;
                     }
                     if (i >= 0 && i < GameInfo.MAP_HEIGHT && bombs.size() == 0) {
-                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber);
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber, false);
                         bombs.add(bomb);
                         map.setBombMap(posX, i, bomb);
                     }
@@ -799,7 +799,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                             break;
                     }
                     if (i >= 0 && i < GameInfo.MAP_WIDTH && bombs.size() == 0) {
-                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber);
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber, false);
                         bombs.add(bomb);
                         map.setBombMap(i, posY, bomb);
                     }
@@ -811,7 +811,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                             break;
                     }
                     if (i >= 0 && i < GameInfo.MAP_HEIGHT && bombs.size() == 0) {
-                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber);
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber, false);
                         bombs.add(bomb);
                         map.setBombMap(posX, i, bomb);
                     }
@@ -823,7 +823,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                             break;
                     }
                     if (i >= 0 && i < GameInfo.MAP_WIDTH && bombs.size() == 0) {
-                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber);
+                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber, false);
                         bombs.add(bomb);
                         map.setBombMap(i, posY, bomb);
                     }
