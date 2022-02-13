@@ -37,6 +37,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     final private String name;
     final private int playerNumber;
 
+    private int gridX, gridY;
+
     private boolean toDestroy = false;
     private boolean destroyed = false;
     private boolean unloadOnly = false;
@@ -89,6 +91,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         this.map = map;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
         this.body = createBody();
+        this.gridX = gridX;
+        this.gridY = gridY;
 
         this.playerNumber = playerNumber;
         this.texture = new Texture(String.format("player/%d/%s", playerNumber, textureLocation));
@@ -664,6 +668,28 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         throwing = false;
     }
 
+    public void setAlive(float locX, float locY) {
+        float currX = locX / GameInfo.PPM;
+        float currY = locY / GameInfo.PPM;
+        int posX = (int)Math.floor(currX);
+        int posY = (int)Math.floor(currY);
+
+        // Snaps the bomb if player passes the 0.5 threshold
+        if (currX - posX < 0.5) {
+            posX -= 1;
+        }
+        if (currY - posY < 0.5) {
+            posY -= 1;
+        }
+
+        this.gridX = posX;
+        this.gridY = posY;
+
+        dead = false;
+        unloadOnly = true;
+        toDestroy = true;
+    }
+
     public boolean getDead() {
         return dead;
     }
@@ -840,7 +866,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                         (body.getPosition().y) * GameInfo.PPM);
         }
 
-        if (destroyed && unloadOnly) {
+        if (dead && destroyed && unloadOnly) {
             this.body = createBody();
             toDestroy = false;
             destroyed = false;
@@ -862,6 +888,16 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                     break;
             }
             this.texture = new Texture(String.format("player/d%d/downstill.png", playerNumber));
+        }
+
+        if (!dead && destroyed && unloadOnly) {
+            this.body = createBody();
+            toDestroy = false;
+            destroyed = false;
+            unloadOnly = false;
+
+            updatePosition(gridX, gridY);
+            this.texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
         }
     }
 
