@@ -37,9 +37,6 @@ public class MainScene implements Screen, ContactListener {
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
 
-    private boolean gameOver = false;
-    private Player winner;
-
     public MainScene(GameMain game, int numPlayers, int numLevel) {
         setupCamera();
         this.game = game;
@@ -88,34 +85,24 @@ public class MainScene implements Screen, ContactListener {
         this.debugRenderer = new Box2DDebugRenderer();
     }
 
-    public boolean getGameOver() {
-        return gameOver;
-    }
-
-    public Player getWinner() {
-        if (gameOver)
-            return winner;
-        else
-            return null;
-    }
 
     private void checkScore(float delta) {
         int alive = 0;
 
         for (Player player : BoardInfo.players) {
             player.update(delta);
-            if (!player.getDestroyed())
+            if (!player.getDead())
                 alive++;
         }
 
-        int largest = 0;
+        /*int largest = 0;
         int largestIndex = 0;
         for (int i = 0; i < BoardInfo.playerScore.length; i++) {
             if (BoardInfo.playerScore[i] > largest) {
                 largestIndex = i;
                 largest = BoardInfo.playerScore[i];
             }
-        }
+        }*/
         /*boolean draw = false;
         for(int j = 0; j < BoardInfo.playerScore.length; j++){
             if (BoardInfo.playerScore[0] != BoardInfo.playerScore[j]){
@@ -125,10 +112,13 @@ public class MainScene implements Screen, ContactListener {
             }
         }*/
 
-        winner = BoardInfo.players.get(largestIndex);
+        //winner = BoardInfo.players.get(largestIndex);
 
-        if (alive <= 1)
-            gameOver = true;
+        if (alive <= 1) {
+            level.getSdMusic().dispose();
+            level.getGameMusic().dispose();
+            game.setScreen(new EndScene(game));
+        }
     }
 
     public void update(float delta) {
@@ -139,11 +129,6 @@ public class MainScene implements Screen, ContactListener {
 
         hud.updateTime();
 
-        if (getWinner() != null) {
-            level.getSdMusic().dispose();
-            level.getGameMusic().dispose();
-            game.setScreen(new EndScene(game, getWinner()));
-        }
     }
 
     @Override

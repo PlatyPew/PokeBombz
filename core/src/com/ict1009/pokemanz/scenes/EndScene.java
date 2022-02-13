@@ -10,7 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.ict1009.pokemanz.GameMain;
 import com.ict1009.pokemanz.entity.Player;
+import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.huds.MainHud;
 import com.ict1009.pokemanz.huds.WinnerHud;
 
 public class EndScene implements Screen {
@@ -29,8 +31,8 @@ public class EndScene implements Screen {
     private Animation<TextureRegion> pokeball;
     private float elapsed;
 
-    public EndScene(GameMain game, Player player) {
-        this.winnerHud = new WinnerHud(game, player.getPlayerNumber());
+    public EndScene(GameMain game) {
+        this.winnerHud = new WinnerHud(game, BoardInfo.players.size());
         this.batch = game.getBatch();
         this.game = game;
         exitToTitleButtonActive = new Texture("screen/exittotitleactive.png");
@@ -40,6 +42,7 @@ public class EndScene implements Screen {
         endMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_end.ogg"));
         endMusic.setLooping(true);
         endMusic.play();
+        getScore();
     }
 
     @Override
@@ -68,6 +71,13 @@ public class EndScene implements Screen {
         batch.end();
         batch.setProjectionMatrix(winnerHud.getStage().getCamera().combined);
         winnerHud.getStage().draw();
+    }
+
+    public void getScore() {
+        for (int i = 0; i < BoardInfo.playerScore.length; i++) {
+            winnerHud.updateScore(i+1,
+                    BoardInfo.playerScore[i]);
+        }
     }
 
     @Override
