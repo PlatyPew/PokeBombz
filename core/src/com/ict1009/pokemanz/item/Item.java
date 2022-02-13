@@ -39,22 +39,20 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
             return null;
 
         // Chooses a random item
-        int choice = (int)(Math.random() * 5);
+        int choice = (int)(Math.random() * 10);
 
-        switch (choice) {
-        case 0:
-            return new BombExtra(world, gridX, gridY);
-        case 1:
+        if (choice < 1)
             return new BombKick(world, gridX, gridY);
-        case 2:
-            return new BombRange(world, gridX, gridY);
-        case 3:
+        else if (choice < 2)
             return new BombThrow(world, gridX, gridY);
-        case 4:
+        else if (choice < 4)
+            return new BombRange(world, gridX, gridY);
+        else if (choice < 7)
+            return new BombExtra(world, gridX, gridY);
+        else if (choice < 10)
             return new SpeedUp(world, gridX, gridY);
-        default:
+        else
             return null;
-        }
     }
 
     public abstract void applyProperty(Player player);
