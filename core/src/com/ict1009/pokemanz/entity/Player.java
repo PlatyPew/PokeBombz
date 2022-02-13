@@ -720,22 +720,22 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
         isWalking = false;
 
-        if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) && currY < GameInfo.HEIGHT - GameInfo.PPM) {
+        if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) && currY < GameInfo.HEIGHT - GameInfo.PPM && !disableUp) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasUp.getRegions());
             velY = baseSpeed;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > 0) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > 0 && !disableLeft) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasSide.getRegions());
             velX = -baseSpeed;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > 0) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > 0 && !disableDown) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasDown.getRegions());
             velY = -baseSpeed;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) && currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 17)) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) && currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 17) && !disableRight) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasSide.getRegions());
