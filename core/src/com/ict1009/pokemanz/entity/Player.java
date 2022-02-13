@@ -108,8 +108,14 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             new TextureAtlas(String.format("player/d%d/down.atlas", playerNumber));
         this.playerDeadAtlasUp = new TextureAtlas(String.format("player/d%d/up.atlas", playerNumber));
 
-        if (Controllers.getControllers().notEmpty()) {
-            this.controllerID = Controllers.getControllers().pop().getUniqueId();
+        // Because LibGDX array is stupid
+        int numberController = 0;
+        for (Controller controller : Controllers.getControllers()) {
+            numberController++;
+        }
+
+        if (numberController >= playerNumber) {
+            this.controllerID = Controllers.getControllers().get(playerNumber - 1).getUniqueId();
             Controllers.addListener(this);
         }
     }
