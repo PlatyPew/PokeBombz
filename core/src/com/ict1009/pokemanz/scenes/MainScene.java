@@ -60,6 +60,9 @@ public class MainScene implements Screen, ContactListener {
 
         this.level.setGameMusic();
         this.world = new World(new Vector2(0, 0), true);
+        for (int k = 0; k < BoardInfo.playerScore.length; k++){
+            BoardInfo.playerScore[k] = 0;
+        }
         BoardInfo.players.clear();
         BoardInfo.players.add(new Player(world, level, 1, "upstill.png", 0, 0, "Platy"));
         BoardInfo.players.add(new Player(world, level, 2, "downstill.png", 15, 9, "Helpme"));

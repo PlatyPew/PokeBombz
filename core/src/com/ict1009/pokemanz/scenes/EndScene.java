@@ -22,10 +22,12 @@ public class EndScene implements Screen {
 
     private static final int ETT_BUTTON_WIDTH=201;
     private static final int ETT_BUTTON_HEIGHT=60;
-    private static final int ETT_BUTTON_Y=70;
+    private static final int ETT_BUTTON_Y=120;
     private static final int ETT_BUTTON_X=GameInfo.WIDTH/2-ETT_BUTTON_WIDTH/2;
+    private static final int GAME_OVER_WIDTH=513;
     private Texture exitToTitleButtonActive;
     private Texture exitToTitleButtonInactive;
+    private Texture gameOver;
     private Music endMusic;
     private Animation<TextureRegion> pikachu;
     private Animation<TextureRegion> pokeball;
@@ -37,6 +39,7 @@ public class EndScene implements Screen {
         this.batch = game.getBatch();
         this.game = game;
         this.numPlayers = numPlayers;
+        gameOver = new Texture("screen/gameover.png");
         exitToTitleButtonActive = new Texture("screen/exittotitleactive.png");
         exitToTitleButtonInactive = new Texture("screen/exittotitleinactive.png");
         pikachu = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("screen/pikachu-running.gif").read());
@@ -58,8 +61,9 @@ public class EndScene implements Screen {
         batch.begin();
 
         batch.draw(new Texture("room/scorescreen.png"), 0, 0);
-        batch.draw(pikachu.getKeyFrame(elapsed), 170f,720/2f-50f,439/2, 321/2);
-        batch.draw(pokeball.getKeyFrame(elapsed), 850f,720/2f-115f,480/2, 480/2);
+        batch.draw(gameOver, GameInfo.WIDTH/2F - GAME_OVER_WIDTH/2, GameInfo.HEIGHT/2F + 110);
+        batch.draw(pikachu.getKeyFrame(elapsed), 190f,720/2f-50f,439/2, 321/2);
+        batch.draw(pokeball.getKeyFrame(elapsed), 830f,720/2f-115f,480/2, 480/2);
         if (Gdx.input.getX() < ETT_BUTTON_X + ETT_BUTTON_WIDTH  && Gdx.input.getX() > ETT_BUTTON_X - ETT_BUTTON_WIDTH && GameInfo.HEIGHT - Gdx.input.getY() < ETT_BUTTON_HEIGHT + ETT_BUTTON_Y && GameInfo.HEIGHT - Gdx.input.getY() > ETT_BUTTON_Y) {
             batch.draw(exitToTitleButtonActive,ETT_BUTTON_X,ETT_BUTTON_Y);
             if (Gdx.input.justTouched()) {
