@@ -32,6 +32,7 @@ public class Chatbot {
         this.player = new ChatBotUser();
         knowledgeList = new KnowledgeList();
         scoreboardupdater = new ScoreBoardUpdater();
+        Reload_scoreUpdater();
         
     }
     public void getUserInput(){
@@ -358,22 +359,78 @@ public class Chatbot {
     	Pattern pattern = Pattern.compile(patternString,Pattern.CASE_INSENSITIVE);
     	Matcher matcher = pattern.matcher(Input);
     	return matcher.find();
-	}   
-    public boolean chat_bot_is_upload_score() {
-    	if(isPatternMatch(this.input,"^upload score ID [0-9]$")) {
-    		chatbot_Upload_Score();
+	} 
+    public void Reload_scoreUpdater() {
+    	try {
+			scoreboardupdater.ReloadContent();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    public boolean chat_bot_is_load_score_to_game() {
+    	Reload_scoreUpdater();
+    	if(isPatternMatch(this.input,"^upload score ID [0-9]+$")) {
+    		int idNum = Integer.parseInt(words[3]);
+    		if(idNum >  scoreboardupdater.getLatestIdNumber()) {
+    			return false;
+    		}
+    		chatbot_load_Score_To_Game(idNum);
     		return true;
     	}
     	return false;
     }
-    private void chatbot_Upload_Score() {
+    private void chatbot_load_Score_To_Game(int idNum) {
     	try {
-			int idNum = Integer.parseInt(words[3]);
+			
 			scoreboardupdater.setIdNumber(idNum);
 			BoardInfo.playerScore = scoreboardupdater.uploadScoreBoard();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+    }
+    public boolean chat_bot_is_Update_New_Score() {
+    	if(isPatternMatch(this.input,"^update new score$")) {
+    		chatbot_Update_New_Score();
+    		return true;
+    	}
+    	return false;
+    }
+    private void chatbot_Update_New_Score() {
+    	try {
+    		scoreboardupdater.currentScore = BoardInfo.playerScore;
+			
+			scoreboardupdater.saveNewContent();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    }
+    public boolean chat_bot_is_Update_Old_Score() {
+    	
+    	if(isPatternMatch(this.input,"^update score ID [0-9]+$")) {
+    		int idNum = Integer.parseInt(words[3]);
+    		if(idNum > scoreboardupdater.getLatestIdNumber()) {
+    			return false;
+    		}
+    		chatbot_Update_Old_Score(idNum);
+    		return true;
+    	}
+    	return false;
+    }
+    private void chatbot_Update_Old_Score(int idNum) {
+    	try {
+    		scoreboardupdater.setUpdateId(idNum);
+    		scoreboardupdater.currentScore = BoardInfo.playerScore;
+			scoreboardupdater.updateOldContent();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
     }
     
 

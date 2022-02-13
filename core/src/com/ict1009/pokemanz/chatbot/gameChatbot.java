@@ -59,9 +59,16 @@ public class gameChatbot {
         else if(chatbot.chatbot_is_Change_Bomb_Range()) {
         	
         }
-        else if(chatbot.chat_bot_is_upload_score()) {
+        else if(chatbot.chat_bot_is_load_score_to_game()) {
         	
         }
+        else if(chatbot.chat_bot_is_Update_New_Score()) {
+        	
+        }
+        else if(chatbot.chat_bot_is_Update_Old_Score()) {
+        	
+        }
+        
         else{
             chatbot.chatbot_do_not_understand();
         }
