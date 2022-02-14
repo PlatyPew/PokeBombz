@@ -26,6 +26,8 @@ import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
 import com.ict1009.pokemanz.room.Obstacle;
+import com.ict1009.pokemanz.control.Keyboard;
+import com.ict1009.pokemanz.control.Gamepad;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -244,7 +246,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
         isWalking = false;
 
-        if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) &&
+        if ((Keyboard.up(playerNumber) || up) &&
             currY < GameInfo.HEIGHT - GameInfo.PPM * 2 && !disableUp) {
             isWalking = true;
             animation =
@@ -252,7 +254,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
             player_direction = "up";
             velY = baseSpeed;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > GameInfo.PPM &&
+        } else if ((Keyboard.left(playerNumber) || left) && currX > GameInfo.PPM &&
                    !disableLeft) {
             isWalking = true;
             animation =
@@ -260,7 +262,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             texture = new Texture(String.format("player/%d/leftstill.png", playerNumber));
             player_direction = "left";
             velX = -baseSpeed;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > GameInfo.PPM &&
+        } else if ((Keyboard.down(playerNumber) || down) && currY > GameInfo.PPM &&
                    !disableDown) {
             isWalking = true;
             animation =
@@ -268,7 +270,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             texture = new Texture(String.format("player/%d/downstill.png", playerNumber));
             player_direction = "down";
             velY = -baseSpeed;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) &&
+        } else if ((Keyboard.right(playerNumber) || right) &&
                    currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 16) && !disableRight) {
             isWalking = true;
             animation =
@@ -348,65 +350,16 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             posY -= 1;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F) && map.getBombMap()[posX][posY] != null &&
-            !destroyed) {
-
-            // if-else method with up, down as one condition and left, right as one
-            // condition
-            //        	if (player_direction == "up" || player_direction == "down") {
-            //        		System.out.println("character facing up/down");
-            //        	}else if (player_direction == "left" || player_direction == "right") {
-            //        		System.out.println("character facing left/right");
-            //        	}else {
-            //        		System.out.println("player have not moved");
-            //        	}
-
-            // if-else method with each direction as one condition
-            //        	if (player_direction == "up") {
-            //        		System.out.println("character facing up");
-            //        	}else if ( player_direction == "down"){
-            //        		System.out.println("character facing down");
-            //        	}else if (player_direction == "left") {
-            //        		System.out.println("character facing left");
-            //        	}else if ( player_direction == "right") {
-            //        		System.out.println("character facing right");
-            //        	}else {
-            //        		System.out.println("player have not moved");
-            //        	}
-
-            // using if-else to check if the player direction is null
-            // if player_direction is not null then execute the case condition for each
-            // direction
-            //			if (player_direction == null) {
-            //				player_direction = "up";
-            //			}
-            //			else {
-            //				switch (player_direction) {
-            //				case "up":
-            //					System.out.println("character facing up");
-            //					break;
-            //				case "down":
-            //					System.out.println("character facing down");
-            //					break;
-            //				case "right":
-            //					System.out.println("character facing right");
-            //					break;
-            //				case "left":
-            //					System.out.println("character facing left");
-            //					break;
-            //				}
-            //			}
-            if (getThrowing() == true) {
+        if (Keyboard.throwing(playerNumber) && map.getBombMap()[posX][posY] != null &&
+            !destroyed && getThrowing() == true)
                 handleBombThrow(posX, posY, player_direction);
-            }
-        }
     }
 
     /**
      * Handles bomb placement when spacebar is pressed
      */
     private void handleBomb(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !destroyed && !dead) {
+        if (Keyboard.bomb(playerNumber) && !destroyed && !dead) {
             placeBomb();
         }
 
@@ -733,22 +686,22 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
         isWalking = false;
 
-        if ((Gdx.input.isKeyPressed(Input.Keys.W) || up) && currY < GameInfo.HEIGHT - GameInfo.PPM && !disableUp) {
+        if ((Keyboard.up(playerNumber) || up) && currY < GameInfo.HEIGHT - GameInfo.PPM && !disableUp) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasUp.getRegions());
             velY = baseSpeed;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || left) && currX > 0 && !disableLeft) {
+        } else if ((Keyboard.left(playerNumber) || left) && currX > 0 && !disableLeft) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasSide.getRegions());
             velX = -baseSpeed;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.S) || down) && currY > 0 && !disableDown) {
+        } else if ((Keyboard.down(playerNumber) || down) && currY > 0 && !disableDown) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasDown.getRegions());
             velY = -baseSpeed;
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.D) || right) && currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 17) && !disableRight) {
+        } else if ((Keyboard.right(playerNumber) || right) && currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 17) && !disableRight) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasSide.getRegions());
@@ -869,7 +822,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         } else if (dead && !unloadOnly) {
             handleDeadMovement();
             handleBomb(delta);
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+            if (Keyboard.bomb(playerNumber))
                 handleDeadBomb();
             setPosition((body.getPosition().x) * GameInfo.PPM,
                         (body.getPosition().y) * GameInfo.PPM);
@@ -877,7 +830,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             handleMovement();
             handleThrow();
             handleBomb(delta);
-            if (Gdx.input.isKeyJustPressed(Input.Keys.K) && kick)
+            if (Keyboard.kicking(playerNumber) && kick)
                 handleBombKick();
             setPosition((body.getPosition().x) * GameInfo.PPM,
                         (body.getPosition().y) * GameInfo.PPM);
@@ -936,21 +889,21 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
         if (controller.getUniqueId() == controllerID) {
-            if (buttonCode == 11)
+            if (Gamepad.up(buttonCode))
                 up = true;
-            else if (buttonCode == 13)
+            else if (Gamepad.left(buttonCode))
                 left = true;
-            else if (buttonCode == 12)
+            else if (Gamepad.down(buttonCode))
                 down = true;
-            else if (buttonCode == 14)
+            else if (Gamepad.right(buttonCode))
                 right = true;
-            else if (buttonCode == 1 && !destroyed) {
+            else if (Gamepad.bomb(buttonCode) && !destroyed) {
                 placeBomb();
                 handleDeadBomb();
             }
-            else if (buttonCode == 10)
+            else if (Gamepad.throwing(buttonCode))
                 controllerHandleThrow();
-            else if (buttonCode == 9 && kick)
+            else if (Gamepad.kicking(buttonCode) && kick)
                 handleBombKick();
         }
 
@@ -960,13 +913,13 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     @Override
     public boolean buttonUp(Controller controller, int buttonCode) {
         if (controller.getUniqueId() == controllerID) {
-            if (buttonCode == 11)
+            if (Gamepad.up(buttonCode))
                 up = false;
-            else if (buttonCode == 13)
+            else if (Gamepad.left(buttonCode))
                 left = false;
-            else if (buttonCode == 12)
+            else if (Gamepad.right(buttonCode))
                 down = false;
-            else if (buttonCode == 14)
+            else if (Gamepad.right(buttonCode))
                 right = false;
         }
 
