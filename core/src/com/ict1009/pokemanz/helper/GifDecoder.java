@@ -1,4 +1,4 @@
-package com.ict1009.pokemanz.scenes;
+package com.ict1009.pokemanz.helper;
 
 /* Copyright by Johannes Borchardt */
 /* LibGdx conversion 2014 by Anton Persson */

@@ -12,9 +12,8 @@ import com.ict1009.pokemanz.GameMain;
 import com.ict1009.pokemanz.entity.Player;
 import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.GameInfo;
-import com.ict1009.pokemanz.huds.MainHud;
+import com.ict1009.pokemanz.helper.GifDecoder;
 import com.ict1009.pokemanz.huds.WinnerHud;
-import com.ict1009.pokemanz.room.Map;
 
 public class EndScene implements Screen {
     private SpriteBatch batch;

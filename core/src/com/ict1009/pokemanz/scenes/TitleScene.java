@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.ict1009.pokemanz.GameMain;
 import com.ict1009.pokemanz.helper.GameInfo;
+import com.ict1009.pokemanz.helper.GifDecoder;
 
 public class TitleScene implements Screen{
 
