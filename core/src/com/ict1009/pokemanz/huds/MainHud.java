@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ict1009.pokemanz.GameMain;
+import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.GameInfo;
 
 public class MainHud {
@@ -89,7 +90,7 @@ public class MainHud {
         timerLabel = new Label(calculateTime(), new Label.LabelStyle(font, Color.WHITE));
 
         for (int i = 0; i < players; i++) {
-            scoreLabel[i] = new Label("0", new Label.LabelStyle(font, Color.WHITE));
+            scoreLabel[i] = new Label(String.valueOf(BoardInfo.playerScore[i]), new Label.LabelStyle(font, Color.WHITE));
         }
     }
 
