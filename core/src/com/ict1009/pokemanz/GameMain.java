@@ -4,12 +4,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.ict1009.pokemanz.chatbot.textInputRunner;
+import com.ict1009.pokemanz.chatbot.TextInputRunner;
 import com.ict1009.pokemanz.scenes.TitleScene;
 
 public class GameMain extends Game {
     private SpriteBatch batch;
-    private textInputRunner chatBot;
+    private TextInputRunner chatBot;
     private static boolean pause = false;
 
     public SpriteBatch getBatch() {
@@ -22,7 +22,7 @@ public class GameMain extends Game {
     public void create() {
         batch = new SpriteBatch();
         setScreen(new TitleScene(this));
-        chatBot = new textInputRunner(this);
+        chatBot = new TextInputRunner(this);
         chatBot.create();
     }
 

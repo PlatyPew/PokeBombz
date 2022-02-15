@@ -1,15 +1,12 @@
 package com.ict1009.pokemanz.chatbot;
-import com.ict1009.pokemanz.GameMain;
-import com.ict1009.pokemanz.scenes.TitleScene;
-import java.io.IOException;
-import java.lang.Math;
-import java.text.DecimalFormat;
-import java.util.*;
 
-public class gameChatbot {
+import com.ict1009.pokemanz.GameMain;
+import java.io.IOException;
+
+public class GameChatbot {
     Chatbot chatbot;
     private GameMain game;
-    public gameChatbot(GameMain game) {
+    public GameChatbot(GameMain game) {
         this.game = game;
         chatbot = new Chatbot();
         chatbot.chatbot_do_load("init.ini");
@@ -49,9 +46,7 @@ public class gameChatbot {
 
         } else if (chatbot.chat_bot_is_Update_Old_Score()) {
 
-        }
-
-        else {
+        } else {
             chatbot.chatbot_do_not_understand();
         }
     }
