@@ -38,8 +38,10 @@ public class EndScene implements Screen {
     private Texture winnerPlayer;
 
     public void giveSurvivorPoints() {
-    	for(int i =0; i < 4; i++) {
-    		if(!BoardInfo.players.get(i).getDead()) {
+    	for(int i =0; i <BoardInfo.players.size(); i++) {
+    		
+    		if(BoardInfo.players.get(i) != null && !BoardInfo.players.get(i).getDead()) {
+    			
     			BoardInfo.playerScore[i] = BoardInfo.playerScore[i] + 5;
     		}
     	}
@@ -112,13 +114,14 @@ public class EndScene implements Screen {
         }
         int largest = 0;
         int largestIndex = 0;
-        for (int i = 0; i < BoardInfo.playerScore.length; i++) {
+        for (int i = 0; i < BoardInfo.players.size(); i++) {
             if (BoardInfo.playerScore[i] > largest) {
                 largestIndex = i;
                 largest = BoardInfo.playerScore[i];
             }
         }
         winner = BoardInfo.players.get(largestIndex);
+
     }
 
     public Player getWinner() {

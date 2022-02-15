@@ -46,7 +46,11 @@ public class GameChatbot {
 
         } else if (chatbot.chat_bot_is_Update_Old_Score()) {
 
-        } else {
+        } else if (chatbot.chatbot_is_reset_scores()) {
+
+        } 
+        
+        else {
             chatbot.chatbot_do_not_understand();
         }
     }
