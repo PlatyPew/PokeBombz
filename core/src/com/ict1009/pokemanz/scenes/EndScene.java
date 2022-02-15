@@ -37,8 +37,17 @@ public class EndScene implements Screen {
     private int numPlayers;
     private Texture winnerPlayer;
 
+    public void giveSurvivorPoints() {
+    	for(int i =0; i < 4; i++) {
+    		if(!BoardInfo.players.get(i).getDead()) {
+    			BoardInfo.playerScore[i] = BoardInfo.playerScore[i] + 5;
+    		}
+    	}
+    }
+    
     public EndScene(GameMain game, int numPlayers, int winnerNum) {
         GameInfo.timeElapsed = 0;
+        giveSurvivorPoints();
         this.winnerHud = new WinnerHud(game, BoardInfo.players.size());
         this.batch = game.getBatch();
         this.game = game;
