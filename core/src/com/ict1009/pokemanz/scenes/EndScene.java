@@ -79,6 +79,8 @@ public class EndScene implements Screen {
             if (Gdx.input.justTouched()) {
                 this.dispose();
                 endMusic.dispose();
+                System.gc();
+                System.runFinalization();
                 game.setScreen(new TitleScene(game));
             }
         } else {
