@@ -44,7 +44,6 @@ public abstract class Map implements BoardElement {
 
         sdMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_sd.ogg"));
         sdMusic.setLooping(true);
-
     }
 
     public Texture getTexture() {

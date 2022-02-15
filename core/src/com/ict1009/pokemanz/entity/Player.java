@@ -20,15 +20,14 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.ict1009.pokemanz.bomb.Bomb;
 import com.ict1009.pokemanz.bomb.Explode;
+import com.ict1009.pokemanz.control.Gamepad;
+import com.ict1009.pokemanz.control.Keyboard;
 import com.ict1009.pokemanz.helper.BoardElement;
 import com.ict1009.pokemanz.helper.BoardInfo;
 import com.ict1009.pokemanz.helper.Destoryable;
 import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.room.Map;
 import com.ict1009.pokemanz.room.Obstacle;
-import com.ict1009.pokemanz.control.Keyboard;
-import com.ict1009.pokemanz.control.Gamepad;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,7 +107,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             new TextureAtlas(String.format("player/d%d/left.atlas", playerNumber));
         this.playerDeadAtlasDown =
             new TextureAtlas(String.format("player/d%d/down.atlas", playerNumber));
-        this.playerDeadAtlasUp = new TextureAtlas(String.format("player/d%d/up.atlas", playerNumber));
+        this.playerDeadAtlasUp =
+            new TextureAtlas(String.format("player/d%d/up.atlas", playerNumber));
 
         // Because LibGDX array is stupid
         int numberController = 0;
@@ -139,7 +139,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         if (maxBombs <= GameInfo.MAX_PLAYER_BOMBS)
             this.maxBombs = maxBombs;
         else {
-        	this.maxBombs = GameInfo.MAX_PLAYER_BOMBS;
+            this.maxBombs = GameInfo.MAX_PLAYER_BOMBS;
         }
     }
 
@@ -187,9 +187,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         if (bombRange <= GameInfo.MAX_PLAYER_BOMB_RANGE)
             this.bombRange = bombRange;
         else {
-        	this.bombRange = GameInfo.MAX_PLAYER_BOMB_RANGE;
+            this.bombRange = GameInfo.MAX_PLAYER_BOMB_RANGE;
         }
-        	
     }
 
     public int getBombRange() {
@@ -246,24 +245,22 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
         isWalking = false;
 
-        if ((Keyboard.up(playerNumber) || up) &&
-            currY < GameInfo.HEIGHT - GameInfo.PPM * 2 && !disableUp) {
+        if ((Keyboard.up(playerNumber) || up) && currY < GameInfo.HEIGHT - GameInfo.PPM * 2 &&
+            !disableUp) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasUp.getRegions());
             texture = new Texture(String.format("player/%d/upstill.png", playerNumber));
             player_direction = "up";
             velY = baseSpeed;
-        } else if ((Keyboard.left(playerNumber) || left) && currX > GameInfo.PPM &&
-                   !disableLeft) {
+        } else if ((Keyboard.left(playerNumber) || left) && currX > GameInfo.PPM && !disableLeft) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasSide.getRegions());
             texture = new Texture(String.format("player/%d/leftstill.png", playerNumber));
             player_direction = "left";
             velX = -baseSpeed;
-        } else if ((Keyboard.down(playerNumber) || down) && currY > GameInfo.PPM &&
-                   !disableDown) {
+        } else if ((Keyboard.down(playerNumber) || down) && currY > GameInfo.PPM && !disableDown) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerAtlasDown.getRegions());
@@ -350,9 +347,9 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             posY -= 1;
         }
 
-        if (Keyboard.throwing(playerNumber) && map.getBombMap()[posX][posY] != null &&
-            !destroyed && getThrowing() == true)
-                handleBombThrow(posX, posY, player_direction);
+        if (Keyboard.throwing(playerNumber) && map.getBombMap()[posX][posY] != null && !destroyed &&
+            getThrowing() == true)
+            handleBombThrow(posX, posY, player_direction);
     }
 
     /**
@@ -476,14 +473,11 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
     private boolean isObjectAt(int gridX, int gridY) {
         if (map.getBombMap()[gridX][gridY] instanceof Bomb) {
             return true;
-        }
-        else if (isPlayerAt(gridX, gridY)) {
+        } else if (isPlayerAt(gridX, gridY)) {
             return true;
-        }
-        else if (map.getObstacleMap()[gridX][gridY] instanceof Obstacle) {
+        } else if (map.getObstacleMap()[gridX][gridY] instanceof Obstacle) {
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -504,74 +498,74 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         if (player_direction == null)
             return;
 
-        switch(player_direction) {
-            case "up":
-                if (posY < GameInfo.MAP_HEIGHT - 1 && map.getBombMap()[posX][++posY] instanceof Bomb) {
-                    System.out.println(posX + " " + posY);
-                    int i;
-                    for (i = posY; i < GameInfo.MAP_HEIGHT - 1; i++) {
-                        if (isObjectAt(posX, i + 1))
-                            break;
-                    }
-                    if (map.getBombMap()[posX][i] == null) {
-                        System.out.println(String.format("Land in %d %d", posX, i));
-                        Bomb bomb = map.getBombMap()[posX][posY];
-                        bomb.updatePosition(posX, i);
-                        map.setBombMap(posX, i, bomb);
-                        map.setBombMap(posX, posY, null);
-                    }
+        switch (player_direction) {
+        case "up":
+            if (posY < GameInfo.MAP_HEIGHT - 1 && map.getBombMap()[posX][++posY] instanceof Bomb) {
+                System.out.println(posX + " " + posY);
+                int i;
+                for (i = posY; i < GameInfo.MAP_HEIGHT - 1; i++) {
+                    if (isObjectAt(posX, i + 1))
+                        break;
                 }
-                break;
-            case "left":
-                if (posX > 0 && map.getBombMap()[--posX][posY] instanceof Bomb) {
-                    int i;
-                    for (i = posX; i > 0; i--) {
-                        if (isObjectAt(i - 1, posY))
-                            break;
-                    }
-                    if (map.getBombMap()[i][posY] == null) {
-                        System.out.println(String.format("Land in %d %d", i, posY));
-                        Bomb bomb = map.getBombMap()[posX][posY];
-                        bomb.updatePosition(i, posY);
-                        map.setBombMap(i, posY, bomb);
-                        map.setBombMap(posX, posY, null);
-                    }
+                if (map.getBombMap()[posX][i] == null) {
+                    System.out.println(String.format("Land in %d %d", posX, i));
+                    Bomb bomb = map.getBombMap()[posX][posY];
+                    bomb.updatePosition(posX, i);
+                    map.setBombMap(posX, i, bomb);
+                    map.setBombMap(posX, posY, null);
                 }
-                break;
-            case "down":
-                if (posY > 0 && map.getBombMap()[posX][--posY] instanceof Bomb) {
-                    int i;
-                    for (i = posY; i > 0; i--) {
-                        if (isObjectAt(posX, i - 1))
-                            break;
-                    }
-                    if (map.getBombMap()[posX][i] == null) {
-                        System.out.println(String.format("Land in %d %d", posX, i));
-                        Bomb bomb = map.getBombMap()[posX][posY];
-                        bomb.updatePosition(posX, i);
-                        map.setBombMap(posX, i, bomb);
-                        map.setBombMap(posX, posY, null);
-                    }
+            }
+            break;
+        case "left":
+            if (posX > 0 && map.getBombMap()[--posX][posY] instanceof Bomb) {
+                int i;
+                for (i = posX; i > 0; i--) {
+                    if (isObjectAt(i - 1, posY))
+                        break;
                 }
-                break;
-            case "right":
-                if (posX < GameInfo.MAP_WIDTH - 1 && map.getBombMap()[++posX][posY] instanceof Bomb) {
-                    int i;
-                    for (i = posX; i < GameInfo.MAP_WIDTH - 1; i++) {
-                        if (isObjectAt(i + 1, posY))
-                            break;
-                    }
-                    if (map.getBombMap()[i][posY] == null) {
-                        System.out.println(String.format("Land in %d %d", i, posY));
-                        Bomb bomb = map.getBombMap()[posX][posY];
-                        bomb.updatePosition(i, posY);
-                        map.setBombMap(i, posY, bomb);
-                        map.setBombMap(posX, posY, null);
-                    }
+                if (map.getBombMap()[i][posY] == null) {
+                    System.out.println(String.format("Land in %d %d", i, posY));
+                    Bomb bomb = map.getBombMap()[posX][posY];
+                    bomb.updatePosition(i, posY);
+                    map.setBombMap(i, posY, bomb);
+                    map.setBombMap(posX, posY, null);
                 }
-                break;
-            default:
-                break;
+            }
+            break;
+        case "down":
+            if (posY > 0 && map.getBombMap()[posX][--posY] instanceof Bomb) {
+                int i;
+                for (i = posY; i > 0; i--) {
+                    if (isObjectAt(posX, i - 1))
+                        break;
+                }
+                if (map.getBombMap()[posX][i] == null) {
+                    System.out.println(String.format("Land in %d %d", posX, i));
+                    Bomb bomb = map.getBombMap()[posX][posY];
+                    bomb.updatePosition(posX, i);
+                    map.setBombMap(posX, i, bomb);
+                    map.setBombMap(posX, posY, null);
+                }
+            }
+            break;
+        case "right":
+            if (posX < GameInfo.MAP_WIDTH - 1 && map.getBombMap()[++posX][posY] instanceof Bomb) {
+                int i;
+                for (i = posX; i < GameInfo.MAP_WIDTH - 1; i++) {
+                    if (isObjectAt(i + 1, posY))
+                        break;
+                }
+                if (map.getBombMap()[i][posY] == null) {
+                    System.out.println(String.format("Land in %d %d", i, posY));
+                    Bomb bomb = map.getBombMap()[posX][posY];
+                    bomb.updatePosition(i, posY);
+                    map.setBombMap(i, posY, bomb);
+                    map.setBombMap(posX, posY, null);
+                }
+            }
+            break;
+        default:
+            break;
         }
     }
 
@@ -686,7 +680,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
         isWalking = false;
 
-        if ((Keyboard.up(playerNumber) || up) && currY < GameInfo.HEIGHT - GameInfo.PPM && !disableUp) {
+        if ((Keyboard.up(playerNumber) || up) && currY < GameInfo.HEIGHT - GameInfo.PPM &&
+            !disableUp) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasUp.getRegions());
@@ -701,7 +696,8 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasDown.getRegions());
             velY = -baseSpeed;
-        } else if ((Keyboard.right(playerNumber) || right) && currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 17) && !disableRight) {
+        } else if ((Keyboard.right(playerNumber) || right) &&
+                   currX < GameInfo.WIDTH - (GameInfo.WIDTH - GameInfo.PPM * 17) && !disableRight) {
             isWalking = true;
             animation =
                 new Animation<TextureAtlas.AtlasRegion>(1f / 10f, playerDeadAtlasSide.getRegions());
@@ -710,23 +706,22 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
         player_direction = getDeadDirection();
 
-
         if (player_direction != null) {
-            switch(player_direction) {
-                case "up":
-                    texture = new Texture(String.format("player/d%d/downstill.png", playerNumber));
-                    break;
-                case "left":
-                    texture = new Texture(String.format("player/d%d/rightstill.png", playerNumber));
-                    break;
-                case "down":
-                    texture = new Texture(String.format("player/d%d/upstill.png", playerNumber));
-                    break;
-                case "right":
-                    texture = new Texture(String.format("player/d%d/leftstill.png", playerNumber));
-                    break;
-                default:
-                    break;
+            switch (player_direction) {
+            case "up":
+                texture = new Texture(String.format("player/d%d/downstill.png", playerNumber));
+                break;
+            case "left":
+                texture = new Texture(String.format("player/d%d/rightstill.png", playerNumber));
+                break;
+            case "down":
+                texture = new Texture(String.format("player/d%d/upstill.png", playerNumber));
+                break;
+            case "right":
+                texture = new Texture(String.format("player/d%d/leftstill.png", playerNumber));
+                break;
+            default:
+                break;
             }
         }
 
@@ -749,57 +744,57 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
 
         if (player_direction != null && posX >= -1 && posY >= -1) {
             int i;
-            switch(player_direction) {
-                case "up":
-                    posY -= 2;
-                    for (i = posY; i >= 0; i--) {
-                        if (!isObjectAt(posX, i))
-                            break;
-                    }
-                    if (i >= 0 && i < GameInfo.MAP_HEIGHT && bombs.size() == 0) {
-                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber, false);
-                        bombs.add(bomb);
-                        map.setBombMap(posX, i, bomb);
-                    }
-                    break;
-                case "left":
-                    posX += 2;
-                    for (i = posX; i < GameInfo.MAP_WIDTH; i++) {
-                        if (!isObjectAt(i, posY))
-                            break;
-                    }
-                    if (i >= 0 && i < GameInfo.MAP_WIDTH && bombs.size() == 0) {
-                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber, false);
-                        bombs.add(bomb);
-                        map.setBombMap(i, posY, bomb);
-                    }
-                    break;
-                case "down":
-                    posY += 2;
-                    for (i = posY; i < GameInfo.MAP_HEIGHT; i++) {
-                        if (!isObjectAt(posX, i))
-                            break;
-                    }
-                    if (i >= 0 && i < GameInfo.MAP_HEIGHT && bombs.size() == 0) {
-                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber, false);
-                        bombs.add(bomb);
-                        map.setBombMap(posX, i, bomb);
-                    }
-                    break;
-                case "right":
-                    posX -= 2;
-                    for (i = posX; i >= 0; i--) {
-                        if (!isObjectAt(i, posY))
-                            break;
-                    }
-                    if (i >= 0 && i < GameInfo.MAP_WIDTH && bombs.size() == 0) {
-                        Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber, false);
-                        bombs.add(bomb);
-                        map.setBombMap(i, posY, bomb);
-                    }
-                    break;
-                default:
-                    break;
+            switch (player_direction) {
+            case "up":
+                posY -= 2;
+                for (i = posY; i >= 0; i--) {
+                    if (!isObjectAt(posX, i))
+                        break;
+                }
+                if (i >= 0 && i < GameInfo.MAP_HEIGHT && bombs.size() == 0) {
+                    Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber, false);
+                    bombs.add(bomb);
+                    map.setBombMap(posX, i, bomb);
+                }
+                break;
+            case "left":
+                posX += 2;
+                for (i = posX; i < GameInfo.MAP_WIDTH; i++) {
+                    if (!isObjectAt(i, posY))
+                        break;
+                }
+                if (i >= 0 && i < GameInfo.MAP_WIDTH && bombs.size() == 0) {
+                    Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber, false);
+                    bombs.add(bomb);
+                    map.setBombMap(i, posY, bomb);
+                }
+                break;
+            case "down":
+                posY += 2;
+                for (i = posY; i < GameInfo.MAP_HEIGHT; i++) {
+                    if (!isObjectAt(posX, i))
+                        break;
+                }
+                if (i >= 0 && i < GameInfo.MAP_HEIGHT && bombs.size() == 0) {
+                    Bomb bomb = new Bomb(world, "bomb/bomb1.png", posX, i, playerNumber, false);
+                    bombs.add(bomb);
+                    map.setBombMap(posX, i, bomb);
+                }
+                break;
+            case "right":
+                posX -= 2;
+                for (i = posX; i >= 0; i--) {
+                    if (!isObjectAt(i, posY))
+                        break;
+                }
+                if (i >= 0 && i < GameInfo.MAP_WIDTH && bombs.size() == 0) {
+                    Bomb bomb = new Bomb(world, "bomb/bomb1.png", i, posY, playerNumber, false);
+                    bombs.add(bomb);
+                    map.setBombMap(i, posY, bomb);
+                }
+                break;
+            default:
+                break;
             }
         }
     }
@@ -842,20 +837,20 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             destroyed = false;
             unloadOnly = false;
             switch (playerNumber) {
-                case 1:
-                    updatePosition(-1, -1);
-                    break;
-                case 2:
-                    updatePosition(16, 10);
-                    break;
-                case 3:
-                    updatePosition(16, -1);
-                    break;
-                case 4:
-                    updatePosition(-1, 10);
-                    break;
-                default:
-                    break;
+            case 1:
+                updatePosition(-1, -1);
+                break;
+            case 2:
+                updatePosition(16, 10);
+                break;
+            case 3:
+                updatePosition(16, -1);
+                break;
+            case 4:
+                updatePosition(-1, 10);
+                break;
+            default:
+                break;
             }
             this.texture = new Texture(String.format("player/d%d/downstill.png", playerNumber));
         }
@@ -900,8 +895,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
             else if (Gamepad.bomb(buttonCode) && !destroyed) {
                 placeBomb();
                 handleDeadBomb();
-            }
-            else if (Gamepad.throwing(buttonCode))
+            } else if (Gamepad.throwing(buttonCode))
                 controllerHandleThrow();
             else if (Gamepad.kicking(buttonCode) && kick)
                 handleBombKick();
@@ -941,12 +935,11 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
         toDestroy = true;
     }
     public void changeSpeed(float speedup) {
-    	if(speedup > 8) {
-    		speedup = 8;
-    	}
-    	else if (speedup < 1) {
-    		speedup =1;
-    	}
+        if (speedup > 8) {
+            speedup = 8;
+        } else if (speedup < 1) {
+            speedup = 1;
+        }
         this.baseSpeed = speedup;
     }
 }
