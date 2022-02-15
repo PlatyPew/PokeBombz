@@ -68,7 +68,6 @@ public class textInputRunner extends ApplicationAdapter {
             try {
                 theChatBot.run(textField.getText());
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             aiText = theChatBot.chatbot.bot.getOutput();
