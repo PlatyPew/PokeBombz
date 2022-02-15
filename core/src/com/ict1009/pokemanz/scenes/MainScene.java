@@ -20,10 +20,9 @@ import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.huds.MainHud;
 import com.ict1009.pokemanz.item.Item;
 import com.ict1009.pokemanz.room.LevelOne;
-import com.ict1009.pokemanz.room.LevelTwo;
 import com.ict1009.pokemanz.room.LevelThree;
+import com.ict1009.pokemanz.room.LevelTwo;
 import com.ict1009.pokemanz.room.Map;
-
 import java.util.ArrayList;
 
 public class MainScene implements Screen, ContactListener {
@@ -45,24 +44,24 @@ public class MainScene implements Screen, ContactListener {
         this.numPlayers = numPlayers;
         this.game = game;
         this.batch = game.getBatch();
-        switch(numLevel){
-            case 1:
-                this.level = new LevelOne();
-                break;
-            case 2:
-                this.level = new LevelTwo();
-                break;
-            case 3:
-                this.level = new LevelThree();
-                break;
-            default:
-                this.level = new LevelOne();
-                break;
+        switch (numLevel) {
+        case 1:
+            this.level = new LevelOne();
+            break;
+        case 2:
+            this.level = new LevelTwo();
+            break;
+        case 3:
+            this.level = new LevelThree();
+            break;
+        default:
+            this.level = new LevelOne();
+            break;
         }
 
         this.level.setGameMusic();
         this.world = new World(new Vector2(0, 0), true);
-        for (int k = 0; k < BoardInfo.playerScore.length; k++){
+        for (int k = 0; k < BoardInfo.playerScore.length; k++) {
             BoardInfo.playerScore[k] = 0;
         }
         BoardInfo.players.clear();
@@ -92,7 +91,6 @@ public class MainScene implements Screen, ContactListener {
         this.debugRenderer = new Box2DDebugRenderer();
     }
 
-
     private void checkScore(float delta) {
         int alive = 0;
 
@@ -121,7 +119,6 @@ public class MainScene implements Screen, ContactListener {
         GameInfo.timeElapsed += 1;
 
         hud.updateTime();
-
     }
 
     @Override

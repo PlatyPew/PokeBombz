@@ -7,7 +7,6 @@ import java.util.UUID;
 public class BoardInfo {
     public static ArrayList<Player> players = new ArrayList<Player>();
     public static int[] playerScore = new int[4];
-    public static int[] savedScore = {0,0,0,0};
+    public static int[] savedScore = {0, 0, 0, 0};
     public static ArrayList<UUID> explosionIDs = new ArrayList<UUID>();
 }
-

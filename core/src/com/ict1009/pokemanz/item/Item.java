@@ -85,7 +85,8 @@ public abstract class Item extends Sprite implements Destoryable, BoardElement {
         bodyDef.fixedRotation = true;
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox((getWidth() / 2) / GameInfo.PPM - 0.2f, (getHeight() / 2) / GameInfo.PPM - 0.2f);
+        shape.setAsBox((getWidth() / 2) / GameInfo.PPM - 0.2f,
+                       (getHeight() / 2) / GameInfo.PPM - 0.2f);
 
         Body body = world.createBody(bodyDef);
 

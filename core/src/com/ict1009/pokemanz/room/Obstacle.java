@@ -8,8 +8,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.helper.BoardElement;
+import com.ict1009.pokemanz.helper.GameInfo;
 
 public class Obstacle extends Sprite implements BoardElement {
     final protected World world;

@@ -22,7 +22,6 @@ public class WinnerHud {
 
     private int players;
 
-
     private Image[] scoreImage;
     private Label[] scoreLabel;
 
@@ -36,7 +35,6 @@ public class WinnerHud {
         scoreImage = new Image[players];
         createImages();
         createLabels();
-
 
         Table scoreTable = new Table();
         scoreTable.setFillParent(true);
@@ -64,15 +62,14 @@ public class WinnerHud {
 
     private void createLabels() {
         FreeTypeFontGenerator generator =
-                new FreeTypeFontGenerator(Gdx.files.internal("font/pokemonsolid.ttf"));
+            new FreeTypeFontGenerator(Gdx.files.internal("font/pokemonsolid.ttf"));
 
         FreeTypeFontGenerator.FreeTypeFontParameter parameter =
-                new FreeTypeFontGenerator.FreeTypeFontParameter();
+            new FreeTypeFontGenerator.FreeTypeFontParameter();
 
         parameter.size = 40;
 
         BitmapFont font = generator.generateFont(parameter);
-
 
         for (int i = 0; i < players; i++) {
             scoreLabel[i] = new Label("0", new Label.LabelStyle(font, Color.WHITE));
@@ -86,6 +83,3 @@ public class WinnerHud {
         return stage;
     }
 }
-
-
-

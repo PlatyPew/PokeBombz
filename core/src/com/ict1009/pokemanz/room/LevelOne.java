@@ -18,8 +18,6 @@ public class LevelOne extends Map {
         {13, 5}, {13, 7}, {13, 8}, {14, 1}, {14, 2}, {14, 4}, {14, 5}, {14, 7}, {14, 8},
     };
 
-
-
     // Coordinates of breakable obstacles
     final private static int[][] breakable = {
         {0, 2},  {0, 3},  {0, 4},  {0, 5},  {0, 6},  {0, 7},  {1, 3},  {1, 6},  {2, 0},  {2, 3},
@@ -38,10 +36,9 @@ public class LevelOne extends Map {
         super(textureLocation, unbreakable, breakable);
     }
 
-    public Music getGameMusic(){
+    public Music getGameMusic() {
         return gameMusic;
     }
-
 
     @Override
     public void setGameMusic() {
