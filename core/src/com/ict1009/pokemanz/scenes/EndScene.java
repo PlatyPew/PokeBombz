@@ -19,6 +19,7 @@ public class EndScene implements Screen {
     private SpriteBatch batch;
     private WinnerHud winnerHud;
     private GameMain game;
+    private Screen titlescene;
 
     private static final int ETT_BUTTON_WIDTH = 201;
     private static final int ETT_BUTTON_HEIGHT = 60;
@@ -98,7 +99,8 @@ public class EndScene implements Screen {
                 endMusic.dispose();
                 System.gc();
                 System.runFinalization();
-                game.setScreen(new TitleScene(game));
+                titlescene = new TitleScene(game);
+                game.setScreen(titlescene);
             }
         } else {
             batch.draw(exitToTitleButtonInactive, ETT_BUTTON_X, ETT_BUTTON_Y);

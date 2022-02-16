@@ -39,6 +39,8 @@ public class MainScene implements Screen, ContactListener {
     private int numPlayers;
     private int winnerNum;
 
+    private Screen endscene;
+
     public MainScene(GameMain game, int numPlayers, int numLevel) {
         setupCamera();
         this.numPlayers = numPlayers;
@@ -108,7 +110,8 @@ public class MainScene implements Screen, ContactListener {
                 if (!player.getDead())
                     winnerNum = player.getPlayerNumber();
             }
-            game.setScreen(new EndScene(game, numPlayers, winnerNum));
+            endscene = new EndScene(game, numPlayers, winnerNum);
+            game.setScreen(endscene);
         }
     }
 
