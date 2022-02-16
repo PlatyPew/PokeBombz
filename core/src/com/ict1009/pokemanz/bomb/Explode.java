@@ -383,8 +383,8 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
         bodyDef.fixedRotation = true;
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox((getWidth() / 2) / GameInfo.PPM - 0.1f,
-                       (getHeight() / 2) / GameInfo.PPM - 0.1f);
+        shape.setAsBox((getWidth() / 2) / GameInfo.PPM - 0.2f,
+                       (getHeight() / 2) / GameInfo.PPM - 0.2f);
 
         Body body = world.createBody(bodyDef);
 

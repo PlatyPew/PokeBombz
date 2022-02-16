@@ -9,7 +9,7 @@ public class SpeedUp extends Item {
     }
 
     public void applyProperty(Player player) {
-        player.setBaseSpeed(player.getBaseSpeed() + 1);
+        player.setBaseSpeed(player.getBaseSpeed() + 0.5f);
         super.setToDestroy();
     }
 }

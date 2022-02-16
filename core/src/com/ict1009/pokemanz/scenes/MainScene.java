@@ -1,6 +1,7 @@
 package com.ict1009.pokemanz.scenes;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -19,11 +20,15 @@ import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.huds.MainHud;
 import com.ict1009.pokemanz.item.Item;
 import com.ict1009.pokemanz.room.LevelOne;
+import com.ict1009.pokemanz.room.LevelThree;
+import com.ict1009.pokemanz.room.LevelTwo;
 import com.ict1009.pokemanz.room.Map;
+import java.util.ArrayList;
 
 public class MainScene implements Screen, ContactListener {
     private World world;
     private SpriteBatch batch;
+    private GameMain game;
 
     private MainHud hud;
 
@@ -31,19 +36,47 @@ public class MainScene implements Screen, ContactListener {
 
     private OrthographicCamera box2DCamera;
     private Box2DDebugRenderer debugRenderer;
+    private int numPlayers;
+    private int winnerNum;
 
-    private boolean gameOver = false;
-    private Player winner;
+    private Screen endscene;
 
-    public MainScene(GameMain game) {
+    public MainScene(GameMain game, int numPlayers, int numLevel) {
         setupCamera();
+        this.numPlayers = numPlayers;
+        this.game = game;
         this.batch = game.getBatch();
+        switch (numLevel) {
+        case 1:
+            this.level = new LevelOne();
+            break;
+        case 2:
+            this.level = new LevelTwo();
+            break;
+        case 3:
+            this.level = new LevelThree();
+            break;
+        default:
+            this.level = new LevelOne();
+            break;
+        }
 
-        this.level = new LevelOne();
+        this.level.setGameMusic();
         this.world = new World(new Vector2(0, 0), true);
-
+//        for (int k = 0; k < BoardInfo.playerScore.length; k++) {
+//            BoardInfo.playerScore[k] = 0;
+//        }
+        BoardInfo.players.clear();
         BoardInfo.players.add(new Player(world, level, 1, "upstill.png", 0, 0, "Platy"));
         BoardInfo.players.add(new Player(world, level, 2, "downstill.png", 15, 9, "Helpme"));
+
+        if (numPlayers >= 3) {
+            BoardInfo.players.add(new Player(world, level, 3, "upstill.png", 15, 0, "Saveme"));
+        }
+
+        if (numPlayers >= 4) {
+            BoardInfo.players.add(new Player(world, level, 4, "downstill.png", 0, 9, "Iamdie"));
+        }
 
         this.hud = new MainHud(game, BoardInfo.players.size());
 
@@ -60,35 +93,44 @@ public class MainScene implements Screen, ContactListener {
         this.debugRenderer = new Box2DDebugRenderer();
     }
 
-    public boolean getGameOver() {
-        return gameOver;
-    }
+    private void checkScore(float delta) {
+        int alive = 0;
 
-    public Player getWinner() {
-        if (gameOver)
-            return winner;
-        else
-            return null;
+        for (Player player : BoardInfo.players) {
+            player.update(delta);
+            if (!player.getDead())
+                alive++;
+        }
+
+        if (alive <= 1) {
+            level.getSdMusic().dispose();
+            level.getGameMusic().dispose();
+            for (Player player : BoardInfo.players) {
+                player.update(delta);
+                if (!player.getDead())
+                    winnerNum = player.getPlayerNumber();
+            }
+            endscene = new EndScene(game, numPlayers, winnerNum);
+            game.setScreen(endscene);
+        }
     }
 
     public void update(float delta) {
-        int alive = 0;
-        for (Player player : BoardInfo.players) {
-            player.update(delta);
-            if (!player.getDestroyed()) {
-                winner = player;
-                alive++;
-            }
-        }
-
-        if (alive <= 1)
-            gameOver = true;
-
+        checkScore(delta);
         level.update(delta);
 
         GameInfo.timeElapsed += 1;
 
         hud.updateTime();
+    }
+
+    public int getScore(int playerNum) {
+        return BoardInfo.playerScore[playerNum - 1];
+    }
+
+    public void setScore(int playerNum, int score) {
+        BoardInfo.playerScore[playerNum - 1] = score;
+        hud.updateScore(playerNum, BoardInfo.playerScore[playerNum - 1]);
     }
 
     @Override
@@ -101,10 +143,10 @@ public class MainScene implements Screen, ContactListener {
         batch.begin();
 
         batch.draw(level.getTexture(), 0, 0);
+        level.render(batch);
         for (Player player : BoardInfo.players) {
             player.render(batch);
         }
-        level.render(batch);
         batch.end();
 
         debugRenderer.render(world, box2DCamera.combined);
@@ -205,19 +247,24 @@ public class MainScene implements Screen, ContactListener {
 
             if (!BoardInfo.explosionIDs.contains(explosion.getUUID())) {
                 if (explosion.getPlayerNumber() != player.getPlayerNumber()) {
-                    BoardInfo.playerScore[player.getPlayerNumber() - 1] -= 1;
-                    BoardInfo.playerScore[explosion.getPlayerNumber() - 1] += 1;
+                    setScore(player.getPlayerNumber(), getScore(player.getPlayerNumber()) - 1);
+                    setScore(explosion.getPlayerNumber(), getScore(explosion.getPlayerNumber()) + 1);
 
-                    hud.updateScore(player.getPlayerNumber(),
-                                    BoardInfo.playerScore[player.getPlayerNumber() - 1]);
+                    Player explosionPlayer = BoardInfo.players.get(explosion.getPlayerNumber() - 1);
+                    if (explosionPlayer.getDead()) {
+                        float locX = player.getX();
+                        float locY = player.getY();
 
-                    hud.updateScore(explosion.getPlayerNumber(),
-                                    BoardInfo.playerScore[explosion.getPlayerNumber() - 1]);
+                        explosionPlayer.setAlive(locX, locY);
+                    }
+
+                } else {
+                    setScore(player.getPlayerNumber(), getScore(player.getPlayerNumber()) - 1);
                 }
 
                 BoardInfo.explosionIDs.add(explosion.getUUID());
 
-                player.setToDestroy();
+                player.setDead();
             }
         }
     }

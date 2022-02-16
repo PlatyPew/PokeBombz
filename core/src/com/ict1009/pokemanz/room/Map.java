@@ -1,5 +1,7 @@
 package com.ict1009.pokemanz.room;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -30,6 +32,8 @@ public abstract class Map implements BoardElement {
 
     private int obTimer = 0;
     private int sdCounter = 0;
+    Music gameMusic;
+    Music sdMusic;
 
     public Map(String textureLocation, int[][] unbreakable, int[][] breakable) {
         this.texture = new Texture(textureLocation);
@@ -37,11 +41,16 @@ public abstract class Map implements BoardElement {
         this.breakable = breakable;
 
         spiral();
+
+        sdMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_sd.ogg"));
+        sdMusic.setLooping(true);
     }
 
     public Texture getTexture() {
         return this.texture;
     }
+
+    public abstract Music getGameMusic();
 
     /**
      * Creates unbreakable obstacles using 2d array
@@ -171,8 +180,17 @@ public abstract class Map implements BoardElement {
     public void suddenDeath(float delta) {
         if (GameInfo.timeElapsed < GameInfo.SUDDEN_DEATH)
             return;
+        gameMusic = getGameMusic();
+        gameMusic.dispose();
+        sdMusic.play();
+
+        for (Player player : BoardInfo.players) {
+            if (player.getDead())
+                player.setToDestroy();
+        }
 
         if (obTimer % GameInfo.SUDDEN_DEATH_DROP == 0 && sdCounter < suddenDeathCoords.size()) {
+
             int gridX = suddenDeathCoords.get(sdCounter)[0];
             int gridY = suddenDeathCoords.get(sdCounter)[1];
 
@@ -183,6 +201,7 @@ public abstract class Map implements BoardElement {
 
                 if (Math.abs(gridX - playerGridX) < 1 && Math.abs(gridY - playerGridY) < 1) {
                     player.setToDestroy();
+                    player.setDead();
                 }
             }
 
@@ -264,5 +283,14 @@ public abstract class Map implements BoardElement {
                 }
             }
         }
+    }
+
+    public void setGameMusic() {
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_game2.ogg"));
+        gameMusic.setLooping(true);
+        gameMusic.play();
+    }
+    public Music getSdMusic() {
+        return sdMusic;
     }
 }

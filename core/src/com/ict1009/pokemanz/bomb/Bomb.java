@@ -19,7 +19,7 @@ import com.ict1009.pokemanz.helper.GameInfo;
 
 public class Bomb extends Sprite implements Destoryable, BoardElement {
     final World world;
-    final private int timer = 2;
+    final private int timer = 3;
     private int gridX, gridY;
     final private int playerNumber;
 
@@ -45,9 +45,22 @@ public class Bomb extends Sprite implements Destoryable, BoardElement {
         this.gridX = gridX;
         this.gridY = gridY;
         setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
-        this.body = createBody();
         this.bombAtlas = new TextureAtlas("bomb/bomb explosion.atlas");
         this.playerNumber = playerNumber;
+        this.body = createBody();
+    }
+
+    public Bomb(World world, String textureLocation, int gridX, int gridY, int playerNumber,
+                boolean sensor) {
+        super(new Texture(textureLocation));
+        this.world = world;
+        this.gridX = gridX;
+        this.gridY = gridY;
+        setPosition((gridX + 1) * GameInfo.PPM, (gridY + 1) * GameInfo.PPM);
+        this.bombAtlas = new TextureAtlas("bomb/bomb explosion.atlas");
+        this.playerNumber = playerNumber;
+        this.sensor = sensor;
+        this.body = createBody();
     }
 
     public int getTimer() {

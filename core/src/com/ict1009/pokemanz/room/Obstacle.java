@@ -5,10 +5,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.ict1009.pokemanz.helper.GameInfo;
 import com.ict1009.pokemanz.helper.BoardElement;
+import com.ict1009.pokemanz.helper.GameInfo;
 
 public class Obstacle extends Sprite implements BoardElement {
     final protected World world;
@@ -77,7 +78,9 @@ public class Obstacle extends Sprite implements BoardElement {
 
         Body body = world.createBody(bodyDef);
 
-        body.createFixture(shape, 1f).setUserData(this);
+        Fixture fixture = body.createFixture(shape, 1f);
+        fixture.setUserData(this);
+        fixture.setFriction(0);
         shape.dispose();
         return body;
     }
