@@ -13,20 +13,20 @@ import java.util.regex.Pattern;
 
 import java.util.*;
 public class Chatbot {
-    protected Bot bot;
-    protected ChatBotUser player;
-    protected String[] words, questionWords;
-    protected String input, entity,answer;
-    protected ScoreBoardUpdater scoreboardupdater;
-    public Scanner sc = new Scanner(System.in);
+    private Bot bot;
+    private ChatBotUser player;
+    private String[] words, questionWords;
+    private String input, entity,answer;
+    private ScoreBoardUpdater scoreboardupdater;
     private boolean unAnsweredQuestion = false;
-    KnowledgeList knowledgeList;
-    Knowledge knowledge;
+    private KnowledgeList knowledgeList;
+    private Knowledge knowledge;
+    public Scanner sc = new Scanner(System.in);
     
     
     
     
-    
+
     public Chatbot(){
         bot = new Bot();
         this.player = new ChatBotUser();
@@ -34,6 +34,9 @@ public class Chatbot {
         scoreboardupdater = new ScoreBoardUpdater();
         Reload_scoreUpdater();
         
+    }
+    public String getBotOutput() {
+    	return this.bot.getOutput();
     }
     public void getUserInput(){
         player.userInput(sc);
@@ -158,6 +161,7 @@ public class Chatbot {
     public void chatbot_do_rest(){
     	bot.bot_output("Data Reset back to default");
         knowledgeList.clearKnowledge();
+        chatbot_do_load("init.ini");
     }
     public boolean chatbot_is_save() throws IOException{
         if(this.input.toLowerCase().equals("save")){
@@ -398,7 +402,7 @@ public class Chatbot {
     }
     private void chatbot_Update_New_Score() {
     	try {
-    		scoreboardupdater.currentScore = BoardInfo.playerScore;
+    		scoreboardupdater.setCurrentScore(BoardInfo.playerScore);
 			
 			scoreboardupdater.saveContent();
 		} catch (FileNotFoundException e) {
@@ -423,7 +427,7 @@ public class Chatbot {
     private void chatbot_Update_Old_Score(int idNum) {
     	try {
     		scoreboardupdater.setUpdateId(idNum);
-    		scoreboardupdater.currentScore = BoardInfo.playerScore;
+    		scoreboardupdater.setCurrentScore(BoardInfo.playerScore);
 			scoreboardupdater.saveContent(idNum);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

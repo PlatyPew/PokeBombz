@@ -43,7 +43,7 @@ public class EndScene implements Screen {
     		
     		if(BoardInfo.players.get(i) != null && !BoardInfo.players.get(i).getDead()) {
     			
-    			BoardInfo.playerScore[i] = BoardInfo.playerScore[i] + 5;
+    			BoardInfo.playerScore[i] = BoardInfo.playerScore[i] + 1;
     		}
     	}
     }

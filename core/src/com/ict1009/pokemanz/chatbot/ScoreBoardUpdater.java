@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class ScoreBoardUpdater {
     private String content, Line, scoreString, newContent;
     private int IDNumber, LatestIdNumber, UpdateIDNumber;
-    public int[] allScores = new int[4], currentScore = {4, 3, 5, 6};
+    private int[] allScores = new int[4], currentScore = {4, 3, 5, 6};
     public ScoreBoardUpdater() {
         Line = "";
         IDNumber = 2;
@@ -26,7 +26,9 @@ public class ScoreBoardUpdater {
         Matcher matcher = pattern.matcher(Input);
         return matcher.find();
     }
-
+    public void setCurrentScore(int [] newScore) {
+    	this.currentScore = newScore;
+    }
     public int[] uploadScoreBoard() throws FileNotFoundException {
         int Count = 4;
         File file = new File("scoreBoard.ini");
@@ -83,27 +85,27 @@ public class ScoreBoardUpdater {
 		this.newContent = "";
 		this.content = "";
 		this.UpdateIDNumber=IdNum;
-		newContent = String.format("ID=%d\nPlayer1=%d\nPlayer2=%d\nPlayer3=%d\nPlayer4=%d",
+		newContent = String.format("ID=%d\nPlayer1=%d\nPlayer2=%d\nPlayer3=%d\nPlayer4=%d\n",
 				this.UpdateIDNumber,currentScore[0],currentScore[1],currentScore[2],currentScore[3]);
 		File file = new File("scoreBoard.ini");
-      Scanner scan = new Scanner(file);
-      while(scan.hasNextLine()) {
-      	Line = scan.nextLine();
- 
-      	if(isPatternMatch(Line,"^ID=" + UpdateIDNumber +"$")) {
-      		this.content += this.newContent;
-      		for(int i=0; i<4; i++) {
-      			scan.nextLine();
-      		}
-      	}
-      	else {
-             	this.content += Line;
-          	this.content += "\n";
+		Scanner scan = new Scanner(file);
+		while(scan.hasNextLine()) {
+	      	Line = scan.nextLine();
+	 
+	      	if(isPatternMatch(Line,"^ID=" + UpdateIDNumber +"$")) {
+	      		this.content += this.newContent;
+	      		for(int i=0; i<4; i++) {
+	      			scan.nextLine();
+	      		}
+	      	}
+	      	else {
+	         	this.content += Line;
+	          	this.content += "\n";
       	}
       }
         System.out.println(this.content + newContent);
         FileWriter writer = new FileWriter("scoreBoard.ini", false);
-        writer.write(this.content + newContent);
+        writer.write(this.content);
         writer.close();
     }
 

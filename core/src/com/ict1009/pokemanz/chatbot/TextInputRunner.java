@@ -59,6 +59,7 @@ public class TextInputRunner extends ApplicationAdapter {
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
+    
 
     public void activateChatBot() {
 
@@ -69,7 +70,7 @@ public class TextInputRunner extends ApplicationAdapter {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            aiText = theChatBot.chatbot.bot.getOutput();
+            aiText = theChatBot.chatbot.getBotOutput();
             textField.setText("");
         }
 

@@ -21,9 +21,10 @@ public class GameChatbot {
 
         } else if (chatbot.chatbot_is_unansweredQuestion()) {
 
-        } else if (chatbot.chatbot_is_smalltalk()) {
+        } else if (chatbot.chatbot_is_smalltalk()) {	
+        	
         } else if (chatbot.chatbot_is_reset()) {
-            chatbot.chatbot_do_load("init.ini");
+
         } else if (chatbot.chatbot_is_save()) {
 
         } else if (chatbot.chatbot_is_ChangeSpawnTime()) {
