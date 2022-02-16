@@ -62,6 +62,8 @@ public class TitleScene implements Screen {
     private boolean bye = false;
     private int numP = 1;
 
+    private Screen mainscene;
+
     public TitleScene(GameMain game) {
         this.game = game;
         this.batch = game.getBatch();
@@ -170,7 +172,8 @@ public class TitleScene implements Screen {
             if (Gdx.input.justTouched()) {
                 this.dispose();
                 menuMusic.dispose();
-                game.setScreen(new MainScene(game, numP, 1));
+                mainscene = new MainScene(game, numP, 1);
+                game.setScreen(mainscene);
                 System.out.println("Level 1 + " + numP);
             }
         } else {
@@ -189,7 +192,8 @@ public class TitleScene implements Screen {
             if (Gdx.input.justTouched()) {
                 this.dispose();
                 menuMusic.dispose();
-                game.setScreen(new MainScene(game, numP, 2));
+                mainscene = new MainScene(game, numP, 2);
+                game.setScreen(mainscene);
                 System.out.println("Level 2 + " + numP);
             }
         } else {
@@ -209,7 +213,8 @@ public class TitleScene implements Screen {
             if (Gdx.input.justTouched()) {
                 this.dispose();
                 menuMusic.dispose();
-                game.setScreen(new MainScene(game, numP, 3));
+                mainscene = new MainScene(game, numP, 3);
+                game.setScreen(mainscene);
                 System.out.println("Level 3 + " + numP);
             }
         } else {
