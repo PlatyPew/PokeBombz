@@ -124,6 +124,15 @@ public class MainScene implements Screen, ContactListener {
         hud.updateTime();
     }
 
+    public int getScore(int playerNum) {
+        return BoardInfo.playerScore[playerNum - 1];
+    }
+
+    public void setScore(int playerNum, int score) {
+        BoardInfo.playerScore[playerNum - 1] = score;
+        hud.updateScore(playerNum, BoardInfo.playerScore[playerNum - 1]);
+    }
+
     @Override
     public void show() {}
 
@@ -238,14 +247,8 @@ public class MainScene implements Screen, ContactListener {
 
             if (!BoardInfo.explosionIDs.contains(explosion.getUUID())) {
                 if (explosion.getPlayerNumber() != player.getPlayerNumber()) {
-                    BoardInfo.playerScore[player.getPlayerNumber() - 1] -= 1;
-                    BoardInfo.playerScore[explosion.getPlayerNumber() - 1] += 1;
-
-                    hud.updateScore(player.getPlayerNumber(),
-                                    BoardInfo.playerScore[player.getPlayerNumber() - 1]);
-
-                    hud.updateScore(explosion.getPlayerNumber(),
-                                    BoardInfo.playerScore[explosion.getPlayerNumber() - 1]);
+                    setScore(player.getPlayerNumber(), getScore(player.getPlayerNumber()) - 1);
+                    setScore(explosion.getPlayerNumber(), getScore(explosion.getPlayerNumber()) + 1);
 
                     Player explosionPlayer = BoardInfo.players.get(explosion.getPlayerNumber() - 1);
                     if (explosionPlayer.getDead()) {
@@ -256,9 +259,7 @@ public class MainScene implements Screen, ContactListener {
                     }
 
                 } else {
-                    BoardInfo.playerScore[player.getPlayerNumber() - 1] -= 1;
-                    hud.updateScore(player.getPlayerNumber(),
-                                    BoardInfo.playerScore[player.getPlayerNumber() - 1]);
+                    setScore(player.getPlayerNumber(), getScore(player.getPlayerNumber()) - 1);
                 }
 
                 BoardInfo.explosionIDs.add(explosion.getUUID());
