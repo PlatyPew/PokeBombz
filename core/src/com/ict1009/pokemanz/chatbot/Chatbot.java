@@ -408,4 +408,25 @@ public class Chatbot {
         }
         return false;
     }
+    public boolean chatbot_is_ChangeKickBomb() {
+    	if (isPatternMatch(this.input, "^change Kick Bomb ?P?[1-4]?$")) {
+    		chatbot_do_ChangeKickBomb();
+            return true;
+        }
+        return false;
+    }
+    public void chatbot_do_ChangeKickBomb() {
+    	
+         if (isPatternMatch(this.input, "change Kick Bomb P[1-4]$")) {
+             int playerNum = Integer.parseInt(words[3].substring(1));
+             BoardInfo.players.get(playerNum - 1).setKick(true);
+             bot.bot_output("player " +playerNum +" can kick bombs now");
+         } else {
+             for (int i = 0; i < BoardInfo.players.size(); i++) {
+                 BoardInfo.players.get(i).setKick(true);
+             }
+             bot.bot_output("All Players can kick bombs now");
+         }
+     	}
+	
 }
