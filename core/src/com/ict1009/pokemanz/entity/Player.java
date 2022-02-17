@@ -911,7 +911,7 @@ public class Player extends Sprite implements ControllerListener, Destoryable, B
                 up = false;
             else if (Gamepad.left(buttonCode))
                 left = false;
-            else if (Gamepad.right(buttonCode))
+            else if (Gamepad.down(buttonCode))
                 down = false;
             else if (Gamepad.right(buttonCode))
                 right = false;
