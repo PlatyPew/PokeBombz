@@ -1,5 +1,7 @@
 package com.ict1009.pokemanz.helper;
 
+import com.badlogic.gdx.audio.Music;
+
 public class GameInfo {
     final public static int WIDTH = 1280;
     final public static int HEIGHT = 720;
@@ -22,4 +24,6 @@ public class GameInfo {
     public static int MAX_PLAYER_BOMB_RANGE = 5;
 
     public static int timeElapsed = 0;
+
+    public static Music currentMusic;
 }

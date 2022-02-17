@@ -296,6 +296,7 @@ public class Chatbot {
     }
     public boolean chatbot_is_exitMenu(GameMain game) {
         if (isPatternMatch(this.input, "^exit main menu$")) {
+            GameInfo.currentMusic.dispose();
             game.setScreen(new TitleScene(game));
             bot.bot_output("Alright you are in menu now");
             return true;
