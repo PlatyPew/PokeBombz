@@ -35,7 +35,7 @@ public class MainScene implements Screen, ContactListener {
     private Map level;
 
     private OrthographicCamera box2DCamera;
-    private Box2DDebugRenderer debugRenderer;
+    // private Box2DDebugRenderer debugRenderer;
     private int numPlayers;
     private int winnerNum;
 
@@ -90,7 +90,7 @@ public class MainScene implements Screen, ContactListener {
         this.box2DCamera.setToOrtho(false, GameInfo.WIDTH / GameInfo.PPM,
                                     GameInfo.HEIGHT / GameInfo.PPM);
         this.box2DCamera.position.set(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f, 0);
-        this.debugRenderer = new Box2DDebugRenderer();
+        // this.debugRenderer = new Box2DDebugRenderer();
     }
 
     private void checkScore(float delta) {
@@ -149,7 +149,7 @@ public class MainScene implements Screen, ContactListener {
         }
         batch.end();
 
-        debugRenderer.render(world, box2DCamera.combined);
+        // debugRenderer.render(world, box2DCamera.combined);
 
         batch.setProjectionMatrix(hud.getStage().getCamera().combined);
         hud.getStage().draw();
