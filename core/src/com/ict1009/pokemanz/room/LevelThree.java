@@ -2,6 +2,7 @@ package com.ict1009.pokemanz.room;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.ict1009.pokemanz.helper.GameInfo;
 
 public class LevelThree extends Map {
     final private static String textureLocation = "room/background3.png";
@@ -36,6 +37,7 @@ public class LevelThree extends Map {
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/music_game6.ogg"));
         gameMusic.setLooping(true);
         gameMusic.play();
+        GameInfo.currentMusic = gameMusic;
     }
 
     public Music getGameMusic(){
