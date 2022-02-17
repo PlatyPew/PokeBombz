@@ -49,6 +49,8 @@ public class GameChatbot {
 
         } else if (chatbot.chatbot_is_reset_scores()) {
 
+        } else if (chatbot.chatbot_is_ChangeKickBomb()) {
+
         } 
         
         else {
