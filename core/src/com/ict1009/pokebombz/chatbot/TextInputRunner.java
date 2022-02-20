@@ -25,7 +25,7 @@ public class TextInputRunner extends ApplicationAdapter {
     private GameMain game;
 
     public TextInputRunner(GameMain game) {
-        this.aiText = "helloworld";
+        this.aiText = "Enter 'Help' to open a help text file";
         this.game = game;
     }
     public void create() {

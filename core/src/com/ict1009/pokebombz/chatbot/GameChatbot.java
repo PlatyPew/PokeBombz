@@ -28,7 +28,7 @@ public class GameChatbot {
 
         } else if (chatbot.chatbot_is_save()) {
 
-        } else if (chatbot.chatbot_is_ChangeSpawnTime()) {
+        } else if (chatbot.chatbot_is_ChangeSpawnChance()) {
 
         } else if (chatbot.chatbot_is_load()) {
 
@@ -42,17 +42,19 @@ public class GameChatbot {
 
         } else if (chatbot.chatbot_is_Change_Bomb_Range()) {
 
-        } else if (chatbot.chat_bot_is_load_score_to_game()) {
+        } else if (chatbot.chatbot_is_load_score_to_game()) {
 
-        } else if (chatbot.chat_bot_is_Update_New_Score()) {
+        } else if (chatbot.chatbot_is_Update_New_Score()) {
 
-        } else if (chatbot.chat_bot_is_Update_Old_Score()) {
+        } else if (chatbot.chatbot_is_Update_Old_Score()) {
 
         } else if (chatbot.chatbot_is_reset_scores()) {
 
         } else if (chatbot.chatbot_is_ChangeKickBomb()) {
 
-        } 
+        } else if (chatbot.chatbot_is_help()) {
+        	
+        }
         
         else {
             chatbot.chatbot_do_not_understand();
