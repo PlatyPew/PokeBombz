@@ -5,12 +5,17 @@ import com.ict1009.pokebombz.helper.GameInfo;
 import com.ict1009.pokebombz.scenes.TitleScene;
 
 import java.awt.Desktop;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 public class Chatbot {
     public Scanner sc = new Scanner(System.in);
     private Bot bot;
@@ -337,12 +342,25 @@ public class Chatbot {
     }
     private void chatbot_do_help() throws IOException, IllegalArgumentException
     {
-    	
-         // create the process
-		File file = new File("help.txt");
-		Desktop desktop = Desktop.getDesktop();
-         // checking the command in list
-		desktop.open(file);
+    	File file = new File("help.txt");
+		String longMessage = "" , Line= "";
+		Scanner scan = new Scanner(file);
+        while (scan.hasNextLine()) {
+            Line = scan.nextLine();
+            longMessage += Line;
+            longMessage += "\n";
+        }
+        JTextArea textArea = new JTextArea(15, 60);
+        textArea.setFont(new Font("Arial Black", Font.TYPE1_FONT, 16));
+        textArea.setText(longMessage);
+        textArea.setEditable(false);
+        
+        // wrap a scrollpane around it
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        
+        // display them in a message dialog
+        JOptionPane.showMessageDialog(null, scrollPane,"Help Menu",JOptionPane.INFORMATION_MESSAGE);	
+
      }
     private void chatbot_do_load() {
 

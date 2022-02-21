@@ -1,33 +1,28 @@
-<player> = p<player number>	If left empty the effects will affect all players.
-
-General:
-exit ( Exit game)
-Exit main menu (exit to main menu)
-Help (Open help.txt on PC)
-
-Out Of Game:
-Any command that starts with "who", "what" and "how" would be will be presummed to be a question. The ai would reply that he doesn't understand the question. It would expect the user to reply the question and it would saved into it database.
-
-Load (Load Curret information into knowledge.ini file in assets)
-
-Reset (Reset informaton in chatbot and get information from init.ini which is the default information)
-
-Save ( save information into knowledge.ini)
-
-
-
-
-In Game:
-Change bomb count <count> <player>
-Change bomb range <range> <player>(Optional) <number>
-change kick bomb p<player number>(Optional)
-Change death timer <number>
-Change Spawn Chance <Number> ( Percentage)
-Change speed <Count> <player>
-Start sudden death
-
-Score:
-Reset score (User score == 0,0,0,0)
-Upload score ID <player>
-Update new score (Give new ID and update into a ini-file)
-Update score ID <A number smaller than the highest ID> (update score into a that slot)
+ <player> = p<player number> If left empty the effects will affect all players. 
+ 
+ General: 
+ exit ( Exit game) 
+ Exit main menu (exit to main menu) 
+ Help (Open help.txt on PC) 
+ 
+ Out Of Game: 
+ Any command that starts with "who", "what" and "how" would be will be presummed to be a question. The ai would reply the question according to it data base. If the data isn't present then it would reply that he doesn't understand the question and would expect the user to reply the question and it would saved into it database. 
+ 
+ Load (Load Curret information into knowledge.ini file in assets) 
+ Reset (Reset informaton in chatbot and get information from init.ini which is the default information) 
+ Save ( save information into knowledge.ini) 
+ 
+ In Game: 
+ Change bomb count <count> <player> 
+ Change bomb range <range> <player>(Optional) <number> 
+ change kick bomb p<player number>(Optional) 
+ Change death timer <number> 
+ Change Spawn Chance <Number> ( Percentage) 
+ Change speed <Count> <player> 
+ Start sudden death 
+ 
+ Score: 
+ Reset score (User score == 0,0,0,0) 
+ Upload score ID <player> 
+ Update new score (Give new ID and update into a ini-file) 
+ Update score ID <A number smaller than the highest ID> (update score into a that slot)
