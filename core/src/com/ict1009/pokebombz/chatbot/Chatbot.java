@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 public class Chatbot {
-    public Scanner sc = new Scanner(System.in);
+    private Scanner sc = new Scanner(System.in);
     private Bot bot;
     private String input, entity, answer;
     private Knowledge knowledge;
@@ -47,14 +47,14 @@ public class Chatbot {
         bot.bot_output("I don't understand " + this.input);
     }
     public boolean chatbot_is_Change_Bomb_Count() {
-        if (isPatternMatch(this.input, "^change bomb count [0-9]*\\.?[0-9]* ?P?[1-4]?$")) {
+        if (isPatternMatch(this.input, "^change bomb count [0-9]\\.?[0-9]* ?P?[1-4]?$")) {
             chatbot_do_Change_Bomb_Count();
             return true;
         }
         return false;
     }
     public boolean chatbot_is_Change_Bomb_Range() {
-        if (isPatternMatch(this.input, "^change bomb range [0-9]*.?[0-9]* ?P?[1-4]?$")) {
+        if (isPatternMatch(this.input, "^change bomb range [0-9] ?P?[1-4]?$")) {
             chatbot_do_Change_Bomb_Range();
             return true;
         }
@@ -63,7 +63,7 @@ public class Chatbot {
     public boolean chatbot_is_ChangeDeathTimer() {
         try {
             
-            if (isPatternMatch(this.input, "^Change death timer [0-9]*")) {
+            if (isPatternMatch(this.input, "^Change death timer [0-9]")) {
             	float value = Float.parseFloat(words[3]);
             	chatbot_do_changeDeathTimer(value);
                 return true;
@@ -95,7 +95,7 @@ public class Chatbot {
     }
     public boolean chatbot_is_changeSpeed() {
         try {
-            if (isPatternMatch(this.input, "^change speed [0-9].?[0-9]* ?p?[1-4]?$")) {
+            if (isPatternMatch(this.input, "^change speed [0-9] ?p?[1-4]?$")) {
                 float value = Float.parseFloat(words[2]);
                 chatbot_do_changeSpeed(value);
                 return true;
@@ -118,6 +118,7 @@ public class Chatbot {
     public boolean chatbot_is_exitMenu(GameMain game) {
         if (isPatternMatch(this.input, "^exit main menu$")) {
             GameInfo.currentMusic.dispose();
+            GameInfo.timeElapsed = 0;
             game.setScreen(new TitleScene(game));
             bot.bot_output("Alright you are in menu now");
             return true;
@@ -175,6 +176,7 @@ public class Chatbot {
     }
     public boolean chatbot_is_reset_scores() {
         if (isPatternMatch(this.input, "^Reset score$")) {
+        	bot.bot_output("Resetted Score");
             BoardInfo.playerScore = new int[] {0, 0, 0, 0};
             return true;
         }
@@ -260,7 +262,7 @@ public class Chatbot {
         float bombNum = Float.parseFloat(words[3]);
         int bombNumInt = (int)bombNum;
         try {
-            if (isPatternMatch(this.input, "^change bomb count [0-9]*.*[0-9]* P[1-4]$")) {
+            if (isPatternMatch(this.input, "^change bomb count [0-9] P[1-4]$")) {
                 int playerNum = Integer.parseInt(words[4].substring(1));
                 BoardInfo.players.get(playerNum - 1).setMaxBombs(bombNumInt);
                 bot.bot_output("Bomb count has been changed to " + bombNumInt + " for player " +
