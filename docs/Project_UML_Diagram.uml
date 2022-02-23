@@ -1,0 +1,630 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+Class GameMain {
+    -batch: SpriteBatch
+    - chatBot: TextInputRunner
+    -{static} pause: boolean
+    __
+    +getBatch(): SpriteBatch
+    +toggleState(): void
+    +create(): void
+    +render(): void
+}
+Class MainScene {
+    world: World
+    -batch: SpriteBatch
+    -hud: MainHud
+    -level: Map
+    -box2DCamera: OrthographicCamera
+    -numPlayers: int
+    -winnerNum: int
+    -endScene: Screen
+    __
+    +MainScene(GameMain, int, int)
+    __
+    -setupCamera(): void
+    -checkScore(float): void
+    +update(float): void
+    +getScore(int): int
+    +setScore(int, int): void
+    +render(float): void
+    -playerMovement(): void
+    -detectPlayerCollision(): void
+    -detectPlayerExplosion(): void
+    -detectPlayerItem(): void
+    -updateBombTangible(Contact): void
+}
+
+Class EndScene {
+    -{static} gameButtonSizes: int
+    -game: GameMain
+    -batch: SpriteBatch
+    -gameButtonTextures: Texture
+    -playerSpriteTextures: Texture
+    -endSceneAnimations: Animation<TextureRegion>
+    -elapsed: float
+    -winner: Player
+    -numPlayers: int
+    __
+    +EndScene(GameMain, int, int)
+    __
+    +giveSurvivorPoints(): void
+    +render(float): void
+    +getScore(): void
+    +getWinner(): Player
+}
+
+Class TitleScene {
+    -{static} gameButtonSizes: int
+    -game: GameMain
+    -batch: SpriteBatch
+    -gameButtonTextures: Texture
+    -animation: Animation<TextureRegion>
+    -elapsed: float
+    -menuMusic: Music
+    -active: boolean
+    -bye: boolean
+    -numP: int
+    -mainscene: Screen
+    __
+
+    __
+    +render(float): void
+}
+
+class MainHud {
+    - stage: Stage
+    - players: int
+    - timerImage: Image
+    - timerLabel: Label
+    - scoreImage: Image[]
+    - scoreLabel: Label[]
+__
+    + MainHud(GameMain, int)
+__
+    - createImages(): void
+    - createLabels(): void
+    - calculateTime(): String
+    + updateTime(): void
+    + updateScore(int, int): void
+    + getStage(): Stage
+}
+
+class WinnerHud {
+    - scoreImage: Image[]
+    - scoreLabel: Label[]
+__
+    + WinnerHud(GameMain, int)
+__
+    - createImages(): void
+    - createLabels(): void
+    + updateScore(int, int): void
+    + getStage(): Stage
+}
+
+abstract Item{
+    + gridX: int
+    + gridY: int
+    - body: Body
+    - world: World
+    # toDestroy: boolean
+    - destoryed: boolean
+   --
+    + Item(World,String,int,int)
+   --
+    + getGridY(): int
+    + getGridX(): int
+    - createBody(): Body
+    + getDestroyed(): boolean
+    + setToDestroy(): void
+    + getBody(): Body
+   --
+    + {static} randomItem(World,int,int): Item
+   --
+    + {abstract} applyProperty(Player): void
+}
+
+class BombRange{
+    + BombRange(World,int,int)
+   --
+    + applyProperty(Player): void
+}
+
+class BombExtra{
+    + BombExtra(World,int,int)
+   --
+    + applyProperty(Player): void
+}
+
+class BombKick{
+    + BombKick(World,int,int)
+   --
+    + applyProperty(Player): void
+}
+
+class BombThrow{
+    + BombThrow(World,int,int)
+   --
+    + applyProperty(Player): void
+}
+
+class SpeedUp{
+    + SpeedUp(World,int,int)
+   --
+    + applyProperty(Player): void
+}
+
+class Bomb{
+    + world: World
+    - sensor:boolean
+    - body: Body
+    - bodyType: BodyType
+    - animation: Animation<AtlasRegion>
+    - destroyed: boolean
+    - timer: int
+    - elapsedTime: float
+    - toDestroy: boolean
+    - playerNumber: int
+    - gridX: int
+    - gridY: int
+    ---
+    + Bomb(World, String, int, int, int)
+    + Bomb(World, String, int, int, int,boolean)
+    ---
+    + getTimer(): int
+    + getGridX(): int
+    + getGridY(): int
+    + getUpdated(): boolean
+    + getPlayerNumber(): int
+    + updateBody(BodyType, boolean): void
+    - countdown(float): void
+    + updatePosition(int,int): void
+    + setToDestory(): void
+    + getDestroyed(): boolean
+    + render(SpriteBatch): void
+    + update(float): void
+}
+
+class Explode{
+    + world: World
+    - body: Body
+    - map: Map
+    - gridX: int
+    - gridY: int
+    - timer: int
+    - range: int
+    - playerNumber: int
+    - counter: int
+    - destroyed: boolean
+    - toDestory: boolean
+    - explosions: ArrayList<Explode>
+    - uuid: UUID
+    - bodyType: BodyType
+    ---
+    + Explode(World, Map, String, int, int, int, int, UUID)
+    + Explode(World, Map, String, int, int, int, int, boolean)
+    ---
+    + getUUID(): UUID
+    + getPlayerNumber(): int
+    + setToDestroy: void
+    + getDestroyed: boolean
+    - handleExplosion(): void
+    - countDown(float): void
+    + render(SpriteBatch): void
+    + update(float): void
+}
+
+abstract Map{
+    - obstacleMap: Obstacle[][]
+    - unbreakable: int[][]
+    - breakable: int[][]
+    - texture: Texture
+    + gameMusic: Music
+    - itemMap: Item[][]
+    - suddenDeathCoords: ArrayList<int[]>
+    - sdCounter: int
+    - world: World
+    + sdMusic: Music
+    - bombMap: Bomb[][]
+    - body: Body
+    - obTimer: int
+   --
+    + Map(String,int[][],int[][])
+   --
+    - createBoundary(World): Body
+    - createBreakable(World): void
+    - createUnbreakable(World): void
+    + getGameMusic(): Music
+    + setGameMusic(): void
+    + getSdMusic(): Music
+    + getBombMap(): Bomb[][]
+    + setBombMap(int,int,Bomb): void
+    + createObstacle(World): void
+    + getItemMap(): Item[][]
+    + setItemMap(int,int,Item): void    
+    + getTexture(): Texture
+    + getObstacleMap(): Obstacle[][]
+    + setObstacleMap(int,int,Obstacle): void
+    + sprial(): void
+    + suddenDeath(float): void
+}
+
+class LevelOne{
+    - {static} textureLocation
+    - gameMusic: Music
+    - {static} breakable: int[][]
+    - {static} unbreakable: int[][]
+    --
+    + LevelOne()
+    --
+    + getGameMusic(): Music
+    + setGameMusic(): void
+}
+
+class LevelTwo{
+    - {static} textureLocation
+    - gameMusic: Music
+    - {static} breakable: int[][]
+    - {static} unbreakable: int[][]
+    --
+    + LevelTwo()
+    --
+    + getGameMusic(): Music
+    + setGameMusic(): void
+}
+
+class LevelThree{
+    - {static} textureLocation
+    - gameMusic: Music
+    - {static} breakable: int[][]
+    - {static} unbreakable: int[][]
+    --
+    + LevelThree()
+    --
+    + getGameMusic(): Music
+    + setGameMusic(): void
+}
+
+class Obstacle {
+    - world: World
+    - breakable: Breakable
+    - canBreak: boolean
+    - gridX: int
+    - gridY: int
+    ---
+    + Obstacle(World,String,int,int)
+    + Obstacle(World,String,int,int,boolean)
+    ---
+    + getGridX(): int
+    + getGridY(): int
+    + getBreakable(): boolean
+    + setToDestroy: void
+    + getDestroyed: boolean
+    + render(SpriteBatch): void
+    + update(float): void
+    }
+    
+class Breakable {
+    - obstacle: Obstacle
+    - toDestroy: boolean
+    - destroyed: boolean
+    ---
+    + Breakable(Obstacle)
+    ---
+    + setToDestory(): void
+    + getDestroyed(): boolean
+    + render(SpriteBatch): void
+    + update(float): void
+}
+
+class Player {
+    - world: World
+    - body: Body
+    - map: Map
+    - playerNumber: int
+    - gridX: int
+    - gridY: int
+    - dead: boolean
+    - animation: Animation<TextureAtlas.AtlasRegion>
+    - elapsedTime: float
+    - texture: Texture
+    - bombRange: int
+    - maxBombs: int
+    - baseSpeed: int
+    - kick: boolean
+    - throwing: boolean
+    - bombs: ArrayList<Bomb>
+    - explosions: ArrayList<Explode>
+    - controllerID: String
+__
+    + Player(World, Map, int, String, int, int, String)
+__
+    + getBody(): Body
+    + getPlayerNumber(): int
+    + getDead(): boolean
+    + setBombRange(int): void
+    + getBombRange(): int
+    + setMaxBombs(int): void
+    + getMaxBombs(): int
+    + setBaseSpeed(float): void
+    + getBaseSpeed(): float
+    + setKick(boolean): void
+    + getKick(): boolean
+    + setThrowing(boolean): void
+    + getThrowing(): boolean
+    + getControllerID(): String
+}
+
+
+interface BoardElement {
+    + render(SpriteBatch): void
+    + update(float): void
+}
+
+interface Destroyable {
+    + getBody(): Body
+    + setToDestroy(): void
+    + getDestroyed: boolean
+}
+
+class BoardInfo {
+    + {static} players: ArrayList<Player>
+    + {static} playerScore: int[]
+    + {static} savedScore: int[]
+    + {static} explosionsIDs: ArrayList<UUID>
+}
+
+class GameInfo {
+    + {static} WIDTH: int
+    + {static} HEIGHT: int
+    + {static} MAP_WIDTH: int
+    + {static} MAP_HEIGHT: int
+    + {static} FPS: int
+    + {static} PPM: int
+    + {static} SUDDEN_DEATH: int
+    + {static} SUDDEN_DEATH_DROP: int
+    + {static} ITEM_SPAWN_CHANCE: int
+    + {static} PLAYER_VELOCITY: float
+    + {static} PLAYER_BOMBS: int
+    + {static} PLAYER_BOMB_RANGE: int
+    + {static} MAX_PLAYER_SPEED: int
+    + {static} MAX_PLAYER_BOMBS: int
+    + {static} MAX_PLAYER_BOMB_RANGE: int
+    + {static} timeElapsed: int
+}
+
+class Gamepad {
+    + up(int): boolean
+    + left(int): boolean
+    + down(int): boolean
+    + right(int): boolean
+    + bomb(int): boolean
+    + kicking(int): boolean
+    + throwing(int): boolean
+}
+
+class Keyboard {
+    + up(int): boolean
+    + left(int): boolean
+    + down(int): boolean
+    + right(int): boolean
+    + bomb(int): boolean
+    + kicking(int): boolean
+    + throwing(int): boolean
+}
+
+class MainHud {
+    - stage: Stage
+    - players: int
+    - timerImage: Image
+    - timerLabel: Label
+    - scoreImage: Image[]
+    - scoreLabel: Label[]
+__
+    + MainHud(GameMain, int)
+__
+    - createImages(): void
+    - createLabels(): void
+    - calculateTime(): String
+    + updateTime(): void
+    + updateScore(int, int): void
+    + getStage(): Stage
+}
+
+class WinnerHud {
+    - scoreImage: Image[]
+    - scoreLabel: Label[]
+__
+    + WinnerHud(GameMain, int)
+__
+    - createImages(): void
+    - createLabels(): void
+    + updateScore(int, int): void
+    + getStage(): Stage
+}
+
+class Chatbot {
+   -sc : Scanner
+   -answer : String
+   -bot : Bot
+   -entity : String
+   -input : String
+   -knowledge : Knowledge
+   -knowledgeList : KnowledgeList
+   -player : ChatBotUser
+   -questionWords : String[]
+   -scoreboardupdater : ScoreBoardUpdater
+   -unAnsweredQuestion : boolean
+   -words : String[]
+    
+    +Chatbot_is_Instruction_Method() Boolean
+    -Chatbot_do_Instruction_Method() void
+    -CleanInput(String input) String
+    +getBotOutput() String
+    -isPatternMatch(String Input, String Pattern) boolean
+    
+}
+
+Class ScoreBoardUpdater{
+  int[] allScores
+  String content
+  int[] currentScore
+  int IDNumber
+  int LatestIdNumber
+  String Line
+  String newContent
+  String scoreString
+  int UpdateIDNumber
+  __
+  +getLatestIdNumber() int
+ +isPatternMatch(String, String) boolean
+ +ReloadContent() void
+ +saveContent() void
+ +saveContent(int) void
+ +setIdNumber(int) void
+ +setLatestIdNumber(int) void
+ +setUpdateId(int) void
+ +updateOldContent() void
+ +uploadScoreBoard() int[]
+}
+Class Bot{
+ -String name
+ -String output
+ +Bot()
+ +bot_output(String)
+ +getName()
+ +getOutput()
+}
+Class ChatBotUser{
+  -String input
+  -String name
+  +ChatBotUser()
+  +getInput()
+  +userInput(Scanner)
+  +userSetinput(String)
+}
+Class GameChatbot{
+  Chatbot chatbot
+  GameMain game
+  GameChatbot(GameMain) Void
+  run(String) Void
+}
+Class Knowledge{
+ +String answer
+ +String firstWord
+ +String question
+ +Knowledge(String, String, String)
+}
+Class KnowledgeList{
+ +String answer
+ +ArrayList<Knowledge>[] listOfKnowledge
+ +Knowledge newKnowledge
+ +Knowledge targetKnowledge
+ +int totalNumberOfCategory
+ +KnowledgeList()
+ +addKnowledge(String, String, String) int
+ +choosePageNumber(String) int
+ +cleanInput(String) String
+ +clearKnowledge() void
+ +getKnowledge(String, String) boolean
+ +getTargetKnowledge() Knowledge
+ +loadKnowledge() void
+ +loadKnowledge(String) void
+ +removeKnowledge(String, int) void
+ +saveKnowledge() void
+ +saveKnowledgeIntent(int) string
+}
+Class TextInputRunner{
+   +String aiText
+ +TextField textField
+ +GameChatbot theChatBot
+ +String userInput
+ +TextInputRunner(GameMain) void
+ +activateChatBot() void
+ +changeFocus() void
+ +printAiText(String) void
+}
+
+Chatbot "1" *--"1"  Bot
+Chatbot "1" *--"1" ChatBotUser
+Chatbot "1" *--"1" KnowledgeList
+GameChatbot "1" *--"1"  Chatbot
+KnowledgeList "1" *--"1"  Knowledge  
+Chatbot "1" *--"1"  ScoreBoardUpdater
+TextInputRunner "1" *--"1"  GameChatbot
+
+interface Screen
+
+Map "1" <|-- "1" LevelOne
+Map "1" <|-- "1" LevelTwo
+Map "1" <|-- "1" LevelThree
+Map "1" *-- "*" Obstacle
+Obstacle "1" o-- "0..1" Breakable
+Breakable "0..1" *-- "1" Obstacle
+Keyboard "1" -- "*" Player
+Gamepad "1" -- "*" Player
+BoardInfo "1" -- "*" Player
+Player "*" -- "1" GameInfo 
+Player ..|> Destroyable
+
+GameMain "1" *- "1" TitleScene
+Item <|-- BombExtra
+Item <|-- BombKick
+Item <|-- BombRange
+Item <|-- BombThrow
+Item <|-- SpeedUp
+TitleScene "1" *- "1" MainScene
+EndScene "1" -- "1" Player
+MainScene "1" -- "1" Item
+MainHud "1" --* "1" MainScene
+MainScene "1" *-- "1" Map
+MainScene "1" *-- "4" Player
+MainScene "1" *- "1" EndScene
+WinnerHud "1" -* "1" EndScene
+Screen <|.. EndScene
+Screen <|.. MainScene
+Screen <|.. TitleScene
+
+Player "1" *-- "*" Bomb
+Player "1" *-- "*" Explode
+
+BoardElement <|.. Breakable
+BoardElement <|.. Obstacle
+BoardElement <|.. Item
+BoardElement <|.. Bomb
+BoardElement <|.. Map
+BoardElement <|.. Player
+BoardElement <|.. Explode
+
+Destroyable <|.. Breakable
+Destroyable <|.. Item
+Destroyable <|.. Bomb
+Destroyable <|.. Explode
+Destroyable <|.. Player
+
+MainHud "1" -- "1" GameInfo 
+TitleScene "1" -- "1" GameInfo 
+Bomb "1" -- "1" GameInfo 
+Obstacle "1" -- "1" GameInfo 
+Map "1" -- "1" GameInfo 
+Item "1" -- "1" GameInfo 
+EndScene "1" -- "1" GameInfo 
+WinnerHud "1" -- "1" GameInfo 
+MainScene "1" -- "1" GameInfo 
+Explode "1" -- "1" GameInfo 
+Chatbot "1" -- "1" GameInfo 
+LevelOne "1" -- "1" GameInfo 
+LevelTwo "1" -- "1" GameInfo 
+LevelThree "1" -- "1" GameInfo 
+
+BoardInfo "1" -- "1" MainScene
+BoardInfo "1" -- "1" EndScene
+BoardInfo "1" -- "1" Chatbot
+BoardInfo "1" -- "1" MainHud
+BoardInfo "1" -- "1" WinnerHud
+BoardInfo "1" -- "1" Map
+BoardInfo "1" -- "1" Player
+
+GameMain "1" --* "1" TextInputRunner
+@enduml
