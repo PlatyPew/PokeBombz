@@ -47,14 +47,14 @@ public class Chatbot {
         bot.bot_output("I don't understand " + this.input);
     }
     public boolean chatbot_is_Change_Bomb_Count() {
-        if (isPatternMatch(this.input, "^change bomb count [0-9]\\.?[0-9]* ?P?[1-4]?$")) {
+        if (isPatternMatch(this.input, "^change bomb count [0-9]+ ?P?[1-4]?$")) {
             chatbot_do_Change_Bomb_Count();
             return true;
         }
         return false;
     }
     public boolean chatbot_is_Change_Bomb_Range() {
-        if (isPatternMatch(this.input, "^change bomb range [0-9] ?P?[1-4]?$")) {
+        if (isPatternMatch(this.input, "^change bomb range [0-9]+ ?P?[1-4]?$")) {
             chatbot_do_Change_Bomb_Range();
             return true;
         }
@@ -63,7 +63,7 @@ public class Chatbot {
     public boolean chatbot_is_ChangeDeathTimer() {
         try {
             
-            if (isPatternMatch(this.input, "^Change death timer [0-9]")) {
+            if (isPatternMatch(this.input, "^Change death timer [0-9]+$")) {
             	float value = Float.parseFloat(words[3]);
             	chatbot_do_changeDeathTimer(value);
                 return true;
@@ -95,7 +95,7 @@ public class Chatbot {
     }
     public boolean chatbot_is_changeSpeed() {
         try {
-            if (isPatternMatch(this.input, "^change speed [0-9] ?p?[1-4]?$")) {
+            if (isPatternMatch(this.input, "^change speed [0-9]+ ?p?[1-4]?$")) {
                 float value = Float.parseFloat(words[2]);
                 chatbot_do_changeSpeed(value);
                 return true;
@@ -262,7 +262,7 @@ public class Chatbot {
         float bombNum = Float.parseFloat(words[3]);
         int bombNumInt = (int)bombNum;
         try {
-            if (isPatternMatch(this.input, "^change bomb count [0-9] P[1-4]$")) {
+            if (isPatternMatch(this.input, "^change bomb count [0-9]+ P[1-4]$")) {
                 int playerNum = Integer.parseInt(words[4].substring(1));
                 BoardInfo.players.get(playerNum - 1).setMaxBombs(bombNumInt);
                 bot.bot_output("Bomb count has been changed to " + bombNumInt + " for player " +
@@ -344,7 +344,7 @@ public class Chatbot {
     }
     private void chatbot_do_help() throws IOException, IllegalArgumentException
     {
-    	File file = new File("help.txt");
+    	File file = new File("../assets/help.txt");
 		String longMessage = "" , Line= "";
 		Scanner scan = new Scanner(file);
         while (scan.hasNextLine()) {
@@ -425,7 +425,7 @@ public class Chatbot {
     private void chatbot_do_reset() {
         bot.bot_output("Data Reset back to default");
         knowledgeList.clearKnowledge();
-        chatbot_do_load("init.ini");
+        chatbot_do_load("../assets/init.ini");
     }
     private void chatbot_do_save() {
         try {

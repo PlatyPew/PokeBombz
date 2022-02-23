@@ -10,7 +10,7 @@ public class GameChatbot {
     public GameChatbot(GameMain game) {
         this.game = game;
         chatbot = new Chatbot();
-        chatbot.chatbot_do_load("init.ini");
+        chatbot.chatbot_do_load("../assets/init.ini");
     }
     public void run(String newInput) throws IOException {
         chatbot.setUserInput(newInput);

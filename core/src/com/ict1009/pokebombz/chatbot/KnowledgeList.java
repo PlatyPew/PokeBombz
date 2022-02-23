@@ -85,7 +85,7 @@ class KnowledgeList {
             content += ("\n");
         }
         content = content.trim();
-        FileWriter writer = new FileWriter("knowledge.ini", false);
+        FileWriter writer = new FileWriter("../assets/knowledge.ini", false);
         writer.write(content);
         writer.close();
     }
@@ -98,7 +98,7 @@ class KnowledgeList {
             return "how";
     }
     public void loadKnowledge() throws IOException {
-        File file = new File("knowledge.ini");
+        File file = new File("../assets/knowledge.ini");
         Scanner scan = new Scanner(file);
         String content = "", line = "", firstWord = "";
         String[] questionAndAnswer;
