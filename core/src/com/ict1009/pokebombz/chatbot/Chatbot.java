@@ -475,7 +475,7 @@ public class Chatbot {
     private void chatbot_do_reset() {
         bot.bot_output("Data Reset back to default");
         knowledgeList.clearKnowledge();
-        chatbot_do_load("../assets/init.ini");
+        chatbot_do_load("chatbot/init.ini");
     }
     // Chatbot uploads all current informatio into knowledge.ini
     private void chatbot_do_save() {

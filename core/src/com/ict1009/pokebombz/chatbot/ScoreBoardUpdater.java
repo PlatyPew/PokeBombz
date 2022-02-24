@@ -34,7 +34,7 @@ public class ScoreBoardUpdater {
     // Upload old score into scoreboard.ini
     public int[] uploadScoreBoard() throws FileNotFoundException {
         int Count = 4;
-        File file = new File("../assets/scoreBoard.ini");
+        File file = new File("chatbot/scoreboard.ini");
         Scanner scan = new Scanner(file);
         while (scan.hasNextLine()) {
             Line = scan.nextLine();
@@ -62,7 +62,7 @@ public class ScoreBoardUpdater {
         this.content = "";
         this.setLatestIdNumber(1);
 
-        File file = new File("../assets/scoreBoard.ini");
+        File file = new File("chatbot/scoreboard.ini");
         Scanner scan = new Scanner(file);
         while (scan.hasNextLine()) {
             Line = scan.nextLine();
@@ -83,7 +83,7 @@ public class ScoreBoardUpdater {
                                    currentScore[2], currentScore[3]);
 
         System.out.println(this.content + newContent);
-        FileWriter writer = new FileWriter("../assets/scoreBoard.ini", false);
+        FileWriter writer = new FileWriter("chatbot/scoreboard.ini", false);
         writer.write(this.content + newContent);
         writer.close();
     }
@@ -95,7 +95,7 @@ public class ScoreBoardUpdater {
         newContent = String.format("ID=%d\nPlayer1=%d\nPlayer2=%d\nPlayer3=%d\nPlayer4=%d\n",
                                    this.UpdateIDNumber, currentScore[0], currentScore[1],
                                    currentScore[2], currentScore[3]);
-        File file = new File("../assets/scoreBoard.ini");
+        File file = new File("chatbot/scoreboard.ini");
         Scanner scan = new Scanner(file);
         while (scan.hasNextLine()) {
             Line = scan.nextLine();
@@ -111,7 +111,7 @@ public class ScoreBoardUpdater {
             }
         }
         System.out.println(this.content + newContent);
-        FileWriter writer = new FileWriter("scoreBoard.ini", false);
+        FileWriter writer = new FileWriter("chatbot/scoreboard.ini", false);
         writer.write(this.content);
         writer.close();
     }
@@ -122,7 +122,7 @@ public class ScoreBoardUpdater {
         newContent = String.format("ID=%d\nPlayer1=%d\nPlayer2=%d\nPlayer3=%d\nPlayer4=%d",
                                    this.UpdateIDNumber, currentScore[0], currentScore[1],
                                    currentScore[2], currentScore[3]);
-        File file = new File("../assets/scoreBoard.ini");
+        File file = new File("chatbot/scoreboard.ini");
         Scanner scan = new Scanner(file);
         while (scan.hasNextLine()) {
             Line = scan.nextLine();
@@ -137,7 +137,7 @@ public class ScoreBoardUpdater {
                 this.content += "\n";
             }
         }
-        FileWriter writer = new FileWriter("../assets/scoreBoard.ini", false);
+        FileWriter writer = new FileWriter("chatbot/scoreboard.ini", false);
         writer.write(this.content);
         writer.close();
         System.out.println(content);

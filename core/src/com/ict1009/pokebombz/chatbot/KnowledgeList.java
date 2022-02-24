@@ -90,7 +90,7 @@ class KnowledgeList {
             content += ("\n");
         }
         content = content.trim();
-        FileWriter writer = new FileWriter("../assets/knowledge.ini", false);
+        FileWriter writer = new FileWriter("chatbot/knowledge.ini", false);
         writer.write(content);
         writer.close();
     }
@@ -105,7 +105,7 @@ class KnowledgeList {
     }
     // Load information from knowledge.ini to the chatbot
     public void loadKnowledge() throws IOException {
-        File file = new File("../assets/knowledge.ini");
+        File file = new File("chatbot/knowledge.ini");
         Scanner scan = new Scanner(file);
         String line = "", firstWord = "";
         String[] questionAndAnswer;
