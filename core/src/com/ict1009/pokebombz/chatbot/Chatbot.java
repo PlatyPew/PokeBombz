@@ -344,7 +344,12 @@ public class Chatbot {
     }
     private void chatbot_do_help() throws IOException, IllegalArgumentException
     {
-    	File file = new File("../assets/help.txt");
+        File file = new File("help.txt");
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            new ProcessBuilder("open", file.getAbsolutePath()).start();
+            return;
+        }
+
 		String longMessage = "" , Line= "";
 		Scanner scan = new Scanner(file);
         while (scan.hasNextLine()) {
@@ -352,6 +357,7 @@ public class Chatbot {
             longMessage += Line;
             longMessage += "\n";
         }
+        scan.close();
         JTextArea textArea = new JTextArea(15, 60);
         textArea.setFont(new Font("Arial Black", Font.TYPE1_FONT, 16));
         textArea.setText(longMessage);
