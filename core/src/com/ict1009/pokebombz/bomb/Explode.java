@@ -334,7 +334,7 @@ public class Explode extends Sprite implements BoardElement, Destoryable {
                 super.setTexture(new Texture("explosion/corner1.png"));
                 // If left, bottom and right side of the center is unbreakable
                 if (!rightOfExplosionBreakable) {
-                    super.setTexture(new Texture("explosion/endbtm.png"));
+                    super.setTexture(new Texture("explosion/endbot.png"));
                 }
             }
             // If left and right side of the center is unbreakable
