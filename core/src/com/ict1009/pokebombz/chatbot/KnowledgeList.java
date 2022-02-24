@@ -16,7 +16,7 @@ class KnowledgeList {
             listOfKnowledge[i] = new ArrayList<Knowledge>();
         }
     }
-    //get Knowledge class information
+    // get Knowledge class information
     public Knowledge getTargetKnowledge() {
         return this.targetKnowledge;
     }
@@ -94,7 +94,7 @@ class KnowledgeList {
         writer.write(content);
         writer.close();
     }
-    //Find out the entity of the question
+    // Find out the entity of the question
     public String saveKnowledgeIntent(int page) {
         if (page == 0)
             return "what";
