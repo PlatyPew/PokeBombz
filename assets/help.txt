@@ -1,4 +1,4 @@
- <player> = p<player number> If left empty the effects will affect all players. 
+ <player> = <player number> If left empty the effects will affect all players. 
  
  General: 
  exit ( Exit game) 
@@ -12,17 +12,20 @@
  Reset (Reset informaton in chatbot and get information from init.ini which is the default information) 
  Save ( save information into knowledge.ini) 
  
- In Game: 
- Change bomb count <count> <player> 
- Change bomb range <range> <player>(Optional) <number> 
- change kick bomb p<player number>(Optional) 
+ In Game:
+ Change speed <Count> p<player> 
+	 Example:Change speed 1 p3
+ Change bomb count <count> p<player> 
+	 Example:Change bomb count 3 p4
+ Change bomb range <range> p<player>(Optional) <number>
+	 Example:Change bomb range 1 p1
+ Change kick bomb p<player>(Optional) 
  Change death timer <number> 
  Change Spawn Chance <Number> ( Percentage) 
- Change speed <Count> <player> 
- Start sudden death 
+ Start sudden death
  
  Score: 
  Reset score (User score == 0,0,0,0) 
- Upload score ID <player> 
+ Upload score ID <A number smaller than the highest ID in ScoreBoard.ini> 
  Update new score (Give new ID and update into a ini-file) 
- Update score ID <A number smaller than the highest ID> (update score into a that slot)
+ Update score ID <A number smaller than the highest ID ScoreBoard.ini> (update score into a that slot)

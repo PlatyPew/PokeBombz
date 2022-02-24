@@ -16,9 +16,11 @@ class KnowledgeList {
             listOfKnowledge[i] = new ArrayList<Knowledge>();
         }
     }
+    //get Knowledge class information
     public Knowledge getTargetKnowledge() {
         return this.targetKnowledge;
     }
+    // Find out which array list index to go to
     public int choosePageNumber(String firstWord) {
         if (firstWord.toLowerCase().equals("what")) {
             return 0;
@@ -29,6 +31,7 @@ class KnowledgeList {
         } else
             return -1;
     }
+    // Add information into knowledge list
     public int addKnowledge(String firstWord, String entity, String answer) {
 
         int page = choosePageNumber(firstWord);
@@ -41,6 +44,7 @@ class KnowledgeList {
         listOfKnowledge[page].add(newKnowledge);
         return 0;
     }
+    // Remove information from chatbot
     public void removeKnowledge(String entity, int page) {
         int size = listOfKnowledge[page].size();
         for (int i = 0; i < size; i++) {
@@ -50,6 +54,7 @@ class KnowledgeList {
             }
         }
     }
+    // Check if knowledge is in the chatbot
     public boolean getKnowledge(String entity, String firstWord) {
         int page = choosePageNumber(firstWord);
         if (page == -1) {
@@ -64,12 +69,13 @@ class KnowledgeList {
         }
         return false;
     }
-
+    // Clear all information from the chatbot
     public void clearKnowledge() {
         for (int i = 0; i < this.totalNumberOfCategory; i++) {
             listOfKnowledge[i].clear();
         }
     }
+    // Save information into knowledge.ini file
     public void saveKnowledge() throws IOException {
         String question, answer, content = "";
 
@@ -88,6 +94,7 @@ class KnowledgeList {
         writer.write(content);
         writer.close();
     }
+    //Find out the entity of the question
     public String saveKnowledgeIntent(int page) {
         if (page == 0)
             return "what";
@@ -96,6 +103,7 @@ class KnowledgeList {
         else
             return "how";
     }
+    // Load information from knowledge.ini to the chatbot
     public void loadKnowledge() throws IOException {
         File file = new File("../assets/knowledge.ini");
         Scanner scan = new Scanner(file);
@@ -121,7 +129,7 @@ class KnowledgeList {
         }
         scan.close();
     }
-
+    // Load information from filepath in the STRING Input to the chatbot
     public void loadKnowledge(String input) throws IOException {
         File file = new File(input);
         Scanner scan = new Scanner(file);
@@ -147,6 +155,7 @@ class KnowledgeList {
         }
         scan.close();
     }
+    // Sanitize information before loading it into the chatbot.
     public String cleanInput(String data) {
         return data.replaceAll("[^a-zA-Z0-9 ]", "");
     }

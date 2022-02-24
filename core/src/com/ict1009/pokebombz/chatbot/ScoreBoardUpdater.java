@@ -20,15 +20,18 @@ public class ScoreBoardUpdater {
         UpdateIDNumber = 5;
         setLatestIdNumber(0);
     }
+    // Check if pattern matches the input and patternString
     private boolean isPatternMatch(String Input, String patternString) {
 
         Pattern pattern = Pattern.compile(patternString, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(Input);
         return matcher.find();
     }
+    // Upload the current Score.
     public void setCurrentScore(int[] newScore) {
         this.currentScore = newScore;
     }
+    // Upload old score into scoreboard.ini
     public int[] uploadScoreBoard() throws FileNotFoundException {
         int Count = 4;
         File file = new File("../assets/scoreBoard.ini");
@@ -54,6 +57,7 @@ public class ScoreBoardUpdater {
         System.out.println(content);
         return allScores;
     }
+    // Reload content to update most up to date ID number
     public void ReloadContent() throws FileNotFoundException {
         this.content = "";
         this.setLatestIdNumber(1);
@@ -71,6 +75,7 @@ public class ScoreBoardUpdater {
         scan.close();
         System.out.println(content);
     }
+    // Save new content in scoreBoard.ini
     public void saveContent() throws IOException {
         this.newContent = "";
         newContent = String.format("\nID=%d\nPlayer1=%d\nPlayer2=%d\nPlayer3=%d\nPlayer4=%d",
@@ -82,8 +87,7 @@ public class ScoreBoardUpdater {
         writer.write(this.content + newContent);
         writer.close();
     }
-
-    // Update old score to
+    // Update old score in scoreboard.ini
     public void saveContent(int IdNum) throws IOException {
         this.newContent = "";
         this.content = "";
@@ -111,7 +115,6 @@ public class ScoreBoardUpdater {
         writer.write(this.content);
         writer.close();
     }
-
     // Update old score to
     public void updateOldContent() throws IOException {
         this.newContent = "";
@@ -139,10 +142,11 @@ public class ScoreBoardUpdater {
         writer.close();
         System.out.println(content);
     }
-
+    // Get the latest ID number
     public int getLatestIdNumber() {
         return LatestIdNumber;
     }
+    // Set the latest ID number
     public void setLatestIdNumber(int latestIdNumber) {
         LatestIdNumber = latestIdNumber;
     }
