@@ -1,8 +1,7 @@
 package com.ict1009.pokebombz.chatbot;
 
-import java.io.IOException;
-
 import com.ict1009.pokebombz.GameMain;
+import java.io.IOException;
 
 public class GameChatbot {
     Chatbot chatbot;
@@ -10,7 +9,7 @@ public class GameChatbot {
     public GameChatbot(GameMain game) {
         this.game = game;
         chatbot = new Chatbot();
-        chatbot.chatbot_do_load("init.ini");
+        chatbot.chatbot_do_load("../assets/init.ini");
     }
     public void run(String newInput) throws IOException {
         chatbot.setUserInput(newInput);
@@ -22,13 +21,13 @@ public class GameChatbot {
 
         } else if (chatbot.chatbot_is_unansweredQuestion()) {
 
-        } else if (chatbot.chatbot_is_smalltalk()) {	
-        	
+        } else if (chatbot.chatbot_is_smalltalk()) {
+
         } else if (chatbot.chatbot_is_reset()) {
 
         } else if (chatbot.chatbot_is_save()) {
 
-        } else if (chatbot.chatbot_is_ChangeSpawnTime()) {
+        } else if (chatbot.chatbot_is_ChangeSpawnChance()) {
 
         } else if (chatbot.chatbot_is_load()) {
 
@@ -42,19 +41,19 @@ public class GameChatbot {
 
         } else if (chatbot.chatbot_is_Change_Bomb_Range()) {
 
-        } else if (chatbot.chat_bot_is_load_score_to_game()) {
+        } else if (chatbot.chatbot_is_load_score_to_game()) {
 
-        } else if (chatbot.chat_bot_is_Update_New_Score()) {
+        } else if (chatbot.chatbot_is_Update_New_Score()) {
 
-        } else if (chatbot.chat_bot_is_Update_Old_Score()) {
+        } else if (chatbot.chatbot_is_Update_Old_Score()) {
 
         } else if (chatbot.chatbot_is_reset_scores()) {
 
         } else if (chatbot.chatbot_is_ChangeKickBomb()) {
 
-        } 
-        
-        else {
+        } else if (chatbot.chatbot_is_help()) {
+
+        } else {
             chatbot.chatbot_do_not_understand();
         }
     }

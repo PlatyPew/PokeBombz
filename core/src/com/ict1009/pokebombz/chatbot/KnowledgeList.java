@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.*;
 class KnowledgeList {
     private Knowledge newKnowledge;
-    private String answer;
     private final int totalNumberOfCategory = 3;
     private Knowledge targetKnowledge;
     private ArrayList<Knowledge>[] listOfKnowledge;
@@ -85,7 +84,7 @@ class KnowledgeList {
             content += ("\n");
         }
         content = content.trim();
-        FileWriter writer = new FileWriter("knowledge.ini", false);
+        FileWriter writer = new FileWriter("../assets/knowledge.ini", false);
         writer.write(content);
         writer.close();
     }
@@ -98,9 +97,9 @@ class KnowledgeList {
             return "how";
     }
     public void loadKnowledge() throws IOException {
-        File file = new File("knowledge.ini");
+        File file = new File("../assets/knowledge.ini");
         Scanner scan = new Scanner(file);
-        String content = "", line = "", firstWord = "";
+        String line = "", firstWord = "";
         String[] questionAndAnswer;
         while (scan.hasNextLine()) {
             line = scan.nextLine();
@@ -126,7 +125,7 @@ class KnowledgeList {
     public void loadKnowledge(String input) throws IOException {
         File file = new File(input);
         Scanner scan = new Scanner(file);
-        String content = "", line = "", firstWord = "";
+        String line = "", firstWord = "";
         String[] questionAndAnswer;
         while (scan.hasNextLine()) {
             line = scan.nextLine();
