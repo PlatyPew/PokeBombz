@@ -1,8 +1,7 @@
 package com.ict1009.pokebombz.chatbot;
 
-import java.io.IOException;
-
 import com.ict1009.pokebombz.GameMain;
+import java.io.IOException;
 
 public class GameChatbot {
     Chatbot chatbot;
@@ -22,8 +21,8 @@ public class GameChatbot {
 
         } else if (chatbot.chatbot_is_unansweredQuestion()) {
 
-        } else if (chatbot.chatbot_is_smalltalk()) {	
-        	
+        } else if (chatbot.chatbot_is_smalltalk()) {
+
         } else if (chatbot.chatbot_is_reset()) {
 
         } else if (chatbot.chatbot_is_save()) {
@@ -53,10 +52,8 @@ public class GameChatbot {
         } else if (chatbot.chatbot_is_ChangeKickBomb()) {
 
         } else if (chatbot.chatbot_is_help()) {
-        	
-        }
-        
-        else {
+
+        } else {
             chatbot.chatbot_do_not_understand();
         }
     }

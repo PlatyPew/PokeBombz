@@ -26,8 +26,8 @@ public class ScoreBoardUpdater {
         Matcher matcher = pattern.matcher(Input);
         return matcher.find();
     }
-    public void setCurrentScore(int [] newScore) {
-    	this.currentScore = newScore;
+    public void setCurrentScore(int[] newScore) {
+        this.currentScore = newScore;
     }
     public int[] uploadScoreBoard() throws FileNotFoundException {
         int Count = 4;
@@ -50,6 +50,7 @@ public class ScoreBoardUpdater {
             this.content += Line;
             this.content += "\n";
         }
+        scan.close();
         System.out.println(content);
         return allScores;
     }
@@ -67,42 +68,44 @@ public class ScoreBoardUpdater {
                 setLatestIdNumber(getLatestIdNumber() + 1);
             }
         }
+        scan.close();
         System.out.println(content);
     }
-	public void saveContent() throws IOException {
-		this.newContent = "";
-		newContent = String.format("\nID=%d\nPlayer1=%d\nPlayer2=%d\nPlayer3=%d\nPlayer4=%d",
-				this.LatestIdNumber,currentScore[0],currentScore[1],currentScore[2],currentScore[3]);
-		
-		System.out.println(this.content + newContent);
-      FileWriter writer = new FileWriter("../assets/scoreBoard.ini",false);
-      writer.write(this.content + newContent);
-      writer.close();
-	}
-	
-	// Update old score to 
-	public void saveContent(int IdNum) throws IOException {
-		this.newContent = "";
-		this.content = "";
-		this.UpdateIDNumber=IdNum;
-		newContent = String.format("ID=%d\nPlayer1=%d\nPlayer2=%d\nPlayer3=%d\nPlayer4=%d\n",
-				this.UpdateIDNumber,currentScore[0],currentScore[1],currentScore[2],currentScore[3]);
-		File file = new File("../assets/scoreBoard.ini");
-		Scanner scan = new Scanner(file);
-		while(scan.hasNextLine()) {
-	      	Line = scan.nextLine();
-	 
-	      	if(isPatternMatch(Line,"^ID=" + UpdateIDNumber +"$")) {
-	      		this.content += this.newContent;
-	      		for(int i=0; i<4; i++) {
-	      			scan.nextLine();
-	      		}
-	      	}
-	      	else {
-	         	this.content += Line;
-	          	this.content += "\n";
-      	}
-      }
+    public void saveContent() throws IOException {
+        this.newContent = "";
+        newContent = String.format("\nID=%d\nPlayer1=%d\nPlayer2=%d\nPlayer3=%d\nPlayer4=%d",
+                                   this.LatestIdNumber, currentScore[0], currentScore[1],
+                                   currentScore[2], currentScore[3]);
+
+        System.out.println(this.content + newContent);
+        FileWriter writer = new FileWriter("../assets/scoreBoard.ini", false);
+        writer.write(this.content + newContent);
+        writer.close();
+    }
+
+    // Update old score to
+    public void saveContent(int IdNum) throws IOException {
+        this.newContent = "";
+        this.content = "";
+        this.UpdateIDNumber = IdNum;
+        newContent = String.format("ID=%d\nPlayer1=%d\nPlayer2=%d\nPlayer3=%d\nPlayer4=%d\n",
+                                   this.UpdateIDNumber, currentScore[0], currentScore[1],
+                                   currentScore[2], currentScore[3]);
+        File file = new File("../assets/scoreBoard.ini");
+        Scanner scan = new Scanner(file);
+        while (scan.hasNextLine()) {
+            Line = scan.nextLine();
+
+            if (isPatternMatch(Line, "^ID=" + UpdateIDNumber + "$")) {
+                this.content += this.newContent;
+                for (int i = 0; i < 4; i++) {
+                    scan.nextLine();
+                }
+            } else {
+                this.content += Line;
+                this.content += "\n";
+            }
+        }
         System.out.println(this.content + newContent);
         FileWriter writer = new FileWriter("scoreBoard.ini", false);
         writer.write(this.content);

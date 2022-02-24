@@ -1,10 +1,10 @@
 package com.ict1009.pokebombz.chatbot;
+
 import com.ict1009.pokebombz.GameMain;
 import com.ict1009.pokebombz.helper.BoardInfo;
 import com.ict1009.pokebombz.helper.GameInfo;
 import com.ict1009.pokebombz.scenes.TitleScene;
 
-import java.awt.Desktop;
 import java.awt.Font;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,10 +12,10 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
 public class Chatbot {
     private Scanner sc = new Scanner(System.in);
     private Bot bot;
@@ -39,7 +39,7 @@ public class Chatbot {
         try {
             knowledgeList.loadKnowledge(input);
         } catch (IOException e) {
-        	bot.bot_output("Failed to read!");
+            bot.bot_output("Failed to read!");
             System.out.println(e);
         }
     }
@@ -62,10 +62,10 @@ public class Chatbot {
     }
     public boolean chatbot_is_ChangeDeathTimer() {
         try {
-            
+
             if (isPatternMatch(this.input, "^Change death timer [0-9]+$")) {
-            	float value = Float.parseFloat(words[3]);
-            	chatbot_do_changeDeathTimer(value);
+                float value = Float.parseFloat(words[3]);
+                chatbot_do_changeDeathTimer(value);
                 return true;
             }
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
@@ -74,8 +74,8 @@ public class Chatbot {
         return false;
     }
     public boolean chatbot_is_ChangeKickBomb() {
-    	if (isPatternMatch(this.input, "^change Kick Bomb ?P?[1-4]?$")) {
-    		chatbot_do_ChangeKickBomb();
+        if (isPatternMatch(this.input, "^change Kick Bomb ?P?[1-4]?$")) {
+            chatbot_do_ChangeKickBomb();
             return true;
         }
         return false;
@@ -126,14 +126,14 @@ public class Chatbot {
             return false;
     }
     public boolean chatbot_is_help() {
-    	if (isPatternMatch(this.input, "^help$")) {
-    		try {
-				chatbot_do_help();
-				bot.bot_output("Okay opening help txt ");
-			} catch (IOException | IllegalArgumentException e) {
-				bot.bot_output("Help file either don't exist yet or currently being use.");
-				e.printStackTrace();
-			}
+        if (isPatternMatch(this.input, "^help$")) {
+            try {
+                chatbot_do_help();
+                bot.bot_output("Okay opening help txt ");
+            } catch (IOException | IllegalArgumentException e) {
+                bot.bot_output("Help file either don't exist yet or currently being use.");
+                e.printStackTrace();
+            }
             return true;
         }
         return false;
@@ -176,7 +176,7 @@ public class Chatbot {
     }
     public boolean chatbot_is_reset_scores() {
         if (isPatternMatch(this.input, "^Reset score$")) {
-        	bot.bot_output("Resetted Score");
+            bot.bot_output("Resetted Score");
             BoardInfo.playerScore = new int[] {0, 0, 0, 0};
             return true;
         }
@@ -297,7 +297,7 @@ public class Chatbot {
         }
     }
     private void chatbot_do_changeDeathTimer(float seconds) {
-    	// Change Sudden Death Timer
+        // Change Sudden Death Timer
         if (seconds < 50) {
             seconds = 50;
         } else if (seconds > 500) {
@@ -307,22 +307,22 @@ public class Chatbot {
         GameInfo.SUDDEN_DEATH = (int)(seconds * GameInfo.FPS);
     }
     private void chatbot_do_changeItemSpawn(int SpawnChance) {
-    	bot.bot_output("Spawn chance has changed!");
+        bot.bot_output("Spawn chance has changed!");
         GameInfo.ITEM_SPAWN_CHANCE = SpawnChance;
     }
     private void chatbot_do_ChangeKickBomb() {
-    	
-         if (isPatternMatch(this.input, "change Kick Bomb P[1-4]$")) {
-             int playerNum = Integer.parseInt(words[3].substring(1));
-             BoardInfo.players.get(playerNum - 1).setKick(true);
-             bot.bot_output("player " +playerNum +" can kick bombs now");
-         } else {
-             for (int i = 0; i < BoardInfo.players.size(); i++) {
-                 BoardInfo.players.get(i).setKick(true);
-             }
-             bot.bot_output("All Players can kick bombs now");
-         }
-     	}
+
+        if (isPatternMatch(this.input, "change Kick Bomb P[1-4]$")) {
+            int playerNum = Integer.parseInt(words[3].substring(1));
+            BoardInfo.players.get(playerNum - 1).setKick(true);
+            bot.bot_output("player " + playerNum + " can kick bombs now");
+        } else {
+            for (int i = 0; i < BoardInfo.players.size(); i++) {
+                BoardInfo.players.get(i).setKick(true);
+            }
+            bot.bot_output("All Players can kick bombs now");
+        }
+    }
     private void chatbot_do_changeSpeed(float speedup) {
         try {
             int playerNum = Integer.parseInt(words[3].substring(1));
@@ -342,16 +342,15 @@ public class Chatbot {
         bot.bot_output("ExITING");
         System.exit(1);
     }
-    private void chatbot_do_help() throws IOException, IllegalArgumentException
-    {
+    private void chatbot_do_help() throws IOException, IllegalArgumentException {
         File file = new File("help.txt");
         if (System.getProperty("os.name").startsWith("Mac")) {
             new ProcessBuilder("open", file.getAbsolutePath()).start();
             return;
         }
 
-		String longMessage = "" , Line= "";
-		Scanner scan = new Scanner(file);
+        String longMessage = "", Line = "";
+        Scanner scan = new Scanner(file);
         while (scan.hasNextLine()) {
             Line = scan.nextLine();
             longMessage += Line;
@@ -362,14 +361,14 @@ public class Chatbot {
         textArea.setFont(new Font("Arial Black", Font.TYPE1_FONT, 16));
         textArea.setText(longMessage);
         textArea.setEditable(false);
-        
+
         // wrap a scrollpane around it
         JScrollPane scrollPane = new JScrollPane(textArea);
-        
-        // display them in a message dialog
-        JOptionPane.showMessageDialog(null, scrollPane,"Help Menu",JOptionPane.INFORMATION_MESSAGE);	
 
-     }
+        // display them in a message dialog
+        JOptionPane.showMessageDialog(null, scrollPane, "Help Menu",
+                                      JOptionPane.INFORMATION_MESSAGE);
+    }
     private void chatbot_do_load() {
 
         try {
@@ -421,10 +420,9 @@ public class Chatbot {
     }
     private void chatbot_do_Reload_scoreUpdater() {
         try {
-        	//Set up latest Numer ID
+            // Set up latest Numer ID
             scoreboardupdater.ReloadContent();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -481,8 +479,7 @@ public class Chatbot {
         return matcher.find();
     }
     private void startSuddenDeath() {
-    	bot.bot_output("Initiating Sudden deaath!!!");
+        bot.bot_output("Initiating Sudden deaath!!!");
         GameInfo.timeElapsed = 1055550;
     }
-	
 }
