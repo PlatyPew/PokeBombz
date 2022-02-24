@@ -180,14 +180,20 @@ All players scores revert to 0
 reset score
 ```
 
-Uploads score to database
+Saves score to database
 
 ```sh
 # Add score to database
 update new score
 
-# Overwrite specific ID in database
-upload score id <number:int>
+# Load save ID in database
+update score id <id:int>
+```
+
+Loads score from database
+
+```sh
+upload score id <id:int>
 ```
 
 ### Miscellaneous
