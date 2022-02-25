@@ -11,8 +11,8 @@
     <img src="https://img.shields.io/badge/license-MIT-green.svg" />
     <img src="https://img.shields.io/badge/Java-17.02+0-blue.svg" />
     <br /><br />
-    <a href="https://www.youtube.com/watch?v=aV5OEF8v6rE">
-        <img align="center" src="https://res.cloudinary.com/marcomontalbano/image/upload/v1645750597/video_to_markdown/images/youtube--aV5OEF8v6rE-c05b58ac6eb4c4700831b2b3070cd403.jpg" alt="PokeBombz Trailer" width="80%" />
+    <a href="https://youtu.be/KH4pPEYr6As">
+        <img align="center" src="https://res.cloudinary.com/marcomontalbano/image/upload/v1645795428/video_to_markdown/images/youtube--KH4pPEYr6As-c05b58ac6eb4c4700831b2b3070cd403.jpg" alt="PokeBombz Trailer" width="80%" />
     </a>
 </p>
 <hr>
