@@ -32,6 +32,7 @@ Get started with PokeBombz
         -   [Scoring](#scoring)
         -   [Miscellaneous](#miscellaneous)
 -   [UML Diagram](#uml-diagram)
+-   [Contributors](#Contributors)
 
 ## Setup
 
@@ -47,22 +48,6 @@ Windows
 
 ```
 .\gradlew.bat desktop:run
-```
-
-### Run pre-built jar file
-
-Download from the [release](https://github.com/sgtechICT1009/ict1009-team01-2022/releases) page
-
-Windows and Linux
-
-```
-java -jar PokeBombz.jar
-```
-
-MacOS
-
-```
-java -XstartOnFirstThread -jar PokeBombz.jar
 ```
 
 ## Instructions
@@ -228,3 +213,14 @@ save
 ## UML Diagram
 
 [![UML Diagram](docs/Project_UML_Diagram.png)](docs/Project_UML_Diagram.png)
+
+## Contributors
+
+This project would not exist without these folks!
+
+-   [@Brockkoli](https://github.com/Brockkoli)
+-   [@JonTJT](https://github.com/JonTJT)
+-   [@Mel-YWM](https://github.com/Mel-YWM)
+-   [@PlatyPew](https://github.com/PlatyPew)
+-   [@PototoPatata](https://github.com/PototoPatata)
+-   [@tryhardlaijun](https://github.com/tryhardlaijun)
